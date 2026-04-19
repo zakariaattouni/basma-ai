@@ -6,49 +6,115 @@
     <title>بَسْمَة AI - إدارة عيادة الأسنان</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
         body { font-family: 'Tajawal', sans-serif; background-color: #f0f4f8; }
+        .hidden { display: none; }
         .tooth-icon { color: #3b82f6; filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5)); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
     <div id="loginPage" class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center border-t-4 border-blue-600">
             <div class="mb-6">
                 <i class="fas fa-tooth fa-4x tooth-icon mb-4"></i>
                 <h1 class="text-3xl font-bold text-blue-600">بَسْمَة AI</h1>
-                <p class="text-gray-500 mt-2">مستقبل طب الأسنان الرقمي</p>
+                <p class="text-gray-500 mt-2">نظام الإدارة الذكي للعيادة</p>
             </div>
-            
-            <div class="space-y-4">
-                <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
-                <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
-                <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-300">دخول النظام</button>
+            <div class="space-y-4 text-right">
+                <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none border-gray-300">
+                <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none border-gray-300">
+                <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-300 shadow-lg">دخول النظام</button>
             </div>
         </div>
     </div>
 
-    <footer class="bg-white border-t py-4 text-center">
+    <div id="dashboard" class="hidden flex-grow p-4 md:p-8">
+        <header class="bg-white shadow-md rounded-xl p-4 mb-6 flex justify-between items-center border-r-4 border-blue-600">
+            <div>
+                <h2 class="text-xl font-bold text-gray-800">أهلاً بك د. زكريا محمد عطوني</h2>
+                <p class="text-sm text-gray-500">لوحة تحكم بَسْمَة AI</p>
+            </div>
+            <button onclick="location.reload()" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition"><i class="fas fa-sign-out-alt ml-2"></i>خروج</button>
+        </header>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-lg font-bold mb-4 text-blue-700 border-b pb-2"><i class="fas fa-user-plus ml-2"></i>تسجيل مريض جديد</h3>
+                <div class="space-y-3">
+                    <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-3 bg-gray-50 border rounded-lg outline-none focus:border-blue-400">
+                    <input type="text" id="pDiagnosis" placeholder="التشخيص المبدئي" class="w-full p-3 bg-gray-50 border rounded-lg outline-none focus:border-blue-400">
+                    <button onclick="savePatient()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold transition shadow-md">حفظ في السحابة</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-green-500">
+                <h3 class="text-lg font-bold mb-4 text-gray-800"><i class="fas fa-users ml-2"></i>سجل المرضى الأخير</h3>
+                <div id="patientList" class="space-y-2 overflow-y-auto max-h-60">
+                    <p class="text-gray-400 text-center italic">جاري تحميل البيانات من السحابة...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t py-4 text-center mt-auto">
         <p class="text-gray-600 text-sm">
             تم التطوير والتصميم بواسطة 
-            <span class="font-bold text-blue-600 underline">د. زكريا محمد عطوني</span>
+            <span class="font-bold text-blue-600 underline text-lg">د. زكريا محمد عطوني</span>
             &copy; 2026
         </p>
     </footer>
 
     <script>
+        // إعدادات Firebase الخاصة بك
+        const firebaseConfig = {
+            databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // نظام الدخول
         function handleLogin() {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('password').value;
             
             if(email === "salematto@gmail.com" && pass === "zak1959") {
-                alert("تم تسجيل الدخول بنجاح يا دكتور!");
-                // هنا سيتم توجيهك للوحة التحكم في الخطوة القادمة
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                loadPatients();
             } else {
                 alert("البيانات غير صحيحة، يرجى المحاولة مرة أخرى.");
             }
+        }
+
+        // حفظ البيانات
+        function savePatient() {
+            const name = document.getElementById('pName').value;
+            const diag = document.getElementById('pDiagnosis').value;
+            if(name) {
+                db.ref('patients').push({ name: name, diagnosis: diag, date: new Date().toLocaleDateString() });
+                document.getElementById('pName').value = '';
+                document.getElementById('pDiagnosis').value = '';
+                alert("تم الحفظ بنجاح دكتور!");
+            }
+        }
+
+        // تحميل القائمة
+        function loadPatients() {
+            db.ref('patients').on('value', (snap) => {
+                const list = document.getElementById('patientList');
+                list.innerHTML = '';
+                snap.forEach((child) => {
+                    const data = child.val();
+                    list.innerHTML += `<div class="p-3 bg-blue-50 border-r-4 border-blue-400 rounded flex justify-between items-center">
+                        <div><strong class="text-blue-800">${data.name}</strong><br><small class="text-gray-500">${data.diagnosis || 'بدون تشخيص'}</small></div>
+                        <span class="text-xs text-gray-400">${data.date}</span>
+                    </div>`;
+                });
+            });
         }
     </script>
 </body>
