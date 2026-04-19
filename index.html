@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>بَسْمَة AI | النسخة السحابية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <style>
+        :root { --primary: #0a5e7a; --secondary: #ffb347; --bg: #f4f7f6; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background: var(--bg); padding-bottom: 90px; }
+        
+        #authScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary), #063546); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .auth-card { background: white; border-radius: 30px; padding: 40px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; }
+        .tabs-nav { display: flex; background: white; overflow-x: auto; sticky; top: 0; z-index: 1000; border-bottom: 2px solid #e0e0e0; }
+        .tab-item { flex: 1; padding: 15px; border: none; background: none; font-weight: 800; color: #888; cursor: pointer; display: flex; flex-direction: column; align-items: center; min-width: 80px; font-size: 0.75rem; }
+        .tab-item.active { color: var(--primary); border-bottom: 4px solid var(--secondary); background: #f0f7f9; }
+
+        .container { padding: 15px; max-width: 800px; margin: 0 auto; }
+        .card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-right: 5px solid var(--primary); }
+        
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; margin-bottom: 10px; outline: none; }
+        .btn-action { background: var(--primary); color: white; border: none; padding: 13px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; }
+
+        .footer { background: #063546; color: white; text-align: center; padding: 15px; font-size: 0.85rem; position: fixed; bottom: 0; width: 100%; border-top: 3px solid var(--secondary); }
+        .sync-status { font-size: 0.7rem; color: #27ae60; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div id="authScreen">
+    <div class="auth-card">
+        <h2 style="color:var(--primary); margin-bottom:20px;">دخول العيادة السحابي</h2>
+        <input type="email" id="email" placeholder="البريد الإلكتروني">
+        <input type="password" id="pass" placeholder="كلمة المرور">
+        <button class="btn-action" onclick="login()">دخول</button>
+    </div>
+</div>
+
+<div id="app" style="display:none;">
+    <header class="header">
+        <h1>بَسْمَة AI</h1>
+        <div class="sync-status" id="status"><i class="fas fa-cloud"></i> متصل بالسحابة</div>
+    </header>
+
+    <nav class="tabs-nav">
+        <button class="tab-item active" onclick="nav('pts', this)"><i class="fas fa-user-injured"></i>المرضى</button>
+        <button class="tab-item" onclick="nav('ai', this)"><i class="fas fa-robot"></i>الذكاء</button>
+    </nav>
+
+    <main class="container" id="view"></main>
+
+    <footer class="footer">
+        تطوير وتصميم د. زكريا محمد عطوني &copy; 2026
+    </footer>
+</div>
+
+<script>
+    // الإعدادات الخاصة بك يا دكتور
+    const firebaseConfig = {
+        apiKey: "AIzaSyAbr8jCyftJnKzGDNNI5D5eU2xRnDHpu5I",
+        authDomain: "basma-clinic.firebaseapp.com",
+        projectId: "basma-clinic",
+        databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/", // تم استنتاجه من اسم المشروع
+        storageBucket: "basma-clinic.firebasestorage.app",
+        messagingSenderId: "147318897236",
+        appId: "1:147318897236:web:c70aa97a8d9022aeab8bc1"
+    };
+
+    // تهيئة Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const USER = "salematto@gmail.com";
+    const PASS = "zak1959";
+
+    function login() {
+        if(document.getElementById('email').value === USER && document.getElementById('pass').value === PASS) {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            nav('pts');
+        } else { alert("بيانات خاطئة"); }
+    }
+
+    function nav(tab, btn) {
+        document.querySelectorAll('.tab-item').forEach(i => i.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        const view = document.getElementById('view');
+        
+        if(tab === 'pts') {
+            view.innerHTML = `
+                <div class="card">
+                    <h3><i class="fas fa-plus"></i> إضافة مريض للسحابة</h3>
+                    <input id="n" placeholder="اسم المريض">
+                    <input id="p" placeholder="رقم الهاتف">
+                    <button class="btn-action" onclick="saveToCloud()">حفظ سحابي</button>
+                </div>
+                <div id="list">جاري تحميل البيانات من السحابة...</div>`;
+            listenToCloud();
+        } else if(tab === 'ai') {
+            view.innerHTML = `<div class="card"><h3>الذكاء الاصطناعي</h3><textarea id="aiIn" rows="4" placeholder="وصف الحالة..."></textarea><button class="btn-action" onclick="runAI()">تحليل</button><div id="aiOut" style="margin-top:15px; display:none;"></div></div>`;
+        }
+    }
+
+    // حفظ البيانات في Firebase
+    function saveToCloud() {
+        const name = document.getElementById('n').value;
+        const phone = document.getElementById('p').value;
+        if(name) {
+            const newPt = db.ref('patients').push();
+            newPt.set({
+                name: name,
+                phone: phone,
+                date: new Date().toLocaleString('ar-EG')
+            });
+            document.getElementById('n').value = '';
+            document.getElementById('p').value = '';
+        }
+    }
+
+    // الاستماع للبيانات من Firebase (مزامنة حية)
+    function listenToCloud() {
+        db.ref('patients').on('value', (snapshot) => {
+            const data = snapshot.val();
+            const list = document.getElementById('list');
+            if(!data) {
+                list.innerHTML = "لا يوجد مرضى في السحابة حالياً.";
+                return;
+            }
+            let html = '';
+            Object.keys(data).reverse().forEach(key => {
+                const pt = data[key];
+                html += `<div class="card"><strong>${pt.name}</strong><br><small>${pt.phone} | ${pt.date}</small></div>`;
+            });
+            list.innerHTML = html;
+        });
+    }
+
+    // محرك الذكاء الاصطناعي البسيط (للتجربة)
+    function runAI() {
+        const input = document.getElementById('aiIn').value;
+        const out = document.getElementById('aiOut');
+        out.style.display = 'block';
+        if(input.includes("ألم")) {
+            out.innerHTML = "التشخيص المبدئي: التهاب لب سني. الخطة: معالجة لبية.";
+        } else {
+            out.innerHTML = "يرجى تقديم تفاصيل أكثر.";
+        }
+    }
+</script>
+</body>
+</html>
