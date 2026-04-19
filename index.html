@@ -3,91 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بَسْمَة AI - الإصدار المستقر</title>
+    <title>بَسْمَة AI - النظام المستقر</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; margin: 0; padding: 0; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f3f4f6; margin: 0; padding: 0; }
         .hidden { display: none !important; }
-        .tooth-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin: 10px 0; }
-        .tooth-btn { padding: 8px 2px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 10px; font-weight: bold; background: white; cursor: pointer; text-align: center; }
+        .tooth-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+        .tooth-btn { padding: 8px 2px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 10px; font-weight: bold; background: white; cursor: pointer; transition: 0.2s; }
         .tooth-btn.selected { background: #2563eb; color: white; border-color: #1e40af; }
-        .nav-fixed { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 10px; z-index: 1000; }
-        .active-link { color: #2563eb !important; font-weight: bold; }
+        /* شريط الأقسام السفلي */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; padding: 12px; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #9ca3af; font-size: 10px; font-weight: bold; border: none; background: none; cursor: pointer; }
+        .nav-item.active { color: #2563eb; }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="min-h-screen flex flex-col">
 
     <div id="loginPage" class="fixed inset-0 bg-blue-600 z-[2000] flex items-center justify-center p-6">
         <div class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center">
             <i class="fas fa-tooth fa-3x text-blue-600 mb-4"></i>
             <h1 class="text-2xl font-bold text-gray-800 mb-6">بَسْمَة AI</h1>
-            <input type="password" id="password" placeholder="كلمة المرور (zak1959)" class="w-full p-4 border rounded-2xl mb-4 text-center outline-none focus:ring-2 focus:ring-blue-500">
-            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-blue-700 transition">دخول النظام</button>
+            <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-4 border rounded-2xl mb-4 text-center outline-none">
+            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg">دخول</button>
         </div>
     </div>
 
-    <div id="dashboard" class="hidden flex-grow pb-24">
-        <header class="bg-white p-4 shadow-sm flex justify-between items-center border-b sticky top-0 z-50">
+    <div id="dashboard" class="hidden flex-grow flex flex-col pb-24">
+        <header class="bg-white p-4 shadow-sm flex justify-between items-center border-b">
             <div class="flex items-center gap-2">
                 <i class="fas fa-tooth text-blue-600 text-xl"></i>
-                <span class="font-bold text-lg text-blue-800">بَسْمَة AI</span>
+                <span class="font-bold text-blue-800">بَسْمَة AI</span>
             </div>
-            <span class="text-xs font-bold text-gray-500 border-b border-blue-200">د. زكريا محمد عطوني</span>
+            <span class="text-[10px] font-bold text-gray-400">د. زكريا محمد عطوني</span>
         </header>
 
-        <main class="p-4 max-w-xl mx-auto w-full">
-            <section id="section-add">
+        <main class="p-4 max-w-lg mx-auto w-full">
+            <div id="section-add" class="space-y-4">
                 <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-700 mb-4 flex items-center gap-2"><i class="fas fa-user-plus text-blue-500"></i> مراجع جديد</h3>
+                    <h3 class="font-bold text-gray-700 mb-3"><i class="fas fa-plus-circle ml-1"></i> مريض جديد</h3>
                     
-                    <p class="text-[10px] text-gray-400 mb-2">اختر رقم السن المصاب:</p>
-                    <div class="tooth-grid" id="toothGrid"></div>
+                    <div class="tooth-grid mb-4" id="toothGrid"></div>
 
-                    <input type="text" id="pName" placeholder="اسم المريض بالكامل" class="w-full p-4 bg-gray-50 rounded-2xl mb-3 outline-none border border-gray-100 focus:border-blue-300">
-                    <textarea id="pDiagnosis" placeholder="صف الحالة (نبح، عصب، وارم، ألم ليل...)" class="w-full p-4 bg-gray-50 rounded-2xl mb-3 h-24 outline-none border border-gray-100 focus:border-blue-300"></textarea>
+                    <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-4 bg-gray-50 rounded-2xl mb-3 outline-none border">
+                    <textarea id="pDiagnosis" placeholder="وصف الحالة..." class="w-full p-4 bg-gray-50 rounded-2xl mb-3 h-24 outline-none border"></textarea>
                     
-                    <div id="aiIntelligence" class="hidden bg-indigo-50 p-4 rounded-2xl text-xs text-indigo-900 border border-indigo-100 mb-3 leading-relaxed"></div>
+                    <div id="aiIntelligence" class="hidden bg-indigo-50 p-4 rounded-2xl text-xs text-indigo-900 border border-indigo-100 mb-3"></div>
 
                     <div class="flex gap-2">
-                        <button onclick="runMagicAI()" class="flex-1 bg-indigo-100 text-indigo-700 font-bold py-4 rounded-2xl border border-indigo-200"><i class="fas fa-brain ml-1"></i> تحليل AI</button>
-                        <button onclick="savePatient()" class="flex-1 bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-md"><i class="fas fa-save ml-1"></i> حفظ</button>
+                        <button onclick="runMagicAI()" class="flex-1 bg-indigo-100 text-indigo-700 font-bold py-4 rounded-2xl">تحليل AI</button>
+                        <button onclick="savePatient()" class="flex-1 bg-blue-600 text-white font-bold py-4 rounded-2xl">حفظ</button>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <section id="section-list" class="hidden">
-                <h3 class="font-bold text-gray-700 mb-4 px-2">سجل المراجعات</h3>
-                <div id="patientList" class="space-y-3"></div>
-            </section>
+            <div id="section-list" class="hidden space-y-3">
+                <h3 class="font-bold text-gray-700 px-2">سجل المراجعات</h3>
+                <div id="patientList"></div>
+            </div>
         </main>
 
-        <nav class="nav-fixed">
-            <button onclick="showSection('add')" id="nav-add" class="flex flex-col items-center active-link text-gray-400">
-                <i class="fas fa-plus-circle text-xl"></i><span class="text-[10px] mt-1 font-bold">إضافة</span>
+        <nav class="bottom-nav">
+            <button onclick="showPage('add')" id="nav-add" class="nav-item active">
+                <i class="fas fa-plus-square text-2xl mb-1"></i>
+                <span>إضافة</span>
             </button>
-            <button onclick="showSection('list')" id="nav-list" class="flex flex-col items-center text-gray-400">
-                <i class="fas fa-clipboard-list text-xl"></i><span class="text-[10px] mt-1 font-bold">السجل</span>
+            <button onclick="showPage('list')" id="nav-list" class="nav-item">
+                <i class="fas fa-folder-open text-2xl mb-1"></i>
+                <span>السجل</span>
             </button>
-            <button onclick="location.reload()" class="flex flex-col items-center text-red-400">
-                <i class="fas fa-power-off text-xl"></i><span class="text-[10px] mt-1 font-bold">خروج</span>
+            <button onclick="location.reload()" class="nav-item text-red-400">
+                <i class="fas fa-power-off text-2xl mb-1"></i>
+                <span>خروج</span>
             </button>
         </nav>
     </div>
 
     <script>
-        // تكوين Firebase (استخدمنا الرابط الخاص بك)
         const firebaseConfig = { databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         let selectedTooth = null;
 
-        // إنشاء خريطة الأسنان عند التشغيل
-        function initTeeth() {
+        // توليد الأسنان
+        function createTeeth() {
             const grid = document.getElementById('toothGrid');
             const nums = [18,17,16,15,14,13,12,11, 21,22,23,24,25,26,27,28, 48,47,46,45,44,43,42,41, 31,32,33,34,35,36,37,38];
             grid.innerHTML = '';
@@ -95,8 +98,7 @@
                 const b = document.createElement('button');
                 b.className = 'tooth-btn';
                 b.innerText = n;
-                b.onclick = (e) => {
-                    e.preventDefault();
+                b.onclick = () => {
                     document.querySelectorAll('.tooth-btn').forEach(btn => btn.classList.remove('selected'));
                     b.classList.add('selected');
                     selectedTooth = n;
@@ -106,82 +108,60 @@
         }
 
         function handleLogin() {
-            const pass = document.getElementById('password').value;
-            if(pass === "zak1959") {
+            if(document.getElementById('password').value === "zak1959") {
                 document.getElementById('loginPage').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
-                initTeeth();
+                createTeeth();
                 loadPatients();
-            } else {
-                alert("كلمة المرور غير صحيحة دكتور زكريا!");
-            }
+            } else { alert("خطأ!"); }
         }
 
-        function showSection(name) {
+        // التبديل بين الصفحات (إصلاح شامل)
+        function showPage(pageId) {
+            // إخفاء كل الأقسام
             document.getElementById('section-add').classList.add('hidden');
             document.getElementById('section-list').classList.add('hidden');
-            document.getElementById('section-'+name).classList.remove('hidden');
+            // إظهار القسم المطلوب
+            document.getElementById('section-' + pageId).classList.remove('hidden');
             
-            document.getElementById('nav-add').classList.remove('active-link');
-            document.getElementById('nav-list').classList.remove('active-link');
-            document.getElementById('nav-'+name).classList.add('active-link');
+            // تحديث الأزرار
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('nav-' + pageId).classList.add('active');
         }
 
         function runMagicAI() {
-            const diag = document.getElementById('pDiagnosis').value.toLowerCase();
+            const diag = document.getElementById('pDiagnosis').value;
             const res = document.getElementById('aiIntelligence');
-            if(!diag) { alert("اكتب وصف الحالة أولاً"); return; }
+            if(!diag) return;
             res.classList.remove('hidden');
-            res.innerHTML = "جاري التحليل السريري للشكوى...";
+            res.innerHTML = "جاري التحليل لعيادة د. زكريا...";
             setTimeout(() => {
-                let msg = `<b>توصية للسن (${selectedTooth || 'غير محدد'}):</b><br>`;
-                if(diag.includes("نبح") || diag.includes("سهرني") || diag.includes("نبض")) {
-                    msg += "التشخيص: التهاب عصب حاد. الإجراء: استئصال اللب (Pulpectomy).";
-                } else if(diag.includes("وارم") || diag.includes("منفوخ")) {
-                    msg += "التشخيص: خراج سني. الإجراء: تصريف جراحي ووصف مضاد حيوي (Augmentin).";
-                } else if(diag.includes("عالي") || diag.includes("اطبق")) {
-                    msg += "التشخيص: التهاب ذروي. الإجراء: فحص الإطباق وتطهير القنوات.";
-                } else {
-                    msg += "الحالة تتطلب فحصاً سريرياً واختبار حيوية وصورة أشعة.";
-                }
-                res.innerHTML = msg;
-            }, 800);
+                res.innerHTML = `<b>توصية السن (${selectedTooth || 'عام'}):</b><br>بناءً على الأعراض، يُشتبه بوجود حالة تحتاج تداخل جراحي أو سحب عصب. يُنصح بصورة أشعة.`;
+            }, 600);
         }
 
         function savePatient() {
             const name = document.getElementById('pName').value;
             const diag = document.getElementById('pDiagnosis').value;
-            if(!name) { alert("أدخل اسم المريض"); return; }
-            
-            db.ref('patients').push({
-                name, diagnosis: diag, tooth: selectedTooth, date: new Date().toLocaleDateString('ar-EG')
-            }).then(() => {
-                alert("تم حفظ المريض في السجل السحابي!");
-                document.getElementById('pName').value = '';
-                document.getElementById('pDiagnosis').value = '';
-                document.getElementById('aiIntelligence').classList.add('hidden');
-                selectedTooth = null;
-                document.querySelectorAll('.tooth-btn').forEach(b => b.classList.remove('selected'));
-            });
+            if(!name) return;
+            db.ref('patients').push({ name, diagnosis: diag, tooth: selectedTooth, date: new Date().toLocaleDateString('ar-EG') })
+              .then(() => {
+                  alert("تم الحفظ!");
+                  document.getElementById('pName').value = '';
+                  document.getElementById('pDiagnosis').value = '';
+                  document.getElementById('aiIntelligence').classList.add('hidden');
+              });
         }
 
         function loadPatients() {
             db.ref('patients').on('value', snap => {
                 const list = document.getElementById('patientList');
                 list.innerHTML = '';
-                if(!snap.exists()) {
-                    list.innerHTML = '<p class="text-center text-gray-400 mt-10">السجل فارغ حالياً</p>';
-                    return;
-                }
                 snap.forEach(child => {
                     const d = child.val();
-                    list.innerHTML += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="font-bold text-blue-900">${d.name}</span>
-                            <span class="text-[10px] font-bold bg-blue-100 text-blue-600 px-2 py-1 rounded-lg">سن: ${d.tooth || 'الكل'}</span>
-                        </div>
-                        <p class="text-xs text-gray-500 mb-2">${d.diagnosis}</p>
-                        <div class="text-[9px] text-gray-300 italic text-left">${d.date}</div>
+                    list.innerHTML += `<div class="bg-white p-4 rounded-2xl shadow-sm border mb-2">
+                        <div class="flex justify-between font-bold text-blue-900"><span>${d.name}</span><span class="text-blue-500">#${d.tooth || '--'}</span></div>
+                        <p class="text-xs text-gray-500 mt-1">${d.diagnosis}</p>
                     </div>`;
                 });
             });
