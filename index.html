@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بَسْمَة AI - الإدارة الذكية</title>
+    <title>بَسْمَة AI - النظام الذكي المتكامل</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -12,38 +12,27 @@
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
         body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
         .hidden { display: none; }
-        .scroll-tabs {
-            display: flex;
-            overflow-x: auto;
-            white-space: nowrap;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
+        .scroll-tabs { display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none; -ms-overflow-style: none; }
         .scroll-tabs::-webkit-scrollbar { display: none; }
-        .tab-btn {
-            flex: 0 0 auto;
-            padding: 8px 16px;
-            margin: 0 4px;
-            border-radius: 20px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-        }
-        .tab-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
+        .tab-btn { flex: 0 0 auto; padding: 10px 20px; margin: 0 5px; border-radius: 25px; background: white; border: 1px solid #e2e8f0; font-size: 0.9rem; transition: all 0.3s; color: #475569; }
+        .tab-btn.active { background: #2563eb; color: white; border-color: #2563eb; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); }
         .tooth-logo { color: #2563eb; filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.4)); }
+        .ai-glow { animation: glow 2s infinite; }
+        @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
     <div id="loginPage" class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md text-center border-t-8 border-blue-600">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md text-center border-t-8 border-blue-600">
             <i class="fas fa-tooth fa-4x tooth-logo mb-4"></i>
             <h1 class="text-3xl font-bold text-blue-700 mb-2">بَسْمَة AI</h1>
-            <p class="text-gray-500 mb-8 text-sm italic">مستقبل طب الأسنان الرقمي</p>
-            <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-3 border rounded-xl mb-4 outline-none focus:ring-2 focus:ring-blue-400 border-gray-200">
-            <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-3 border rounded-xl mb-6 outline-none focus:ring-2 focus:ring-blue-400 border-gray-200">
-            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-blue-700 transition">دخول النظام</button>
+            <p class="text-gray-400 mb-8 text-sm italic italic font-bold">بإشراف د. زكريا محمد عطوني</p>
+            <div class="space-y-4">
+                <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-4 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-400 border-gray-100">
+                <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-4 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-400 border-gray-100">
+                <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-blue-700 transition">دخول النظام</button>
+            </div>
         </div>
     </div>
 
@@ -51,54 +40,58 @@
         <header class="bg-white shadow-sm p-4 flex justify-between items-center border-b px-6">
             <div class="flex items-center space-x-2 space-x-reverse">
                 <i class="fas fa-tooth text-2xl tooth-logo"></i>
-                <span class="text-xl font-bold text-blue-700 font-bold">بَسْمَة AI</span>
+                <span class="text-xl font-bold text-blue-700">بَسْمَة AI</span>
             </div>
             <div class="text-left">
-                <span class="text-xs text-gray-400 block italic">مرحباً دكتور</span>
-                <span class="text-sm font-bold text-gray-700">زكريا محمد عطوني</span>
+                <span class="text-xs text-gray-400 block italic">مرحباً بك دكتور</span>
+                <span class="text-sm font-bold text-gray-700 border-b border-blue-200">زكريا محمد عطوني</span>
             </div>
         </header>
 
-        <div class="bg-blue-50 p-3 border-b sticky top-0 z-50">
+        <div class="bg-blue-50 p-3 border-b sticky top-0 z-50 overflow-hidden">
             <div class="scroll-tabs px-2">
-                <button onclick="showSection('add')" id="btn-add" class="tab-btn active"><i class="fas fa-plus-circle ml-1"></i>إضافة مريض</button>
-                <button onclick="showSection('list')" id="btn-list" class="tab-btn"><i class="fas fa-list-ul ml-1"></i>سجل المراجعات</button>
-                <button onclick="showSection('ai')" id="btn-ai" class="tab-btn border-indigo-200 text-indigo-700 font-bold"><i class="fas fa-robot ml-1"></i>المساعد الذكي</button>
-                <button class="tab-btn text-gray-400"><i class="fas fa-x-ray ml-1"></i>الأشعة</button>
-                <button class="tab-btn text-gray-400"><i class="fas fa-prescription ml-1"></i>وصفات</button>
-                <button onclick="location.reload()" class="tab-btn text-red-500 font-bold border-red-100"><i class="fas fa-power-off ml-1"></i>خروج</button>
+                <button onclick="showSection('add')" id="btn-add" class="tab-btn active"><i class="fas fa-user-plus ml-2"></i>إضافة مريض</button>
+                <button onclick="showSection('list')" id="btn-list" class="tab-btn"><i class="fas fa-clipboard-list ml-2"></i>سجل المرضى</button>
+                <button onclick="showSection('ai')" id="btn-ai" class="tab-btn border-indigo-200 text-indigo-700 font-bold bg-indigo-50"><i class="fas fa-brain ml-2 ai-glow"></i>المساعد الذكي</button>
+                <button class="tab-btn text-gray-400 opacity-50"><i class="fas fa-x-ray ml-2"></i>الأشعة</button>
+                <button class="tab-btn text-gray-400 opacity-50"><i class="fas fa-file-prescription ml-2"></i>وصفات</button>
+                <button onclick="location.reload()" class="tab-btn text-red-500 font-bold border-red-100"><i class="fas fa-power-off ml-2"></i>خروج</button>
             </div>
         </div>
 
         <main class="p-4 max-w-lg mx-auto w-full space-y-4">
-            <div id="section-add" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <h3 class="font-bold mb-4 text-gray-800 flex items-center"><i class="fas fa-user-plus ml-2 text-blue-600"></i>بيانات المريض</h3>
-                <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl mb-3 outline-none">
-                <textarea id="pDiagnosis" placeholder="التشخيص أو الخطة العلاجية..." class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl mb-3 h-24 outline-none"></textarea>
-                <button onclick="savePatient()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl shadow-md hover:bg-blue-700 transition">حفظ في السحابة</button>
+            <div id="section-add" class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                <h3 class="font-bold mb-4 text-gray-800 flex items-center"><i class="fas fa-id-card ml-2 text-blue-600"></i>بيانات مريض جديد</h3>
+                <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl mb-4 outline-none focus:border-blue-400">
+                <textarea id="pDiagnosis" placeholder="صف حالة المريض (حتى بالعامية)..." class="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl mb-4 h-32 outline-none focus:border-blue-400"></textarea>
+                <button onclick="savePatient()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-md hover:bg-blue-700 transition transform active:scale-95">حفظ في السجل السحابي</button>
             </div>
 
-            <div id="section-ai" class="hidden bg-gradient-to-br from-indigo-50 to-blue-50 p-6 rounded-2xl border border-indigo-100 shadow-inner">
-                <h3 class="font-bold text-indigo-800 mb-3 flex items-center"><i class="fas fa-brain ml-2"></i>تحليل الحالة السريري (AI)</h3>
-                <div class="bg-white p-4 rounded-xl border border-indigo-100 text-sm leading-relaxed text-indigo-900 shadow-sm min-h-[80px]" id="aiAdvice">
-                    أدخل بيانات التشخيص في قسم "إضافة" أولاً، ثم اضغط على زر التحليل بالأسفل.
+            <div id="section-ai" class="hidden bg-gradient-to-br from-indigo-50 to-blue-50 p-6 rounded-3xl border border-indigo-100 shadow-inner">
+                <h3 class="font-bold text-indigo-800 mb-4 flex items-center"><i class="fas fa-robot ml-2"></i>تحليل اللغة العامية والتشخيص</h3>
+                <div class="bg-white p-5 rounded-2xl border border-indigo-100 text-sm leading-relaxed text-indigo-900 shadow-sm min-h-[100px] mb-4" id="aiAdvice">
+                    يرجى كتابة "وصف المريض" في قسم الإضافة، ثم الضغط على الزر أدناه ليقوم الذكاء الاصطناعي بتحليله.
                 </div>
-                <button onclick="runAI()" class="mt-4 w-full bg-indigo-600 text-white py-3 rounded-xl font-bold shadow-lg hover:bg-indigo-700 transition flex items-center justify-center">
-                    <i class="fas fa-magic ml-2"></i>بدء التحليل الذكي
+                <button onclick="runAI()" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-lg hover:bg-indigo-700 transition flex items-center justify-center">
+                    <i class="fas fa-wand-magic-sparkles ml-2"></i>تحليل الحالة سريرياً
                 </button>
             </div>
 
-            <div id="section-list" class="hidden bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <h3 class="font-bold mb-4 text-gray-800 border-b pb-2 flex items-center"><i class="fas fa-history ml-2 text-green-600"></i>آخر المراجعات</h3>
-                <div id="patientList" class="space-y-3"></div>
+            <div id="section-list" class="hidden bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                <h3 class="font-bold mb-4 text-gray-800 border-b pb-2 flex items-center"><i class="fas fa-database ml-2 text-green-600"></i>المراجعات السابقة</h3>
+                <div id="patientList" class="space-y-3 mt-4"></div>
             </div>
         </main>
     </div>
 
-    <footer class="bg-white border-t py-6 text-center mt-auto">
+    <footer class="bg-white border-t py-8 text-center mt-auto">
         <div class="flex flex-col items-center">
-            <p class="text-gray-600 text-sm mb-1">نظام <span class="text-blue-600 font-bold underline">بَسْمَة AI</span> للإدارة الطبية</p>
-            <p class="text-gray-400 text-xs">تم التطوير والتصميم بواسطة <span class="font-bold text-gray-700">د. زكريا محمد عطوني</span> &copy; 2026</p>
+            <div class="flex items-center space-x-2 space-x-reverse mb-2">
+                <i class="fas fa-tooth text-blue-600 opacity-50"></i>
+                <span class="text-blue-600 font-bold tracking-widest text-sm">B A S M A  A I</span>
+            </div>
+            <p class="text-gray-400 text-xs">نظام إدارة العيادات الرقمية - إصدار 2026</p>
+            <p class="text-gray-700 text-sm font-bold mt-1 tracking-wide">تصميم وتطوير: د. زكريا محمد عطوني</p>
         </div>
     </footer>
 
@@ -114,7 +107,7 @@
                 document.getElementById('loginPage').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
                 loadPatients();
-            } else { alert("عذراً، بيانات الدخول غير صحيحة."); }
+            } else { alert("عذراً دكتور، بيانات الدخول غير صحيحة."); }
         }
 
         function showSection(name) {
@@ -125,37 +118,72 @@
         }
 
         function runAI() {
-            const diag = document.getElementById('pDiagnosis').value;
+            const diag = document.getElementById('pDiagnosis').value.toLowerCase();
             const aiText = document.getElementById('aiAdvice');
-            if(!diag) { alert("يرجى كتابة حالة المريض أولاً في قسم الإضافة."); return; }
-            aiText.innerText = "جاري معالجة البيانات وتحليل البروتوكولات الطبية...";
+            
+            if(!diag) { alert("من فضلك اكتب وصف المريض في خانة التشخيص أولاً."); return; }
+            
+            aiText.innerHTML = `<i class="fas fa-circle-notch fa-spin ml-2"></i> جاري ترجمة اللغة العامية وتحليل الاحتمالات الطبية...`;
+            
             setTimeout(() => {
-                let res = "بناءً على المعطيات المبدئية، يُنصح بإجراء صورة أشعة ذروية (Periapical) للتأكد من سلامة النسج الداعمة قبل اتخاذ القرار النهائي.";
-                if(diag.includes("ألم") || diag.includes("عصب")) res = "توصية AI: الحالة تشير لـ (Pulpitis). يُنصح بفتح السن وتطبيق ضماد مسكن مع وصف NSAIDs للمريض.";
-                if(diag.includes("لثة") || diag.includes("نزف")) res = "توصية AI: التهاب أنسجة داعمة. يُنصح بجلسات Scaling و Root Planing مع وصف مضمضة Chlorhexidine.";
-                aiText.innerText = res;
-            }, 1000);
+                let res = "<b>توصية عامة:</b> الوصف غير كافٍ لتحديد إصابة معينة. يُنصح بإجراء اختبارات الحيوية (Vitality Tests) وصورة أشعة ذروية.";
+                
+                if(diag.includes("نبح") || diag.includes("سهرني") || diag.includes("نبض") || diag.includes("يغلي") || diag.includes("شقي")) {
+                    res = "<b>تحليل AI:</b> المريض يصف 'ألم نبضي' حاد. التشخيص المرجح: <u>التهاب عصب غير ردود (Irreversible Pulpitis)</u>. <br><b>الإجراء المقترح:</b> فتح السن فوراً لتخفيف الضغط وسحب العصب.";
+                }
+                else if(diag.includes("راسي") || diag.includes("اذني") || diag.includes("عيني") || diag.includes("خد") || diag.includes("وجهي")) {
+                    res = "<b>تحليل AI:</b> ألم منعكس (Referred Pain). <br><b>الاحتمالات:</b> التهاب عصب في رحى خلفية، أو مشكلة في المفصل (TMJ)، أو بزوغ ضرس عقل. <br><b>الإجراء:</b> صورة بانورامية (OPG).";
+                }
+                else if(diag.includes("طالع") || diag.includes("اطبق") || diag.includes("عالي") || diag.includes("لمس") || diag.includes("دقة")) {
+                    res = "<b>تحليل AI:</b> علامات التهاب الأنسجة حول الذروية (Apical Periodontitis). <br><b>الإجراء:</b> فحص عمق القنوات وبدء التطهير الكيميائي الميكانيكي.";
+                }
+                else if(diag.includes("وارم") || diag.includes("حبة") || diag.includes("قيح") || diag.includes("خراج")) {
+                    res = "<b>تحليل AI:</b> وجود <u>خراج سني (Abscess)</u>. <br><b>الإجراء:</b> تفجير الخراج وتصريف الصديد، مع وصف مضاد حيوي واسع الطيف.";
+                }
+                else if(diag.includes("دم") || diag.includes("لحم") || diag.includes("ريحة") || diag.includes("طعم") || diag.includes("وسخ")) {
+                    res = "<b>تحليل AI:</b> مشاكل في الأنسجة الداعمة أو نخر مهمل. <br><b>الإجراء:</b> تقليح لثوي (Scaling) وإزالة الحواف الناتئة للحشوات القديمة إن وجدت.";
+                }
+                else if(diag.includes("هواء") || diag.includes("بارد") || diag.includes("حلو") || diag.includes("شاي")) {
+                    res = "<b>تحليل AI:</b> حساسية عاجية أو نخر مبدئي (Initial Caries). <br><b>الإجراء:</b> فحص سريري بالمسبر وتطبيق مواد سادة للمسام العاجية.";
+                }
+                
+                aiText.innerHTML = `<div class="text-blue-800 animate-in fade-in duration-500">${res}</div>`;
+            }, 1200);
         }
 
         function savePatient() {
             const name = document.getElementById('pName').value;
             const diag = document.getElementById('pDiagnosis').value;
-            if(!name) { alert("يرجى كتابة اسم المريض."); return; }
-            db.ref('patients').push({ name, diagnosis: diag, date: new Date().toLocaleDateString('ar-EG') })
-              .then(() => { alert("تم الحفظ في السجل بنجاح!"); document.getElementById('pName').value = ''; document.getElementById('pDiagnosis').value = ''; })
-              .catch(e => alert("خطأ في الاتصال: " + e));
+            if(!name) { alert("يرجى إدخال اسم المريض."); return; }
+            
+            db.ref('patients').push({
+                name: name,
+                diagnosis: diag,
+                date: new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+            }).then(() => {
+                alert("تم الحفظ بنجاح دكتور زكريا!");
+                document.getElementById('pName').value = '';
+                document.getElementById('pDiagnosis').value = '';
+            }).catch(e => alert("فشل في الاتصال بالسحابة: " + e));
         }
 
         function loadPatients() {
             db.ref('patients').on('value', snap => {
                 const list = document.getElementById('patientList');
                 list.innerHTML = '';
-                if(!snap.exists()) { list.innerHTML = '<p class="text-center text-gray-400 text-sm italic">لا يوجد سجلات حالياً</p>'; return; }
+                if(!snap.exists()) {
+                    list.innerHTML = '<div class="text-center text-gray-400 py-10 italic">السجل فارغ حالياً</div>';
+                    return;
+                }
                 snap.forEach(child => {
                     const d = child.val();
-                    list.innerHTML += `<div class="p-4 bg-gray-50 border border-gray-100 rounded-2xl shadow-sm">
-                        <div class="flex justify-between font-bold text-blue-900 text-sm mb-1"><span>${d.name}</span><span class="text-[10px] text-gray-400">${d.date}</span></div>
-                        <p class="text-xs text-gray-600 italic leading-relaxed">${d.diagnosis || 'بدون تشخيص'}</p>
+                    list.innerHTML += `
+                    <div class="p-4 bg-gray-50 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition cursor-default">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-blue-900">${d.name}</h4>
+                            <span class="text-[9px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">${d.date}</span>
+                        </div>
+                        <p class="text-xs text-gray-600 leading-relaxed">${d.diagnosis || 'لا توجد ملاحظات سريرية'}</p>
                     </div>`;
                 });
             });
