@@ -3,147 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بَسْمَة AI - الإصدار الثالث الاحترافي</title>
+    <title>بَسْمَة AI - الإصدار الفائق</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; }
+        body { font-family: 'Tajawal', sans-serif; background: #f8fafc; color: #1e293b; }
+        .tooth-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+        .tooth-btn { padding: 8px 4px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 10px; font-weight: bold; background: white; cursor: pointer; transition: 0.2s; }
+        .tooth-btn:hover { background: #dbeafe; border-color: #3b82f6; }
+        .tooth-btn.selected { background: #2563eb; color: white; border-color: #1e40af; }
+        .magic-card { background: white; border-radius: 30px; border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); transition: 0.3s; }
+        .magic-card:hover { transform: translateY(-5px); }
         .hidden { display: none; }
-        .tab-btn { flex: 0 0 auto; padding: 12px 20px; margin: 0 5px; border-radius: 15px; background: white; transition: 0.3s; font-size: 0.85rem; font-weight: bold; }
-        .tab-btn.active { background: #1d4ed8; color: white; shadow: 0 4px 10px rgba(29, 78, 216, 0.3); }
-        .card { background: white; border-radius: 24px; padding: 24px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 1px solid #e2e8f0; }
-        .ai-result { border-right: 4px solid #4f46e5; background: #f5f3ff; }
+        .tab-active { background: #2563eb !important; color: white !important; box-shadow: 0 10px 15px -3px rgba(37,99,235,0.3); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen pb-20">
 
-    <div id="loginPage" class="flex-grow flex items-center justify-center p-4">
-        <div class="card w-full max-w-md text-center">
-            <i class="fas fa-tooth fa-3x text-blue-600 mb-4"></i>
-            <h1 class="text-2xl font-bold text-gray-800 mb-6">بَسْمَة AI <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">V3.0</span></h1>
-            <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-4 border rounded-2xl mb-4 outline-none">
-            <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-4 border rounded-2xl mb-6 outline-none">
-            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-blue-700">دخول النظام</button>
+    <div id="loginPage" class="fixed inset-0 bg-white z-[100] flex items-center justify-center p-6">
+        <div class="text-center w-full max-w-sm">
+            <div class="inline-block p-6 bg-blue-50 rounded-full mb-6">
+                <i class="fas fa-tooth fa-4x text-blue-600"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">بَسْمَة AI</h1>
+            <p class="text-gray-400 mb-8 font-bold italic">نظام د. زكريا محمد عطوني</p>
+            <input type="password" id="password" placeholder="كلمة المرور الخاصة بك" class="w-full p-4 bg-gray-50 border rounded-2xl mb-4 outline-none text-center">
+            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-xl">دخول الساحر 🪄</button>
         </div>
     </div>
 
-    <div id="dashboard" class="hidden flex-grow flex flex-col">
-        <header class="bg-white p-4 flex justify-between items-center shadow-sm border-b px-6">
-            <div class="flex items-center space-x-2 space-x-reverse"><i class="fas fa-tooth text-blue-600 text-2xl"></i><span class="font-bold text-xl text-blue-800">بَسْمَة AI</span></div>
-            <div class="text-left"><span class="text-[10px] text-gray-400 block">المطور المسؤول</span><span class="text-sm font-bold text-blue-600 italic underline">د. زكريا محمد عطوني</span></div>
+    <div id="dashboard" class="hidden">
+        <header class="p-6 bg-white border-b flex justify-between items-center sticky top-0 z-40">
+            <div>
+                <h2 class="text-xl font-bold text-blue-900">لوحة التحكم</h2>
+                <p class="text-[10px] text-gray-400">أهلاً بك دكتور زكريا</p>
+            </div>
+            <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
+                <i class="fas fa-user-md text-blue-600"></i>
+            </div>
         </header>
 
-        <nav class="bg-white p-3 sticky top-0 z-50 shadow-sm overflow-x-auto flex no-scrollbar border-b">
-            <button onclick="showSection('add')" id="btn-add" class="tab-btn active"><i class="fas fa-user-plus ml-2"></i>مريض جديد</button>
-            <button onclick="showSection('list')" id="btn-list" class="tab-btn"><i class="fas fa-database ml-2"></i>السجل الطبي</button>
-            <button onclick="showSection('ai')" id="btn-ai" class="tab-btn text-indigo-700 bg-indigo-50"><i class="fas fa-brain ml-2"></i>الصيدلية الذكية</button>
-            <button onclick="location.reload()" class="tab-btn text-red-500 font-bold border border-red-50">خروج</button>
-        </nav>
-
-        <main class="p-4 max-w-2xl mx-auto w-full space-y-6">
+        <main class="p-4 space-y-6 max-w-2xl mx-auto">
             
-            <div id="section-add" class="card space-y-4">
-                <h3 class="font-bold text-gray-700 flex items-center"><i class="fas fa-notes-medical ml-2 text-blue-600"></i>فتح ملف مريض</h3>
-                <input type="text" id="pName" placeholder="اسم المريض الرباعي" class="w-full p-4 bg-gray-50 border-none rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
-                <textarea id="pDiagnosis" placeholder="شكوى المريض (نبح، عالي، وارم...)" class="w-full p-4 bg-gray-50 border-none rounded-2xl h-28 outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            <section id="section-add" class="magic-card p-6">
+                <h3 class="font-bold text-lg mb-4 flex items-center"><i class="fas fa-map-marker-alt ml-2 text-blue-500"></i>تحديد السن والتشخيص</h3>
                 
-                <div class="border-2 border-dashed border-gray-200 p-6 rounded-2xl text-center">
-                    <label class="cursor-pointer">
-                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-300 mb-2"></i>
-                        <p class="text-xs text-gray-400">إرفاق صورة الأشعة (X-Ray)</p>
-                        <input type="file" class="hidden" id="pXray" accept="image/*">
-                    </label>
-                </div>
+                <div class="tooth-grid mb-6" id="toothGrid">
+                    </div>
 
-                <div id="inlineAI" class="hidden ai-result p-4 rounded-xl text-xs leading-relaxed text-indigo-900 mb-2 shadow-inner"></div>
+                <input type="text" id="pName" placeholder="اسم المريض.." class="w-full p-4 bg-gray-50 rounded-2xl mb-4 outline-none border border-gray-100 focus:border-blue-300">
+                <textarea id="pDiagnosis" placeholder="اكتب شكوى المريض هنا.." class="w-full p-4 bg-gray-50 rounded-2xl mb-4 h-24 outline-none border border-gray-100 focus:border-blue-300"></textarea>
+                
+                <div id="aiIntelligence" class="hidden bg-blue-50 p-4 rounded-2xl text-xs text-blue-800 mb-4 border border-blue-100 leading-relaxed"></div>
                 
                 <div class="flex gap-2">
-                    <button onclick="runAdvancedAI()" class="flex-1 bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-lg"><i class="fas fa-magic ml-2"></i>البروتوكول الذكي</button>
-                    <button onclick="savePatient()" class="flex-1 bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg">حفظ الملف</button>
+                    <button onclick="magicAI()" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 rounded-2xl shadow-lg">تحليل ذكي</button>
+                    <button onclick="savePatient()" class="flex-1 bg-gray-900 text-white font-bold py-4 rounded-2xl shadow-lg">حفظ المراجعة</button>
                 </div>
-            </div>
+            </section>
 
-            <div id="section-ai" class="hidden card space-y-4">
-                <h3 class="font-bold text-indigo-800"><i class="fas fa-capsules ml-2"></i>المساعد الدوائي والمواد السنية</h3>
-                <input id="drugSearch" placeholder="ابحث عن دواء أو مادة (أطفال، عصب، حشوة)..." class="w-full p-4 border rounded-2xl outline-none border-indigo-100">
-                <div id="drugResult" class="p-4 bg-indigo-50 rounded-2xl text-sm min-h-[100px] border border-indigo-100">
-                    استخدم البحث لمعرفة الجرعات المناسبة أو أفضل المواد المستخدمة.
-                </div>
-                <button onclick="searchDrugs()" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-md">بحث ذكي</button>
-            </div>
-
-            <div id="section-list" class="hidden space-y-4">
-                <h3 class="font-bold px-2">تاريخ المراجعات</h3>
+            <section id="section-list" class="hidden space-y-4">
+                <h3 class="font-bold text-lg px-2">أرشيف المراجعات</h3>
                 <div id="patientList" class="space-y-4"></div>
-            </div>
-
+            </section>
         </main>
-    </div>
 
-    <footer class="bg-white border-t py-8 text-center mt-auto">
-        <p class="text-gray-700 text-sm font-bold">بَسْمَة AI &copy; 2026</p>
-        <p class="text-[10px] text-gray-400">تم التصميم والتطوير بواسطة د. زكريا محمد عطوني</p>
-    </footer>
+        <nav class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t p-4 flex justify-around items-center z-50">
+            <button onclick="showSection('add')" id="nav-add" class="text-blue-600 flex flex-col items-center"><i class="fas fa-plus-circle text-2xl"></i><span class="text-[10px] mt-1">جديد</span></button>
+            <button onclick="showSection('list')" id="nav-list" class="text-gray-400 flex flex-col items-center"><i class="fas fa-history text-2xl"></i><span class="text-[10px] mt-1">السجل</span></button>
+            <button onclick="location.reload()" class="text-red-400 flex flex-col items-center"><i class="fas fa-sign-out-alt text-2xl"></i><span class="text-[10px] mt-1">خروج</span></button>
+        </nav>
+    </div>
 
     <script>
         const firebaseConfig = { databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        let selectedTooth = null;
+
+        // توليد خريطة الأسنان
+        const grid = document.getElementById('toothGrid');
+        const toothNumbers = [18,17,16,15,14,13,12,11, 21,22,23,24,25,26,27,28, 48,47,46,45,44,43,42,41, 31,32,33,34,35,36,37,38];
+        toothNumbers.forEach(num => {
+            const btn = document.createElement('button');
+            btn.className = 'tooth-btn';
+            btn.innerText = num;
+            btn.onclick = () => {
+                document.querySelectorAll('.tooth-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedTooth = num;
+            };
+            grid.appendChild(btn);
+        });
+
         function handleLogin() {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            if(email === "salematto@gmail.com" && pass === "zak1959") {
+            if(document.getElementById('password').value === "zak1959") {
                 document.getElementById('loginPage').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
                 loadPatients();
-            } else { alert("عذراً دكتور، تأكد من البيانات."); }
+            } else { alert("كلمة المرور خاطئة يا دكتور!"); }
         }
 
         function showSection(name) {
-            ['add', 'list', 'ai'].forEach(s => document.getElementById('section-'+s).classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            ['add', 'list'].forEach(s => document.getElementById('section-'+s).classList.add('hidden'));
             document.getElementById('section-'+name).classList.remove('hidden');
-            document.getElementById('btn-'+name).classList.add('active');
+            // تحديث ألوان الأزرار في الشريط السفلي
+            document.querySelectorAll('nav button').forEach(b => b.classList.replace('text-blue-600', 'text-gray-400'));
+            document.getElementById('nav-'+name).classList.replace('text-gray-400', 'text-blue-600');
         }
 
-        // (3) المساعد الذكي المطور (بروتوكولات ودوائيات)
-        function runAdvancedAI() {
-            const text = document.getElementById('pDiagnosis').value.toLowerCase();
-            const resBox = document.getElementById('inlineAI');
-            if(!text) return;
-            resBox.classList.remove('hidden');
-            resBox.innerHTML = "جاري تحليل الحالة وصياغة البروتوكول العلاجي...";
+        function magicAI() {
+            const diag = document.getElementById('pDiagnosis').value.toLowerCase();
+            const res = document.getElementById('aiIntelligence');
+            if(!diag) return;
+            res.classList.remove('hidden');
+            res.innerHTML = "جاري تفعيل السحر البرمجي لتحليل الحالة...";
             
             setTimeout(() => {
-                let protocol = "<b>البروتوكول:</b> يحتاج فحص سريري وأشعة ذروية.";
-                if(text.includes("نبح") || text.includes("سهرني")) {
-                    protocol = `<b>التشخيص:</b> التهاب عصب حاد (Pulpitis).<br>
-                                <b>الخطة:</b> Pulpectomy.<br>
-                                <b>المواد:</b> استخدام Sodium Hypochlorite 5.25% للإرواء + Calcium Hydroxide كضماد.<br>
-                                <b>الدواء:</b> Amoxicillin 500mg (كل 8 ساعات) + Ibuprofen 400mg عند اللزوم.`;
-                } else if(text.includes("وارم") || text.includes("خدي")) {
-                    protocol = `<b>التشخيص:</b> خراج سني نشط.<br>
-                                <b>الخطة:</b> تصريف القيح + تطهير قنوات.<br>
-                                <b>الدواء:</b> Augmentin 1g (مرتين يومياً) + Flagyl 500mg (كل 8 ساعات).`;
+                let msg = `<b>توصية للسن رقم (${selectedTooth || 'غير محدد'}):</b><br>`;
+                if(diag.includes("نبح") || diag.includes("سهرني")) {
+                    msg += "التشخيص: التهاب عصب حاد. البروتوكول: Pulpectomy + إرواء هيبوكلوريت + حشو أقماع كوتابيركا.";
+                } else if(diag.includes("وارم")) {
+                    msg += "التشخيص: خراج ذروي. الإجراء: تصريف جراحي ووصف Augmentin 1g.";
+                } else {
+                    msg += "يُنصح بإجراء فحص سريري واختبار برودة للتأكد.";
                 }
-                resBox.innerHTML = protocol;
-            }, 1000);
-        }
-
-        // (3) وظيفة البحث عن الأدوية والمواد
-        function searchDrugs() {
-            const query = document.getElementById('drugSearch').value.toLowerCase();
-            const res = document.getElementById('drugResult');
-            let data = "لم يتم العثور على معلومات دقيقة، يرجى مراجعة المرجع الدوائي.";
-            
-            if(query.includes("أطفال") || query.includes("طفل")) data = "<b>جرعة الأطفال:</b> Amoxicillin (20-40 mg/kg/day) مقسمة على 3 جرعات. Ibuprofen (5-10 mg/kg) كل 6-8 ساعات.";
-            if(query.includes("حشوة") || query.includes("تجميل")) data = "<b>توصية المواد:</b> للحفر العميقة استخدم TheraCal LC كقاعدة واقية، ثم Composite نانوهجين للحصول على لمعان ومتانة عالية.";
-            
-            res.innerHTML = data;
+                res.innerHTML = msg;
+            }, 800);
         }
 
         function savePatient() {
@@ -151,19 +141,15 @@
             const diag = document.getElementById('pDiagnosis').value;
             if(!name) return;
             db.ref('patients').push({
-                name, diagnosis: diag, date: new Date().toLocaleDateString('ar-EG')
+                name, diagnosis: diag, tooth: selectedTooth, date: new Date().toLocaleDateString('ar-EG')
             }).then(() => {
-                alert("تم حفظ الملف وتحديث السجل!");
+                alert("تم الحفظ بنجاح دكتور زكريا!");
                 document.getElementById('pName').value = '';
                 document.getElementById('pDiagnosis').value = '';
-                document.getElementById('inlineAI').classList.add('hidden');
+                document.getElementById('aiIntelligence').classList.add('hidden');
+                document.querySelectorAll('.tooth-btn').forEach(b => b.classList.remove('selected'));
+                selectedTooth = null;
             });
-        }
-
-        // (2) استخراج تقرير PDF (محاكاة)
-        function printReport(name, diag, date) {
-            alert(`جاري تجهيز تقرير رسمي للمريض: ${name}\nبتاريخ: ${date}\nسيتم فتحه في نافذة الطباعة.`);
-            window.print();
         }
 
         function loadPatients() {
@@ -173,18 +159,13 @@
                 snap.forEach(child => {
                     const d = child.val();
                     list.innerHTML += `
-                    <div class="card bg-gray-50 border-none">
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-blue-900">${d.name}</h4>
-                            <button onclick="printReport('${d.name}', '${d.diagnosis}', '${d.date}')" class="text-xs bg-white border px-2 py-1 rounded-lg shadow-sm text-gray-500 hover:text-blue-600">
-                                <i class="fas fa-print ml-1"></i> تقرير
-                            </button>
+                    <div class="magic-card p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">السن: ${d.tooth || 'الكل'}</span>
+                            <span class="text-[10px] text-gray-400">${d.date}</span>
                         </div>
-                        <p class="text-xs text-gray-600">${d.diagnosis}</p>
-                        <div class="mt-3 flex justify-between items-center text-[10px] text-gray-400">
-                            <span>${d.date}</span>
-                            <span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">ملف مكتمل</span>
-                        </div>
+                        <h4 class="font-bold text-gray-800">${d.name}</h4>
+                        <p class="text-xs text-gray-500 mt-1">${d.diagnosis}</p>
                     </div>`;
                 });
             });
