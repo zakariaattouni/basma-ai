@@ -6,8 +6,9 @@
     <title>بَسْمَة AI - المساعد السني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <!-- تحميل فايربيس بشكل آمن مع فشل متسامح -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js" onerror="window.fbBlocked=true"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js" onerror="window.fbBlocked=true"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
         * { box-sizing: border-box; }
@@ -43,10 +44,13 @@
         @keyframes pulse-wa { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
         .wa-pulse { animation: pulse-wa 2s infinite; }
         .wa-pulse:hover { animation: none; }
-    </style>
-</head>
+        .conn-indicator { font-size: 9px; padding: 2px 6px; border-radius: 10px; }
+        .conn-online { background: #dcfce7; color: #166534; }
+        .conn-offline { background: #fee2e2; color: #991b1b; }
+    </style></head>
 <body class="pb-20">
     <div id="toastContainer"></div>
+
     <div id="loginPage" class="fixed inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 z-[10000] flex items-center justify-center p-6">
         <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm text-center">
             <div class="app-logo mx-auto mb-3"><i class="fas fa-tooth"></i></div>
@@ -67,7 +71,6 @@
                 <input type="email" id="doctorEmail" placeholder="البريد الإلكتروني" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-3 text-center outline-none focus:border-amber-500">
                 <input type="password" id="doctorPassword" placeholder="كلمة المرور" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-amber-500">
                 <button type="button" onclick="handleDoctorLogin()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">دخول</button>
-                <!-- ✅ تم تصحيح الرابط هنا -->
                 <p class="text-xs text-gray-400 mt-3">ليس لديك حساب؟ <span class="text-amber-600 cursor-pointer font-medium hover:underline" onclick="openSubscribe()">اشترك الآن</span></p>
             </div>
         </div>
@@ -77,6 +80,7 @@
         <header class="app-header">
             <div class="app-logo"><i class="fas fa-tooth"></i></div>
             <h1 class="font-bold text-blue-900">بَسْمَة AI</h1>
+            <span id="connBadge" class="conn-indicator">...</span>
         </header>
         
         <div id="userBar" class="bg-blue-50 px-4 py-2 text-center text-xs text-blue-700 d-none">
@@ -92,11 +96,11 @@
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <button type="button" onclick="navTo('register')" class="quick-action register"><i class="fas fa-user-plus"></i> مريض جديد</button>
-                    <button type="button" onclick="navTo('ai')" class="quick-action ai"><i class="fas fa-robot"></i> مساعد ذكي</button>
-                    <button type="button" onclick="navTo('add')" class="quick-action"><i class="fas fa-stethoscope"></i> فحص جديد</button>
+                    <button type="button" onclick="navTo('ai')" class="quick-action ai"><i class="fas fa-robot"></i> مساعد ذكي</button>                    <button type="button" onclick="navTo('add')" class="quick-action"><i class="fas fa-stethoscope"></i> فحص جديد</button>
                     <button type="button" onclick="navTo('list')" class="quick-action"><i class="fas fa-clipboard-list"></i> السجلات</button>
                 </div>
-                                <div id="adminSection" class="d-none">
+                
+                <div id="adminSection" class="d-none">
                     <div class="section-card border-2 border-indigo-200">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="font-bold text-sm"><i class="fas fa-user-clock text-amber-500 ml-1"></i> طلبات معلقة</h3>
@@ -141,11 +145,11 @@
                     <h2 class="font-bold text-sm mb-3"><i class="fas fa-user-plus text-green-500 ml-1"></i> مريض جديد</h2>
                     <input type="text" id="regName" placeholder="الاسم الكامل" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
                     <input type="tel" id="regPhone" placeholder="رقم الهاتف" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
-                    <input type="date" id="regBirth" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
-                    <select id="regGender" class="w-full p-2 bg-gray-50 border rounded-lg mb-3 outline-none focus:border-green-400 text-sm"><option value="">الجنس</option><option value="male">ذكر</option><option value="female">أنثى</option></select>
+                    <input type="date" id="regBirth" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">                    <select id="regGender" class="w-full p-2 bg-gray-50 border rounded-lg mb-3 outline-none focus:border-green-400 text-sm"><option value="">الجنس</option><option value="male">ذكر</option><option value="female">أنثى</option></select>
                     <button type="button" onclick="registerPatient()" class="w-full bg-green-500 text-white font-bold py-2 rounded-lg">تسجيل</button>
                 </div>
             </div>
+
             <div id="page-subscribe" class="d-none space-y-3">
                 <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">
                     <div class="text-center mb-3">
@@ -158,7 +162,6 @@
                     <input type="password" id="subPassword" placeholder="كلمة مرور" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
                     <input type="text" id="subSpecialty" placeholder="التخصص (اختياري)" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">
                     <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
-                    <!-- ✅ زر العودة المضاف -->
                     <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-3 hover:bg-gray-300 transition">← العودة لتسجيل الدخول</button>
                 </div>
             </div>
@@ -191,23 +194,42 @@
         <footer class="main-footer">
             <button type="button" onclick="navTo('home')" id="btn-home" class="nav-btn active"><i class="fas fa-home"></i><span>الرئيسية</span></button>
             <button type="button" onclick="navTo('add')" id="btn-add" class="nav-btn"><i class="fas fa-plus-circle"></i><span>فحص</span></button>
-            <button type="button" onclick="navTo('ai')" id="btn-ai" class="nav-btn"><i class="fas fa-robot"></i><span>AI</span></button>
-            <button type="button" onclick="navTo('list')" id="btn-list" class="nav-btn"><i class="fas fa-clipboard-list"></i><span>سجل</span></button>
+            <button type="button" onclick="navTo('ai')" id="btn-ai" class="nav-btn"><i class="fas fa-robot"></i><span>AI</span></button>            <button type="button" onclick="navTo('list')" id="btn-list" class="nav-btn"><i class="fas fa-clipboard-list"></i><span>سجل</span></button>
         </footer>
     </div>
+
     <a href="https://wa.me/963939436998?text=مرحباً، أرغب باستفسار حول تطبيق بَسْمَة AI" target="_blank" class="wa-float wa-pulse" title="تواصل عبر واتساب">
         <i class="fab fa-whatsapp text-2xl"></i>
     </a>
 
     <script>
-        let db = null;
+        // 🛡️ تهيئة آمنة تتعامل مع حجب الشبكات
+        let db = null, firebaseReady = false;
         try {
-            const config = { databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/" };
-            if (!firebase.apps.length) firebase.initializeApp(config);
-            db = firebase.database();
-        } catch (e) { console.error("Firebase Error:", e); }
+            if (typeof firebase !== 'undefined' && !window.fbBlocked) {
+                const config = { databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/" };
+                if (!firebase.apps.length) firebase.initializeApp(config);
+                db = firebase.database();
+                firebaseReady = true;
+                console.log("✅ Firebase متصل");
+            } else {
+                console.warn("⚠️ Firebase غير متاح. العمل بالوضع المحلي الآمن.");
+            }
+        } catch (e) { console.error("Firebase Init Error:", e); }
+
+        // تحديث مؤشر الاتصال
+        const connBadge = document.getElementById('connBadge');
+        if(firebaseReady) {
+            connBadge.className = 'conn-indicator conn-online';
+            connBadge.innerText = '🟢 متصل';
+        } else {
+            connBadge.className = 'conn-indicator conn-offline';
+            connBadge.innerText = '🔴 وضع محلي';
+        }
 
         let currentTooth = null, currentUser = null;
+        // قاعدة بيانات محلية احتياطية
+        const localDB = JSON.parse(localStorage.getItem('basma_local') || '[]');
 
         function switchLogin(type) {
             const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');
@@ -222,58 +244,55 @@
                 formD.classList.remove('d-none'); formA.classList.add('d-none');
             }
         }
-
-        // ✅ دالة فتح صفحة الاشتراك بدون تسجيل دخول
         function openSubscribe() {
             document.getElementById('loginPage').classList.add('d-none');
             document.getElementById('mainContent').classList.remove('d-none');
             navTo('subscribe');
         }
 
-        // ✅ دالة العودة لشاشة الدخول
         function backToLogin() {
             document.getElementById('mainContent').classList.add('d-none');
             document.getElementById('loginPage').classList.remove('d-none');
         }
 
-        function handleAdminLogin(e) {
-            if(e) e.preventDefault();
-            try {
-                if(document.getElementById('adminPassword').value.trim() === "zak1959") { 
-                    currentUser = { role: 'admin' }; afterLogin(); 
-                } else { showToast("❌ كلمة المرور غير صحيحة", "error"); }
-            } catch(err) { showToast("حدث خطأ غير متوقع", "error"); }
+        function handleAdminLogin() {
+            const pwd = document.getElementById('adminPassword').value.trim();
+            if(pwd === "zak1959") { 
+                currentUser = { role: 'admin' }; 
+                afterLogin(); 
+            } else { showToast("❌ كلمة المرور غير صحيحة", "error"); }
         }
-        function handleDoctorLogin(e) {
-            if(e) e.preventDefault();
-            try {
-                const email = document.getElementById('doctorEmail').value.trim();
-                const password = document.getElementById('doctorPassword').value.trim();
-                if(!email || !password) return showToast("أدخل البريد وكلمة المرور", "error");
-                if(!db) return showToast("قاعدة البيانات غير متصلة", "error");
 
-                db.ref('doctor_subscriptions').orderByChild('email').equalTo(email).once('value')
-                  .then(snap => {
-                    if(!snap.exists()) return showToast("❌ حساب غير موجود", "error");
-                    let found = null;
-                    snap.forEach(c => { if(c.val().password === password) found = {id: c.key, ...c.val()}; });
-                    if(!found) return showToast("❌ كلمة المرور خاطئة", "error");
-                    if(found.status !== 'active') return showToast("⏳ حسابك قيد المراجعة أو مُوقف", "info");
-                    currentUser = { role: 'doctor', ...found }; afterLogin();
-                  }).catch(e => showToast("خطأ في الاتصال: " + e.message, "error"));
-            } catch(err) { showToast("حدث خطأ غير متوقع", "error"); }
+        function handleDoctorLogin() {
+            const email = document.getElementById('doctorEmail').value.trim();
+            const password = document.getElementById('doctorPassword').value.trim();
+            if(!email || !password) return showToast("أدخل البريد وكلمة المرور", "error");
+            
+            if(!firebaseReady) return showToast("⚠️ الدخول متوقف مؤقتاً بسبب انقطاع الاتصال. حاول لاحقاً أو اتصل بالمدير.", "info");
+
+            db.ref('doctor_subscriptions').orderByChild('email').equalTo(email).once('value')
+              .then(snap => {
+                if(!snap.exists()) return showToast("❌ حساب غير موجود", "error");
+                let found = null;
+                snap.forEach(c => { if(c.val().password === password) found = {id: c.key, ...c.val()}; });
+                if(!found) return showToast("❌ كلمة المرور خاطئة", "error");
+                if(found.status !== 'active') return showToast("⏳ حسابك قيد المراجعة أو مُوقف", "info");
+                currentUser = { role: 'doctor', ...found }; afterLogin();
+              }).catch(() => showToast("فشل الاتصال بالخادم", "error"));
         }
 
         function afterLogin() {
+            document.getElementById('loginPage').classList.add('d-none');
+            document.getElementById('mainContent').classList.remove('d-none');
             document.getElementById('userBar').classList.remove('d-none');
+            
             if(currentUser.role === 'admin') {
                 document.getElementById('userTypeDisplay').innerText = 'مدير النظام';
                 document.getElementById('adminSection').classList.remove('d-none');
                 loadDoctorRequests(); loadActiveDoctors(); navTo('home');
             } else {
                 document.getElementById('userTypeDisplay').innerText = `د. ${currentUser.name}`;
-                document.getElementById('adminSection').classList.add('d-none');
-                navTo('add');
+                document.getElementById('adminSection').classList.add('d-none');                navTo('add');
             }
             initTeeth(); loadData(); updateStats();
         }
@@ -292,7 +311,8 @@
         }
 
         function navTo(page) {
-            document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('d-none'));            const target = document.getElementById(`page-${page}`);
+            document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('d-none'));
+            const target = document.getElementById(`page-${page}`);
             if(target) target.classList.remove('d-none');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             const btn = document.getElementById(`btn-${page}`);
@@ -322,36 +342,46 @@
             const d = { diagnosis: "🔍 <b>احتمالات:</b><br>• التهاب لبّي (60%)<br>• تسوس عميق (30%)<br>✅ إجراء: أشعة + اختبار حيوية", treatment: "💡 <b>خطة:</b><br>1. عزل + إزالة تسوس<br>2. تقييم العصب<br>3. حشو أو علاج لبّي", prevention: "🛡️ <b>نصائح:</b><br>• فرشاة + فلورايد<br>• خيط طبي يومي<br>• مراجعة كل 6 أشهر" };
             setTimeout(()=> r.innerHTML = d[type], 800);
         }
-
         function savePatient() {
             const name = document.getElementById('pName').value.trim(), diag = document.getElementById('pDiag').value.trim();
             if(!name || !diag) return showToast("أكمل البيانات", "error");
-            if(!db) return showToast("قاعدة البيانات غير متصلة", "error");
-            db.ref('patients').push({ name, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.email || 'admin' })
-              .then(()=>{ showToast("✅ تم الحفظ", "success"); document.getElementById('pName').value=''; document.getElementById('pDiag').value=''; document.getElementById('aiBox').classList.add('d-none'); currentTooth=null; document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none'); updateStats(); })
-              .catch(e=>showToast("خطأ في الحفظ: "+e.message, "error"));
+            
+            const data = { name, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.email || 'admin' };
+            
+            if(firebaseReady) {
+                db.ref('patients').push(data).then(()=>onSaveSuccess());
+            } else {
+                localDB.push(data); localStorage.setItem('basma_local', JSON.stringify(localDB)); onSaveSuccess();
+            }
+        }
+
+        function onSaveSuccess() {
+            showToast("✅ تم الحفظ", "success");
+            document.getElementById('pName').value=''; document.getElementById('pDiag').value=''; document.getElementById('aiBox').classList.add('d-none'); currentTooth=null; document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none'); updateStats();
         }
 
         function registerPatient() {
             const name = document.getElementById('regName').value.trim(), phone = document.getElementById('regPhone').value.trim();
             if(!name || !phone) return showToast("أدخل الاسم والهاتف", "error");
-            if(!db) return showToast("قاعدة البيانات غير متصلة", "error");
-            db.ref('registered_patients').push({ name, phone, birth: document.getElementById('regBirth').value, gender: document.getElementById('regGender').value, date: new Date().toLocaleDateString('ar-EG') })
-              .then(()=>{ showToast("✅ تم التسجيل", "success"); ['regName','regPhone','regBirth','regGender'].forEach(id=>document.getElementById(id).value=''); })
-              .catch(e=>showToast("خطأ في التسجيل: "+e.message, "error"));
+            const data = { name, phone, birth: document.getElementById('regBirth').value, gender: document.getElementById('regGender').value, date: new Date().toLocaleDateString('ar-EG') };
+            if(firebaseReady) db.ref('registered_patients').push(data);
+            else { localDB.push({type:'reg',...data}); localStorage.setItem('basma_local', JSON.stringify(localDB)); }
+            showToast("✅ تم التسجيل", "success"); ['regName','regPhone','regBirth','regGender'].forEach(id=>document.getElementById(id).value='');
         }
 
-        function submitDoctorSubscription() {            const name = document.getElementById('subName').value.trim(), email = document.getElementById('subEmail').value.trim(), pwd = document.getElementById('subPassword').value.trim();
+        function submitDoctorSubscription() {
+            const name = document.getElementById('subName').value.trim(), email = document.getElementById('subEmail').value.trim(), pwd = document.getElementById('subPassword').value.trim();
             if(!name || !email || !pwd) return showToast("أكمل الحقول", "error");
             if(pwd.length < 6) return showToast("كلمة المرور قصيرة", "error");
-            if(!db) return showToast("قاعدة البيانات غير متصلة", "error");
-            db.ref('doctor_subscriptions').push({ name, email, password: pwd, specialty: document.getElementById('subSpecialty').value.trim(), status: 'pending', requestedAt: new Date().toISOString() })
-              .then(()=>{ showToast("✅ تم الإرسال! انتظر التفعيل", "success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value=''); })
-              .catch(e=>showToast("خطأ في الإرسال: "+e.message, "error"));
+            
+            const data = { name, email, password: pwd, specialty: document.getElementById('subSpecialty').value.trim(), status: 'pending', requestedAt: new Date().toISOString() };
+            if(firebaseReady) db.ref('doctor_subscriptions').push(data);
+            else showToast("⚠️ تم حفظ الطلب محلياً. سيتطلب اتصالاً لتفعيله.", "info");
+            showToast("✅ تم الإرسال! انتظر التفعيل", "success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value='');
         }
 
         function loadDoctorRequests() {
-            if(!db) return;
+            if(!firebaseReady) return document.getElementById('doctorRequests').innerHTML = '<p class="text-xs text-gray-400 text-center">غير متاح بدون اتصال</p>';
             db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').on('value', snap => {
                 const c = document.getElementById('doctorRequests'); c.innerHTML = ''; let cnt=0;
                 snap.forEach(child => { cnt++; const v=child.val(); c.innerHTML += `<div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between"><div><b>${v.name}</b><br>${v.email}</div><div class="flex gap-1"><button type="button" onclick="activateDoc('${child.key}')" class="px-2 py-1 bg-green-100 text-green-700 rounded">تفعيل</button><button type="button" onclick="rejectDoc('${child.key}')" class="px-2 py-1 bg-red-100 text-red-700 rounded">رفض</button></div></div>`; });
@@ -359,44 +389,57 @@
                 if(!cnt) c.innerHTML = '<p class="text-xs text-gray-400 text-center py-2">لا توجد طلبات معلقة</p>';
             });
         }
-        function activateDoc(id) { if(db) db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>showToast("✅ تم التفعيل","success")); }
-        function rejectDoc(id) { if(db) db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>showToast("تم رفض الطلب","info")); }
-
+        function activateDoc(id) { db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>showToast("✅ تم التفعيل","success")); }
+        function rejectDoc(id) { db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>showToast("تم رفض الطلب","info")); }
         function loadActiveDoctors() {
-            if(!db) return;
+            if(!firebaseReady) return;
             db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').on('value', snap => {
                 const c = document.getElementById('activeDoctors'); c.innerHTML = '';
                 snap.forEach(child => { const v=child.val(); c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border flex justify-between items-center text-xs"><span>👨‍⚕️ <b>${v.name}</b> | ${v.email}</span><div class="flex gap-1"><button type="button" onclick="suspendDoc('${child.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button><button type="button" onclick="deleteDoc('${child.key}')" class="px-2 py-1 bg-red-100 text-red-700 rounded">حذف</button></div></div>`; });
                 if(!snap.exists()) c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء نشطين</p>';
             });
         }
-        function suspendDoc(id) { if(db) db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>showToast("⛔ تم إيقاف الحساب","info")); }
-        function deleteDoc(id) { if(confirm("حذف نهائي؟ لا يمكن التراجع.") && db) db.ref('doctor_subscriptions/'+id).remove().then(()=>showToast("🗑️ تم الحذف النهائي","success")); }
+        function suspendDoc(id) { db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>showToast("⛔ تم إيقاف الحساب","info")); }
+        function deleteDoc(id) { if(confirm("حذف نهائي؟") && db) db.ref('doctor_subscriptions/'+id).remove().then(()=>showToast("🗑️ تم الحذف","success")); }
 
         function loadData() {
-            if(!db) return showToast("لا يمكن تحميل السجلات: قاعدة البيانات غير متصلة", "error");
-            db.ref('patients').orderByChild('timestamp').on('value', snap => {
-                const c = document.getElementById('patientContainer'); c.innerHTML = ''; let cnt=0;
-                snap.forEach(child => { cnt++; const v=child.val(); c.innerHTML += `<div class="section-card py-2 border-r-4 border-r-blue-500"><div class="flex justify-between"><span class="font-bold text-sm text-blue-800">${v.name}</span><span class="text-[10px] bg-gray-100 px-1 rounded">${v.date}</span></div>${v.tooth?`<span class="text-[10px] text-blue-600">🦷 #${v.tooth}</span><br>`:''}<p class="text-xs text-gray-600 mt-1">${v.diag}</p></div>`; });
-                document.getElementById('recordsCount').innerText = cnt;
-                document.getElementById('noRecords').classList.toggle('d-none', cnt>0);
+            let data = [];
+            if(firebaseReady) {
+                db.ref('patients').orderByChild('timestamp').on('value', snap => {
+                    data = []; snap.forEach(child => data.push(child.val())); renderPatients(data);
+                });
+            } else {
+                renderPatients(localDB);
+            }
+        }
+
+        function renderPatients(data) {
+            const c = document.getElementById('patientContainer'); c.innerHTML = '';
+            data.forEach(v => {
+                c.innerHTML += `<div class="section-card py-2 border-r-4 border-r-blue-500"><div class="flex justify-between"><span class="font-bold text-sm text-blue-800">${v.name}</span><span class="text-[10px] bg-gray-100 px-1 rounded">${v.date}</span></div>${v.tooth?`<span class="text-[10px] text-blue-600">🦷 #${v.tooth}</span><br>`:''}<p class="text-xs text-gray-600 mt-1">${v.diag}</p></div>`;
             });
+            document.getElementById('recordsCount').innerText = data.length;
+            document.getElementById('noRecords').classList.toggle('d-none', data.length>0);
         }
 
         function updateStats() {
-            if(!db) return;
-            db.ref('patients').once('value').then(snap => {
-                document.getElementById('statPatients').innerText = snap.numChildren();
-                let td=0; const today=new Date().toLocaleDateString('ar-EG');
-                snap.forEach(c=>{if(c.val().date===today) td++});
-                document.getElementById('statToday').innerText = td;
-            });            db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap => document.getElementById('statDoctors').innerText = snap.numChildren());
+            const data = firebaseReady ? [] : localDB;
+            if(firebaseReady) {
+                db.ref('patients').once('value').then(snap => {
+                    document.getElementById('statPatients').innerText = snap.numChildren();
+                    let td=0; const today=new Date().toLocaleDateString('ar-EG');
+                    snap.forEach(c=>{if(c.val().date===today) td++});
+                    document.getElementById('statToday').innerText = td;
+                });
+                db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap => document.getElementById('statDoctors').innerText = snap.numChildren());
+            } else {
+                document.getElementById('statPatients').innerText = data.length;
+                document.getElementById('statToday').innerText = data.filter(d => d.date === new Date().toLocaleDateString('ar-EG')).length;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            navTo('home');
-            document.getElementById('adminPassword').addEventListener('keypress', e => e.key==='Enter' && handleAdminLogin());
-            document.getElementById('doctorPassword').addEventListener('keypress', e => e.key==='Enter' && handleDoctorLogin());
+            navTo('home');            document.getElementById('adminPassword').addEventListener('keypress', e => e.key==='Enter' && handleAdminLogin());
         });
     </script>
 </body>
