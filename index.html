@@ -3,94 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بَسْمَة AI - إدارة عيادة الأسنان</title>
+    <title>بَسْمَة AI - النظام المتكامل للعيادة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #f0f4f8; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f1f5f9; }
+        .tab-active { border-bottom: 4px solid #2563eb; color: #2563eb; font-weight: bold; }
         .hidden { display: none; }
-        .tooth-icon { color: #3b82f6; filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5)); }
+        .tooth-icon { color: #2563eb; filter: drop-shadow(0 0 10px rgba(37, 99, 235, 0.3)); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
     <div id="loginPage" class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center border-t-4 border-blue-600">
-            <div class="mb-6">
-                <i class="fas fa-tooth fa-4x tooth-icon mb-4"></i>
-                <h1 class="text-3xl font-bold text-blue-600">بَسْمَة AI</h1>
-                <p class="text-gray-500 mt-2">نظام الإدارة الذكي للعيادة</p>
-            </div>
-            <div class="space-y-4 text-right">
-                <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none border-gray-300">
-                <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none border-gray-300">
-                <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-300 shadow-lg">دخول النظام</button>
+        <div class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center border-t-8 border-blue-600">
+            <i class="fas fa-tooth fa-4x tooth-icon mb-4"></i>
+            <h1 class="text-3xl font-bold text-blue-700 mb-6">بَسْمَة AI</h1>
+            <div class="space-y-4">
+                <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-4 border rounded-xl outline-none focus:ring-2 focus:ring-blue-400">
+                <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-4 border rounded-xl outline-none focus:ring-2 focus:ring-blue-400">
+                <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 shadow-lg transition">دخول النظام</button>
             </div>
         </div>
     </div>
 
-    <div id="dashboard" class="hidden flex-grow p-4 md:p-8">
-        <header class="bg-white shadow-md rounded-xl p-4 mb-6 flex justify-between items-center border-r-4 border-blue-600">
-            <div>
-                <h2 class="text-xl font-bold text-gray-800">أهلاً بك د. زكريا محمد عطوني</h2>
-                <p class="text-sm text-gray-500">لوحة تحكم بَسْمَة AI</p>
+    <div id="dashboard" class="hidden flex-grow flex flex-col">
+        <header class="bg-white shadow-sm p-4 flex justify-between items-center px-8 border-b">
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <i class="fas fa-tooth text-blue-600 text-2xl"></i>
+                <h2 class="text-xl font-bold text-gray-800">بَسْمَة AI | د. زكريا محمد عطوني</h2>
             </div>
-            <button onclick="location.reload()" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition"><i class="fas fa-sign-out-alt ml-2"></i>خروج</button>
+            <button onclick="location.reload()" class="text-red-500 font-bold"><i class="fas fa-sign-out-alt ml-1"></i> خروج</button>
         </header>
 
-        <div class="grid md:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-xl shadow-md">
-                <h3 class="text-lg font-bold mb-4 text-blue-700 border-b pb-2"><i class="fas fa-user-plus ml-2"></i>تسجيل مريض جديد</h3>
-                <div class="space-y-3">
-                    <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-3 bg-gray-50 border rounded-lg outline-none focus:border-blue-400">
-                    <input type="text" id="pDiagnosis" placeholder="التشخيص المبدئي" class="w-full p-3 bg-gray-50 border rounded-lg outline-none focus:border-blue-400">
-                    <button onclick="savePatient()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold transition shadow-md">حفظ في السحابة</button>
+        <nav class="bg-white shadow-sm flex justify-center space-x-8 space-x-reverse p-2 sticky top-0 z-10">
+            <button onclick="showTab('patients')" id="tab-patients" class="px-6 py-2 tab-active transition"><i class="fas fa-users ml-2"></i>المرضى</button>
+            <button onclick="showTab('xray')" id="tab-xray" class="px-6 py-2 text-gray-500 hover:text-blue-600 transition"><i class="fas fa-x-ray ml-2"></i>الأشعة</button>
+            <button onclick="showTab('prescription')" id="tab-prescription" class="px-6 py-2 text-gray-500 hover:text-blue-600 transition"><i class="fas fa-file-prescription ml-2"></i>الوصفات</button>
+            <button onclick="showTab('billing')" id="tab-billing" class="px-6 py-2 text-gray-500 hover:text-blue-600 transition"><i class="fas fa-file-invoice-dollar ml-2"></i>المالية</button>
+        </nav>
+
+        <main class="p-6 max-w-6xl mx-auto w-full">
+            
+            <div id="section-patients" class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border col-span-1">
+                    <h3 class="font-bold mb-4 text-blue-700">إضافة مريض</h3>
+                    <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-3 mb-3 bg-gray-50 border rounded-lg">
+                    <textarea id="pDiagnosis" placeholder="التشخيص..." class="w-full p-3 mb-3 bg-gray-50 border rounded-lg h-24"></textarea>
+                    <button onclick="savePatient()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold">حفظ سحابي</button>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border col-span-2">
+                    <h3 class="font-bold mb-4">سجل المراجعات</h3>
+                    <div id="patientList" class="space-y-3"></div>
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-green-500">
-                <h3 class="text-lg font-bold mb-4 text-gray-800"><i class="fas fa-users ml-2"></i>سجل المرضى الأخير</h3>
-                <div id="patientList" class="space-y-2 overflow-y-auto max-h-60">
-                    <p class="text-gray-400 text-center italic">جاري تحميل البيانات من السحابة...</p>
-                </div>
+            <div id="section-xray" class="hidden bg-white p-10 rounded-2xl shadow-sm border text-center">
+                <i class="fas fa-x-ray fa-4x text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-bold">أرشيف الأشعة الرقمي</h3>
+                <p class="text-gray-500 mt-2">يمكنك هنا رفع وحفظ صور الأشعة الخاصة بالمرضى.</p>
+                <button class="mt-4 bg-blue-100 text-blue-600 px-6 py-2 rounded-lg font-bold border border-blue-200">رفع صورة جديدة</button>
             </div>
-        </div>
+
+            <div id="section-prescription" class="hidden bg-white p-10 rounded-2xl shadow-sm border text-center">
+                <i class="fas fa-file-prescription fa-4x text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-bold">مُولد الوصفات الطبية</h3>
+                <p class="text-gray-500 mt-2">طباعة وصفات طبية احترافية تحمل اسم الدكتور زكريا.</p>
+            </div>
+
+        </main>
     </div>
 
-    <footer class="bg-white border-t py-4 text-center mt-auto">
-        <p class="text-gray-600 text-sm">
-            تم التطوير والتصميم بواسطة 
-            <span class="font-bold text-blue-600 underline text-lg">د. زكريا محمد عطوني</span>
-            &copy; 2026
-        </p>
+    <footer class="bg-white border-t py-6 text-center mt-auto">
+        <p class="text-gray-500 text-sm">تطوير ودراسة: <span class="text-blue-600 font-bold underline text-lg">د. زكريا محمد عطوني</span> &copy; 2026</p>
     </footer>
 
     <script>
-        // إعدادات Firebase الخاصة بك
-        const firebaseConfig = {
-            databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/"
-        };
+        const firebaseConfig = { databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // نظام الدخول
         function handleLogin() {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('password').value;
-            
             if(email === "salematto@gmail.com" && pass === "zak1959") {
                 document.getElementById('loginPage').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
                 loadPatients();
-            } else {
-                alert("البيانات غير صحيحة، يرجى المحاولة مرة أخرى.");
-            }
+            } else { alert("البيانات غير صحيحة."); }
         }
 
-        // حفظ البيانات
+        function showTab(tabName) {
+            // إخفاء كل الأقسام
+            document.getElementById('section-patients').classList.add('hidden');
+            document.getElementById('section-xray').classList.add('hidden');
+            document.getElementById('section-prescription').classList.add('hidden');
+            
+            // إزالة التنسيق النشط من الأزرار
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('tab-active', 'text-blue-600'));
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.add('text-gray-500'));
+
+            // إظهار القسم المختار
+            document.getElementById('section-' + tabName).classList.remove('hidden');
+            document.getElementById('tab-' + tabName).classList.add('tab-active');
+        }
+
         function savePatient() {
             const name = document.getElementById('pName').value;
             const diag = document.getElementById('pDiagnosis').value;
@@ -98,19 +118,17 @@
                 db.ref('patients').push({ name: name, diagnosis: diag, date: new Date().toLocaleDateString() });
                 document.getElementById('pName').value = '';
                 document.getElementById('pDiagnosis').value = '';
-                alert("تم الحفظ بنجاح دكتور!");
             }
         }
 
-        // تحميل القائمة
         function loadPatients() {
             db.ref('patients').on('value', (snap) => {
                 const list = document.getElementById('patientList');
                 list.innerHTML = '';
                 snap.forEach((child) => {
                     const data = child.val();
-                    list.innerHTML += `<div class="p-3 bg-blue-50 border-r-4 border-blue-400 rounded flex justify-between items-center">
-                        <div><strong class="text-blue-800">${data.name}</strong><br><small class="text-gray-500">${data.diagnosis || 'بدون تشخيص'}</small></div>
+                    list.innerHTML += `<div class="p-4 bg-gray-50 border-r-4 border-blue-500 rounded-lg flex justify-between">
+                        <div><strong>${data.name}</strong><br><small class="text-gray-500">${data.diagnosis}</small></div>
                         <span class="text-xs text-gray-400">${data.date}</span>
                     </div>`;
                 });
