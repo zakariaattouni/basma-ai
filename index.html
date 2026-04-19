@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بَسْمَة AI - النظام الذكي المتكامل</title>
+    <title>بَسْمَة AI - المنصة الطبية المتكاملة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -12,9 +12,9 @@
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
         body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
         .hidden { display: none; }
-        .scroll-tabs { display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none; -ms-overflow-style: none; }
+        .scroll-tabs { display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
         .scroll-tabs::-webkit-scrollbar { display: none; }
-        .tab-btn { flex: 0 0 auto; padding: 10px 18px; margin: 0 4px; border-radius: 20px; background: white; border: 1px solid #e2e8f0; font-size: 0.85rem; transition: all 0.3s; cursor: pointer; }
+        .tab-btn { flex: 0 0 auto; padding: 10px 18px; margin: 0 4px; border-radius: 20px; background: white; border: 1px solid #e2e8f0; font-size: 0.85rem; transition: 0.3s; cursor: pointer; }
         .tab-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
         .tooth-logo { color: #2563eb; filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.4)); }
     </style>
@@ -22,64 +22,82 @@
 <body class="min-h-screen flex flex-col">
 
     <div id="loginPage" class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md text-center border-t-8 border-blue-600">
+        <div id="loginBox" class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md text-center border-t-8 border-blue-600">
             <i class="fas fa-tooth fa-3x tooth-logo mb-4"></i>
             <h1 class="text-2xl font-bold text-blue-700 mb-6">بَسْمَة AI</h1>
-            <input type="email" id="email" placeholder="البريد" class="w-full p-3 border rounded-xl mb-4 outline-none">
-            <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-3 border rounded-xl mb-6 outline-none">
-            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl shadow-lg">دخول</button>
+            <div class="space-y-4 text-right">
+                <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-4 border rounded-2xl outline-none border-gray-100">
+                <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-4 border rounded-2xl outline-none border-gray-100">
+                <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg">دخول الأطباء</button>
+                <p class="text-center text-sm text-gray-500 mt-4">ليس لديك حساب؟ <button onclick="toggleAuth()" class="text-blue-600 font-bold underline">تقديم طلب انضمام</button></p>
+            </div>
+        </div>
+
+        <div id="signUpBox" class="hidden bg-white p-8 rounded-3xl shadow-xl w-full max-w-md text-center border-t-8 border-green-500">
+            <h2 class="text-xl font-bold text-gray-800 mb-2">طلب انضمام طبيب</h2>
+            <p class="text-xs text-gray-500 mb-6">سيتم مراجعة طلبك وتفعيل الحساب من قبل الإدارة</p>
+            <div class="space-y-4 text-right">
+                <input type="text" id="regName" placeholder="الاسم الكامل" class="w-full p-3 border rounded-xl outline-none border-gray-200">
+                <input type="email" id="regEmail" placeholder="البريد الإلكتروني" class="w-full p-3 border rounded-xl outline-none border-gray-200">
+                <input type="tel" id="regPhone" placeholder="رقم الهاتف" class="w-full p-3 border rounded-xl outline-none border-gray-200">
+                <button onclick="submitRequest()" class="w-full bg-green-600 text-white font-bold py-4 rounded-2xl shadow-lg mt-2">إرسال الطلب</button>
+                <button onclick="toggleAuth()" class="w-full text-gray-400 text-sm py-2">العودة للدخول</button>
+            </div>
         </div>
     </div>
 
     <div id="dashboard" class="hidden flex-grow flex flex-col">
         <header class="bg-white shadow-sm p-4 flex justify-between items-center border-b px-6">
-            <div class="flex items-center space-x-2 space-x-reverse">
-                <i class="fas fa-tooth text-blue-600"></i>
-                <span class="font-bold text-blue-700">بَسْمَة AI</span>
-            </div>
-            <span class="text-xs font-bold text-gray-700 underline">د. زكريا محمد عطوني</span>
+            <div class="flex items-center space-x-2 space-x-reverse"><i class="fas fa-tooth text-blue-600"></i><span class="font-bold text-blue-700">بَسْمَة AI</span></div>
+            <span id="userNameDisplay" class="text-xs font-bold text-gray-700 underline">د. زكريا محمد عطوني</span>
         </header>
 
         <div class="bg-blue-50 p-3 border-b sticky top-0 z-50">
             <div class="scroll-tabs px-2">
                 <button onclick="showSection('add')" id="btn-add" class="tab-btn active"><i class="fas fa-plus ml-1"></i> مريض جديد</button>
                 <button onclick="showSection('list')" id="btn-list" class="tab-btn"><i class="fas fa-list ml-1"></i> السجل</button>
-                <button onclick="showSection('ai')" id="btn-ai" class="tab-btn font-bold text-indigo-700 border-indigo-200"><i class="fas fa-robot ml-1"></i> نافذة AI</button>
-                <button onclick="location.reload()" class="tab-btn text-red-500 font-bold border-red-100">خروج</button>
+                <button onclick="showSection('ai')" id="btn-ai" class="tab-btn font-bold text-indigo-700"><i class="fas fa-robot ml-1"></i> نافذة AI</button>
+                <button onclick="showSection('admin')" id="btn-admin" class="tab-btn hidden border-red-200 text-red-600 font-bold"><i class="fas fa-user-shield ml-1"></i> طلبات الأطباء</button>
+                <button onclick="location.reload()" class="tab-btn text-red-500 font-bold">خروج</button>
             </div>
         </div>
 
         <main class="p-4 max-w-lg mx-auto w-full space-y-4">
-            
             <div id="section-add" class="bg-white p-6 rounded-2xl shadow-sm border">
-                <h3 class="font-bold mb-4 text-blue-700">تسجيل مريض</h3>
+                <h3 class="font-bold mb-4 text-blue-700">تسجيل بيانات المريض</h3>
                 <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-3 bg-gray-50 border rounded-xl mb-3 outline-none">
-                <textarea id="pDiagnosis" placeholder="اكتب التشخيص أو شكوى المريض..." class="w-full p-3 bg-gray-50 border rounded-xl mb-3 h-24 outline-none"></textarea>
-                
+                <textarea id="pDiagnosis" placeholder="اكتب التشخيص أو الشكوى بالعامية..." class="w-full p-3 bg-gray-50 border rounded-xl mb-3 h-24 outline-none"></textarea>
                 <div id="inlineAI" class="hidden bg-indigo-50 p-3 rounded-xl border border-indigo-100 text-xs mb-3 text-indigo-800 italic"></div>
                 <div class="flex gap-2">
-                    <button onclick="runAI('pDiagnosis', 'inlineAI')" class="flex-1 bg-indigo-100 text-indigo-700 py-3 rounded-xl font-bold border border-indigo-200"><i class="fas fa-magic ml-1"></i> تحليل سريع</button>
-                    <button onclick="savePatient()" class="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl shadow-md">حفظ البيانات</button>
+                    <button onclick="runAI('pDiagnosis', 'inlineAI')" class="flex-1 bg-indigo-100 text-indigo-700 py-3 rounded-xl font-bold"><i class="fas fa-magic ml-1"></i> تحليل AI</button>
+                    <button onclick="savePatient()" class="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl shadow-md">حفظ سحابي</button>
                 </div>
             </div>
 
             <div id="section-ai" class="hidden bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
-                <h3 class="font-bold text-indigo-800 mb-4"><i class="fas fa-brain ml-2"></i> استشارة ذكية مباشرة</h3>
-                <textarea id="aiStandaloneInput" placeholder="اكتب وصف الحالة هنا للتحليل الفوري..." class="w-full p-4 bg-white border border-indigo-100 rounded-2xl mb-4 h-32 outline-none text-sm"></textarea>
-                <div id="standaloneAIResult" class="hidden bg-white p-4 rounded-xl border border-indigo-200 text-sm mb-4 shadow-sm text-indigo-900"></div>
-                <button onclick="runAI('aiStandaloneInput', 'standaloneAIResult')" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-lg"><i class="fas fa-search-plus ml-2"></i> حلل الحالة الآن</button>
+                <h3 class="font-bold text-indigo-800 mb-4"><i class="fas fa-brain ml-2"></i> استشارة فورية</h3>
+                <textarea id="aiStandaloneInput" placeholder="صف الحالة هنا..." class="w-full p-4 bg-white border rounded-2xl mb-4 h-32 outline-none text-sm"></textarea>
+                <div id="standaloneAIResult" class="hidden bg-white p-4 rounded-xl border border-indigo-200 text-sm mb-4 shadow-sm"></div>
+                <button onclick="runAI('aiStandaloneInput', 'standaloneAIResult')" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-lg">حلل الحالة</button>
+            </div>
+
+            <div id="section-admin" class="hidden bg-white p-6 rounded-2xl shadow-sm border border-red-100">
+                <h3 class="font-bold mb-4 text-red-600 italic">طلبات تفعيل الأطباء الجدد</h3>
+                <div id="requestsList" class="space-y-3">
+                    <p class="text-xs text-gray-400 text-center">لا توجد طلبات جديدة حالياً</p>
+                </div>
             </div>
 
             <div id="section-list" class="hidden bg-white p-6 rounded-2xl shadow-sm border">
-                <h3 class="font-bold mb-4">المراجعات السابقة</h3>
+                <h3 class="font-bold mb-4">قائمة المراجعات</h3>
                 <div id="patientList" class="space-y-3"></div>
             </div>
-
         </main>
     </div>
 
-    <footer class="bg-white border-t py-6 text-center mt-auto">
-        <p class="text-gray-400 text-xs font-bold uppercase">تصميم وتطوير: د. زكريا محمد عطوني &copy; 2026</p>
+    <footer class="bg-white border-t py-8 text-center mt-auto">
+        <p class="text-blue-600 font-bold text-sm mb-1">بَسْمَة AI - مستقبل طب الأسنان</p>
+        <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest">تطوير وتصميم: د. زكريا محمد عطوني &copy; 2026</p>
     </footer>
 
     <script>
@@ -87,40 +105,49 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        function toggleAuth() {
+            document.getElementById('loginBox').classList.toggle('hidden');
+            document.getElementById('signUpBox').classList.toggle('hidden');
+        }
+
+        function submitRequest() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const phone = document.getElementById('regPhone').value;
+            if(!name || !email) { alert("يرجى ملء البيانات"); return; }
+            db.ref('requests').push({ doctorName: name, doctorEmail: email, doctorPhone: phone, status: "pending", date: new Date().toLocaleString('ar-EG') })
+              .then(() => { alert("تم إرسال الطلب بنجاح! انتظر تفعيل د. زكريا لحسابك."); toggleAuth(); });
+        }
+
         function handleLogin() {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('password').value;
             if(email === "salematto@gmail.com" && pass === "zak1959") {
                 document.getElementById('loginPage').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
-                loadPatients();
-            } else { alert("خطأ في الدخول"); }
+                document.getElementById('btn-admin').classList.remove('hidden'); // إظهار زر الإدارة لك
+                loadPatients(); loadRequests();
+            } else { alert("عذراً، الدخول للأطباء المفعلين فقط."); }
         }
 
         function showSection(name) {
-            ['add', 'list', 'ai'].forEach(s => document.getElementById('section-'+s).classList.add('hidden'));
+            ['add', 'list', 'ai', 'admin'].forEach(s => document.getElementById('section-'+s).classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('section-'+name).classList.remove('hidden');
             document.getElementById('btn-'+name).classList.add('active');
         }
 
-        // محرك الذكاء الموحد
         function runAI(inputId, resultId) {
             const text = document.getElementById(inputId).value.toLowerCase();
             const resBox = document.getElementById(resultId);
-            
-            if(!text) { alert("أدخل الوصف أولاً"); return; }
-            
+            if(!text) return;
             resBox.classList.remove('hidden');
-            resBox.innerHTML = "جاري التحليل السريري...";
-            
+            resBox.innerHTML = "جاري التحليل السريري للغة المريض...";
             setTimeout(() => {
-                let advice = "<b>تحليل AI:</b> الحالة تتطلب فحصاً سريرياً مباشراً وصورة أشعة ذروية.";
-                if(text.includes("نبح") || text.includes("سهرني")) advice = "<b>AI:</b> ألم نبضي يشير لالتهاب عصب حاد. الإجراء: سحب عصب.";
-                if(text.includes("عالي") || text.includes("اطبق")) advice = "<b>AI:</b> علامات التهاب ذروي. الإجراء: تطهير القنوات.";
-                if(text.includes("وارم") || text.includes("خدي")) advice = "<b>AI:</b> وجود خراج نشط. الإجراء: تصريف ووصف مضاد حيوي.";
-                if(text.includes("دم") || text.includes("لحم")) advice = "<b>AI:</b> مشاكل لثوية. الإجراء: تقليح لثوي عميق.";
-                
+                let advice = "<b>تحليل AI:</b> وصف مبهم، يُنصح باختبار الحيوية وصورة أشعة.";
+                if(text.includes("نبح") || text.includes("سهرني") || text.includes("يغلي")) advice = "<b>AI:</b> التهاب عصب حاد (Pulpitis). الإجراء: سحب عصب فوري.";
+                if(text.includes("عالي") || text.includes("اطبق") || text.includes("طالع")) advice = "<b>AI:</b> التهاب ذروي (Periodontitis). الإجراء: فتح السن وتطهير القنوات.";
+                if(text.includes("وارم") || text.includes("حبة") || text.includes("خدي")) advice = "<b>AI:</b> خراج نشط (Abscess). الإجراء: تصريف ووصف مضاد حيوي.";
                 resBox.innerHTML = advice;
             }, 800);
         }
@@ -128,18 +155,31 @@
         function savePatient() {
             const name = document.getElementById('pName').value;
             const diag = document.getElementById('pDiagnosis').value;
-            if(!name) { alert("أدخل اسم المريض"); return; }
+            if(!name) return;
             db.ref('patients').push({ name, diagnosis: diag, date: new Date().toLocaleDateString('ar-EG') })
-              .then(() => { alert("تم الحفظ!"); document.getElementById('pName').value = ''; document.getElementById('pDiagnosis').value = ''; document.getElementById('inlineAI').classList.add('hidden'); });
+              .then(() => { alert("تم الحفظ في السجل!"); document.getElementById('pName').value = ''; document.getElementById('pDiagnosis').value = ''; document.getElementById('inlineAI').classList.add('hidden'); });
         }
 
         function loadPatients() {
             db.ref('patients').on('value', snap => {
-                const list = document.getElementById('patientList');
-                list.innerHTML = '';
+                const list = document.getElementById('patientList'); list.innerHTML = '';
                 snap.forEach(child => {
                     const d = child.val();
-                    list.innerHTML += `<div class="p-3 bg-gray-50 border rounded-xl"><h4 class="font-bold text-blue-900">${d.name}</h4><p class="text-xs text-gray-500">${d.diagnosis}</p></div>`;
+                    list.innerHTML += `<div class="p-3 bg-gray-50 border rounded-xl mb-2"><h4 class="font-bold text-blue-900">${d.name}</h4><p class="text-xs text-gray-500">${d.diagnosis}</p></div>`;
+                });
+            });
+        }
+
+        function loadRequests() {
+            db.ref('requests').on('value', snap => {
+                const list = document.getElementById('requestsList'); list.innerHTML = '';
+                if(!snap.exists()) { list.innerHTML = '<p class="text-xs text-gray-400 text-center">لا توجد طلبات</p>'; return; }
+                snap.forEach(child => {
+                    const d = child.val();
+                    list.innerHTML += `<div class="p-3 bg-red-50 border border-red-100 rounded-xl text-xs">
+                        <b>د. ${d.doctorName}</b> (${d.doctorPhone})<br>${d.doctorEmail}<br>
+                        <button class="mt-2 bg-green-600 text-white px-3 py-1 rounded" onclick="alert('سيتم تفعيل الحساب قريباً عبر البرمجية الخلفية')">تفعيل الآن</button>
+                    </div>`;
                 });
             });
         }
