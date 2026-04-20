@@ -6,7 +6,6 @@
     <title>بَسْمَة AI - المساعد السني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- تحميل فايربيس بشكل آمن مع فشل متسامح -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js" onerror="window.fbBlocked=true"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js" onerror="window.fbBlocked=true"></script>
     <style>
@@ -14,7 +13,7 @@
         * { box-sizing: border-box; }
         body { font-family: 'Tajawal', sans-serif; background: linear-gradient(135deg, #f0f4f8 0%, #e6f7ff 100%); margin: 0; padding: 0; min-height: 100vh; }
         .d-none { display: none !important; }
-        .main-footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #1e3a8a, #3b82f6); height: 65px; display: flex; justify-content: space-around; align-items: center; border-top: 3px solid #60a5fa; z-index: 9999; padding: 0 10px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); }
+        .main-footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #1e3a8a, #3b82f6); height: 65px; display: flex; justify-content: space-around; align-items: center; border-top: 3px solid #60a5fa; z-index: 9999; padding: 0 10px; }
         .nav-btn { flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #bfdbfe; border: none; background: none; transition: 0.3s; font-size: 10px; cursor: pointer; }
         .nav-btn:hover { color: white; }
         .nav-btn.active { color: white; background: rgba(255,255,255,0.15); border-radius: 12px 12px 0 0; font-weight: 700; }
@@ -47,10 +46,13 @@
         .conn-indicator { font-size: 9px; padding: 2px 6px; border-radius: 10px; }
         .conn-online { background: #dcfce7; color: #166534; }
         .conn-offline { background: #fee2e2; color: #991b1b; }
-    </style></head>
+        .cursor-pointer { cursor: pointer; }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }    </style>
+</head>
 <body class="pb-20">
     <div id="toastContainer"></div>
-
+    
+    <!-- صفحة تسجيل الدخول -->
     <div id="loginPage" class="fixed inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 z-[10000] flex items-center justify-center p-6">
         <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm text-center">
             <div class="app-logo mx-auto mb-3"><i class="fas fa-tooth"></i></div>
@@ -63,19 +65,20 @@
             </div>
             
             <div id="adminLoginForm">
-                <input type="password" id="adminPassword" placeholder="كلمة مرور المدير" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-blue-500">
+                <input type="password" id="adminPassword" placeholder="كلمة مرور المدير" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-blue-500" onkeypress="if(event.key==='Enter') handleAdminLogin()">
                 <button type="button" onclick="handleAdminLogin()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 rounded-xl">دخول</button>
             </div>
             
             <div id="doctorLoginForm" class="d-none">
-                <input type="email" id="doctorEmail" placeholder="البريد الإلكتروني" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-3 text-center outline-none focus:border-amber-500">
-                <input type="password" id="doctorPassword" placeholder="كلمة المرور" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-amber-500">
+                <input type="email" id="doctorEmail" placeholder="البريد الإلكتروني" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-3 text-center outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') handleDoctorLogin()">
+                <input type="password" id="doctorPassword" placeholder="كلمة المرور" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') handleDoctorLogin()">
                 <button type="button" onclick="handleDoctorLogin()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">دخول</button>
                 <p class="text-xs text-gray-400 mt-3">ليس لديك حساب؟ <span class="text-amber-600 cursor-pointer font-medium hover:underline" onclick="openSubscribe()">اشترك الآن</span></p>
             </div>
         </div>
     </div>
-
+    
+    <!-- المحتوى الرئيسي -->
     <div id="mainContent" class="d-none">
         <header class="app-header">
             <div class="app-logo"><i class="fas fa-tooth"></i></div>
@@ -87,17 +90,31 @@
             <i class="fas fa-user-circle ml-1"></i> <span id="userTypeDisplay">مدير النظام</span>
             <button type="button" onclick="logout()" class="mr-3 text-red-500 hover:text-red-700"><i class="fas fa-sign-out-alt ml-1"></i>خروج</button>
         </div>
-
+        
         <main class="p-4 max-w-md mx-auto">
+            <!-- الرئيسية -->
             <div id="page-home" class="space-y-3">
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 rounded-2xl shadow">
                     <h2 class="font-bold mb-1">👋 لوحة التحكم</h2>
-                    <p class="text-blue-100 text-xs">اختر القسم للبدء</p>
+                    <p class="text-blue-100 text-xs">اختر القسم للبدء</p>                </div>
+                
+                <!-- ⭐ قسم مواعيد اليوم -->
+                <div id="todayAppointmentsSection" class="section-card border-indigo-200 bg-gradient-to-br from-indigo-50 to-blue-50 d-none">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-sm"><i class="fas fa-clock text-indigo-600 ml-1"></i> مواعيد اليوم</h3>
+                        <span class="status-badge status-active" id="todayCountBadge">0</span>
+                    </div>
+                    <div id="todayAppointmentsList" class="space-y-2 max-h-40 overflow-y-auto text-sm"></div>
                 </div>
+
                 <div class="grid grid-cols-2 gap-3">
                     <button type="button" onclick="navTo('register')" class="quick-action register"><i class="fas fa-user-plus"></i> مريض جديد</button>
-                    <button type="button" onclick="navTo('ai')" class="quick-action ai"><i class="fas fa-robot"></i> مساعد ذكي</button>                    <button type="button" onclick="navTo('add')" class="quick-action"><i class="fas fa-stethoscope"></i> فحص جديد</button>
+                    <button type="button" onclick="navTo('ai')" class="quick-action ai"><i class="fas fa-robot"></i> مساعد ذكي</button>
+                    <button type="button" onclick="navTo('add')" class="quick-action"><i class="fas fa-stethoscope"></i> فحص جديد</button>
                     <button type="button" onclick="navTo('list')" class="quick-action"><i class="fas fa-clipboard-list"></i> السجلات</button>
+                    <button type="button" onclick="navTo('list')" class="quick-action" style="background: linear-gradient(135deg, #06b6d4, #22d3ee); grid-column: span 2;">
+                        <i class="fas fa-users"></i> 👥 قائمة المرضى (اضغط للتعديل)
+                    </button>
                 </div>
                 
                 <div id="adminSection" class="d-none">
@@ -114,7 +131,7 @@
                         <div id="activeDoctors" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                     </div>
                 </div>
-
+                
                 <div class="section-card">
                     <h3 class="font-bold text-sm mb-2"><i class="fas fa-chart-pie text-blue-500 ml-1"></i> إحصائيات</h3>
                     <div class="grid grid-cols-3 gap-2 text-center">
@@ -124,13 +141,14 @@
                     </div>
                 </div>
             </div>
-
+            
+            <!-- فحص جديد -->
             <div id="page-add" class="d-none space-y-3">
                 <div class="section-card">
-                    <h2 class="font-bold text-sm mb-3"><i class="fas fa-plus-circle text-blue-500 ml-1"></i> فحص جديد</h2>
-                    <div class="tooth-grid mb-3" id="toothGrid"></div>
+                    <h2 class="font-bold text-sm mb-3"><i class="fas fa-plus-circle text-blue-500 ml-1"></i> فحص جديد</h2>                    <div class="tooth-grid mb-3" id="toothGrid"></div>
                     <p id="selectedTooth" class="text-center text-xs text-blue-600 font-semibold mb-2 d-none">✅ السن: <span id="toothNum"></span></p>
                     <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-blue-400 text-sm">
+                    <input type="tel" id="pPhone" placeholder="رقم الهاتف" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-blue-400 text-sm">
                     <textarea id="pDiag" placeholder="وصف الشكوى..." class="w-full p-2 bg-gray-50 border rounded-lg mb-3 outline-none focus:border-blue-400 resize-none text-sm" rows="3"></textarea>
                     <div id="aiBox" class="d-none"></div>
                     <div class="flex gap-2">
@@ -139,17 +157,24 @@
                     </div>
                 </div>
             </div>
-
+            
+            <!-- تسجيل مريض -->
             <div id="page-register" class="d-none space-y-3">
                 <div class="section-card border-green-200">
                     <h2 class="font-bold text-sm mb-3"><i class="fas fa-user-plus text-green-500 ml-1"></i> مريض جديد</h2>
                     <input type="text" id="regName" placeholder="الاسم الكامل" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
                     <input type="tel" id="regPhone" placeholder="رقم الهاتف" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
-                    <input type="date" id="regBirth" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">                    <select id="regGender" class="w-full p-2 bg-gray-50 border rounded-lg mb-3 outline-none focus:border-green-400 text-sm"><option value="">الجنس</option><option value="male">ذكر</option><option value="female">أنثى</option></select>
+                    <input type="date" id="regBirth" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
+                    <select id="regGender" class="w-full p-2 bg-gray-50 border rounded-lg mb-3 outline-none focus:border-green-400 text-sm">
+                        <option value="">الجنس</option>
+                        <option value="male">ذكر</option>
+                        <option value="female">أنثى</option>
+                    </select>
                     <button type="button" onclick="registerPatient()" class="w-full bg-green-500 text-white font-bold py-2 rounded-lg">تسجيل</button>
                 </div>
             </div>
-
+            
+            <!-- الاشتراك -->
             <div id="page-subscribe" class="d-none space-y-3">
                 <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">
                     <div class="text-center mb-3">
@@ -165,11 +190,11 @@
                     <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-3 hover:bg-gray-300 transition">← العودة لتسجيل الدخول</button>
                 </div>
             </div>
-
+            
+            <!-- المساعد الذكي -->
             <div id="page-ai" class="d-none space-y-3">
                 <div class="section-card border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
-                    <div class="flex items-center gap-2 mb-3">
-                        <div class="bg-purple-100 p-2 rounded-lg"><i class="fas fa-robot text-purple-600"></i></div>
+                    <div class="flex items-center gap-2 mb-3">                        <div class="bg-purple-100 p-2 rounded-lg"><i class="fas fa-robot text-purple-600"></i></div>
                         <h2 class="font-bold text-sm">المساعد الذكي</h2>
                     </div>
                     <div class="space-y-2">
@@ -180,30 +205,122 @@
                     <div id="aiResult" class="d-none mt-3 p-3 bg-white rounded-lg border-2 border-purple-300 text-sm"></div>
                 </div>
             </div>
-
+            
+            <!-- قائمة السجلات -->
             <div id="page-list" class="d-none space-y-3 pb-16">
                 <div class="flex justify-between items-center mb-2 px-1">
-                    <h2 class="font-bold text-sm"><i class="fas fa-clipboard-list text-blue-500 ml-1"></i> السجلات</h2>
+                    <h2 class="font-bold text-sm"><i class="fas fa-clipboard-list text-blue-500 ml-1"></i> سجلات المرضى</h2>
                     <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full" id="recordsCount">0</span>
                 </div>
+                <p class="text-[10px] text-gray-500 bg-gray-50 p-2 rounded-lg">💡 اضغط على أي مريض لفتح صفحة التعديل</p>
                 <div id="patientContainer" class="space-y-2"></div>
-                <div id="noRecords" class="text-center py-6 text-gray-400 text-sm d-none"><i class="fas fa-inbox text-2xl mb-2"></i><br>لا توجد سجلات</div>
+                <div id="noRecords" class="text-center py-6 text-gray-400 text-sm d-none">
+                    <i class="fas fa-inbox text-2xl mb-2"></i><br>لا توجد سجلات
+                </div>
+            </div>
+            
+            <!-- ⭐ صفحة تعديل المريض (محدثة) -->
+            <div id="page-patient" class="d-none space-y-3 pb-16">
+                <div class="flex items-center gap-2 mb-2 px-1">
+                    <button type="button" onclick="navTo('list')" class="text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 rounded-lg transition">
+                        <i class="fas fa-arrow-right"></i> رجوع
+                    </button>
+                    <h2 class="font-bold text-sm"><i class="fas fa-user-injured text-blue-500 ml-1"></i> تعديل بيانات المريض</h2>
+                </div>
+                
+                <div class="section-card border-cyan-200 bg-gradient-to-br from-cyan-50 to-blue-50">
+                    <input type="hidden" id="editPatientId">
+                    <input type="hidden" id="editPatientSource">
+                    
+                    <label class="text-xs text-gray-600 font-medium block mb-1">👤 اسم المريض <span class="text-red-500">*</span></label>
+                    <input type="text" id="editName" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none focus:border-cyan-400 text-sm font-bold" placeholder="أدخل الاسم">
+                    
+                    <label class="text-xs text-gray-600 font-medium block mb-1">📱 رقم الهاتف</label>
+                    <input type="tel" id="editPhone" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none focus:border-cyan-400 text-sm" placeholder="09XXXXXXXX">
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-xs text-gray-600 font-medium block mb-1">🎂 تاريخ الميلاد</label>
+                            <input type="date" id="editBirth" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none focus:border-cyan-400 text-sm">
+                        </div>
+                        <div>                            <label class="text-xs text-gray-600 font-medium block mb-1">⚧ الجنس</label>
+                            <select id="editGender" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none focus:border-cyan-400 text-sm">
+                                <option value="">اختر</option>
+                                <option value="male">ذكر</option>
+                                <option value="female">أنثى</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <label class="text-xs text-gray-600 font-medium block mb-1">🦷 رقم السن (إن وجد)</label>
+                    <input type="number" id="editTooth" placeholder="مثال: 16" min="11" max="48" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none focus:border-cyan-400 text-sm">
+                    
+                    <label class="text-xs text-gray-600 font-medium block mb-1">📝 الشكوى / التشخيص</label>
+                    <textarea id="editDiag" placeholder="وصف الحالة المرضية..." class="w-full p-2 bg-white border rounded-lg mb-4 outline-none focus:border-cyan-400 resize-none text-sm" rows="3"></textarea>
+                    
+                    <div class="flex gap-2">
+                        <button type="button" onclick="deletePatient()" class="flex-1 bg-red-100 text-red-700 font-bold py-2.5 rounded-lg text-sm hover:bg-red-200 transition flex items-center justify-center gap-1">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                        <button type="button" onclick="updatePatient()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-2.5 rounded-lg text-sm hover:opacity-90 transition flex items-center justify-center gap-1">
+                            <i class="fas fa-save"></i> حفظ التعديلات
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ⭐ الموعد القادم -->
+                <div class="section-card border-amber-200 bg-gradient-to-br from-amber-50 to-yellow-50">
+                    <h3 class="font-bold text-sm mb-2"><i class="fas fa-calendar-check text-amber-600 ml-1"></i> الموعد القادم</h3>
+                    <input type="datetime-local" id="editNextAppt" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
+                    <button onclick="saveNextAppointment()" class="w-full bg-amber-500 text-white text-xs font-bold py-2 rounded-lg hover:bg-amber-600 transition">حفظ وتأكيد الموعد</button>
+                </div>
+
+                <!-- ⭐ المدفوعات -->
+                <div class="section-card border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
+                    <h3 class="font-bold text-sm mb-2"><i class="fas fa-money-bill-wave text-green-600 ml-1"></i> المدفوعات</h3>
+                    <div class="flex gap-2 mb-2">
+                        <input type="number" id="editTotalCost" placeholder="التكلفة الإجمالية" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm">
+                        <button onclick="updateTotalCost()" class="bg-amber-500 text-white px-3 rounded-lg font-bold text-sm hover:bg-amber-600">تحديث</button>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 mb-3 text-center text-xs">
+                        <div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">الإجمالي</div><div class="font-bold" id="payTotal">0</div></div>
+                        <div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">المدفوع</div><div class="font-bold text-green-600" id="payPaid">0</div></div>
+                        <div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">المتبقي</div><div class="font-bold text-red-600" id="payRemain">0</div></div>
+                    </div>
+                    <div class="flex gap-2 mb-3">
+                        <input type="number" id="newPayAmount" placeholder="المبلغ" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm">
+                        <input type="text" id="newPayNote" placeholder="ملاحظة (اختياري)" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm">
+                        <button onclick="addPayment()" class="bg-green-500 text-white px-3 rounded-lg font-bold text-sm hover:bg-green-600">إضافة</button>
+                    </div>
+                    <div id="paymentHistory" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>                </div>
+                
+                <div class="section-card">
+                    <h3 class="font-bold text-xs mb-2"><i class="fas fa-history text-gray-500 ml-1"></i> آخر تحديث</h3>
+                    <div id="patientVisits" class="space-y-2 text-sm">
+                        <div class="p-2 bg-gray-50 rounded-lg border text-xs">
+                            <span class="text-gray-500">سيظهر هنا تاريخ آخر تعديل للبيانات</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
-
+        
+        <!-- شريط التنقل السفلي -->
         <footer class="main-footer">
             <button type="button" onclick="navTo('home')" id="btn-home" class="nav-btn active"><i class="fas fa-home"></i><span>الرئيسية</span></button>
             <button type="button" onclick="navTo('add')" id="btn-add" class="nav-btn"><i class="fas fa-plus-circle"></i><span>فحص</span></button>
-            <button type="button" onclick="navTo('ai')" id="btn-ai" class="nav-btn"><i class="fas fa-robot"></i><span>AI</span></button>            <button type="button" onclick="navTo('list')" id="btn-list" class="nav-btn"><i class="fas fa-clipboard-list"></i><span>سجل</span></button>
+            <button type="button" onclick="navTo('ai')" id="btn-ai" class="nav-btn"><i class="fas fa-robot"></i><span>AI</span></button>
+            <button type="button" onclick="navTo('list')" id="btn-list" class="nav-btn"><i class="fas fa-users"></i><span>المرضى</span></button>
         </footer>
     </div>
-
+    
+    <!-- زر واتساب -->
     <a href="https://wa.me/963939436998?text=مرحباً، أرغب باستفسار حول تطبيق بَسْمَة AI" target="_blank" class="wa-float wa-pulse" title="تواصل عبر واتساب">
         <i class="fab fa-whatsapp text-2xl"></i>
     </a>
 
     <script>
-        // 🛡️ تهيئة آمنة تتعامل مع حجب الشبكات
+        // 🛡️ تهيئة Firebase آمنة مع فشل متسامح
         let db = null, firebaseReady = false;
         try {
             if (typeof firebase !== 'undefined' && !window.fbBlocked) {
@@ -213,24 +330,31 @@
                 firebaseReady = true;
                 console.log("✅ Firebase متصل");
             } else {
-                console.warn("⚠️ Firebase غير متاح. العمل بالوضع المحلي الآمن.");
+                console.warn("⚠️ Firebase غير متاح. العمل بالوضع المحلي.");
             }
         } catch (e) { console.error("Firebase Init Error:", e); }
-
-        // تحديث مؤشر الاتصال
+        
+        // مؤشر الحالة
         const connBadge = document.getElementById('connBadge');
-        if(firebaseReady) {
-            connBadge.className = 'conn-indicator conn-online';
-            connBadge.innerText = '🟢 متصل';
-        } else {
-            connBadge.className = 'conn-indicator conn-offline';
-            connBadge.innerText = '🔴 وضع محلي';
+        if(firebaseReady) { connBadge.className = 'conn-indicator conn-online'; connBadge.innerText = '🟢 متصل'; }
+        else { connBadge.className = 'conn-indicator conn-offline'; connBadge.innerText = '🔴 وضع محلي'; }
+        
+        let currentTooth = null, currentUser = null, patientsCache = [];
+        const LOCAL_KEY = 'basma_patients';
+                // دوال التخزين المحلي
+        function getLocalDB() { try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); } catch { return []; } }
+        function saveLocalDB(data) { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); }
+        function syncToLocal(data, id) {
+            try {
+                const localDB = getLocalDB();
+                const idx = localDB.findIndex(p => p.id === id || p.firebaseId === id);
+                if(idx !== -1) localDB[idx] = { ...localDB[idx], ...data, id: localDB[idx].id, firebaseId: localDB[idx].firebaseId || id };
+                else localDB.push({ id, firebaseId: id, ...data });
+                saveLocalDB(localDB);
+            } catch(e) { console.warn("Local sync failed:", e); }
         }
-
-        let currentTooth = null, currentUser = null;
-        // قاعدة بيانات محلية احتياطية
-        const localDB = JSON.parse(localStorage.getItem('basma_local') || '[]');
-
+        
+        // تبديل نماذج الدخول
         function switchLogin(type) {
             const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');
             const formA = document.getElementById('adminLoginForm'), formD = document.getElementById('doctorLoginForm');
@@ -244,43 +368,34 @@
                 formD.classList.remove('d-none'); formA.classList.add('d-none');
             }
         }
-        function openSubscribe() {
-            document.getElementById('loginPage').classList.add('d-none');
-            document.getElementById('mainContent').classList.remove('d-none');
-            navTo('subscribe');
-        }
-
-        function backToLogin() {
-            document.getElementById('mainContent').classList.add('d-none');
-            document.getElementById('loginPage').classList.remove('d-none');
-        }
-
+        
+        function openSubscribe() { document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); navTo('subscribe'); }
+        function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
+        
+        // دخول المدير
         function handleAdminLogin() {
             const pwd = document.getElementById('adminPassword').value.trim();
-            if(pwd === "zak1959") { 
-                currentUser = { role: 'admin' }; 
-                afterLogin(); 
-            } else { showToast("❌ كلمة المرور غير صحيحة", "error"); }
+            if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; afterLogin(); }
+            else showToast("❌ كلمة المرور غير صحيحة", "error");
         }
-
+        
+        // دخول الطبيب
         function handleDoctorLogin() {
             const email = document.getElementById('doctorEmail').value.trim();
-            const password = document.getElementById('doctorPassword').value.trim();
-            if(!email || !password) return showToast("أدخل البريد وكلمة المرور", "error");
+            const pwd = document.getElementById('doctorPassword').value.trim();
+            if(!email || !pwd) return showToast("أدخل البريد وكلمة المرور", "error");
+            if(!firebaseReady) return showToast("⚠️ الدخول يتطلب اتصالاً", "info");
             
-            if(!firebaseReady) return showToast("⚠️ الدخول متوقف مؤقتاً بسبب انقطاع الاتصال. حاول لاحقاً أو اتصل بالمدير.", "info");
-
             db.ref('doctor_subscriptions').orderByChild('email').equalTo(email).once('value')
               .then(snap => {
                 if(!snap.exists()) return showToast("❌ حساب غير موجود", "error");
                 let found = null;
-                snap.forEach(c => { if(c.val().password === password) found = {id: c.key, ...c.val()}; });
-                if(!found) return showToast("❌ كلمة المرور خاطئة", "error");
-                if(found.status !== 'active') return showToast("⏳ حسابك قيد المراجعة أو مُوقف", "info");
+                snap.forEach(c => { if(c.val().password === pwd) found = {id: c.key, ...c.val()}; });                if(!found) return showToast("❌ كلمة المرور خاطئة", "error");
+                if(found.status !== 'active') return showToast("⏳ حسابك قيد المراجعة", "info");
                 currentUser = { role: 'doctor', ...found }; afterLogin();
               }).catch(() => showToast("فشل الاتصال بالخادم", "error"));
         }
-
+        
         function afterLogin() {
             document.getElementById('loginPage').classList.add('d-none');
             document.getElementById('mainContent').classList.remove('d-none');
@@ -289,157 +404,380 @@
             if(currentUser.role === 'admin') {
                 document.getElementById('userTypeDisplay').innerText = 'مدير النظام';
                 document.getElementById('adminSection').classList.remove('d-none');
-                loadDoctorRequests(); loadActiveDoctors(); navTo('home');
+                loadDoctorRequests(); loadActiveDoctors();
             } else {
                 document.getElementById('userTypeDisplay').innerText = `د. ${currentUser.name}`;
-                document.getElementById('adminSection').classList.add('d-none');                navTo('add');
+                document.getElementById('adminSection').classList.add('d-none');
             }
-            initTeeth(); loadData(); updateStats();
+            initTeeth(); loadData(); updateStats(); navTo('home');
         }
-
+        
         function logout() {
             currentUser = null; backToLogin();
-            ['adminPassword','doctorEmail','doctorPassword'].forEach(id => document.getElementById(id).value = '');
+            ['adminPassword','doctorEmail','doctorPassword'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
         }
-
+        
         function showToast(msg, type='info') {
             const c = document.getElementById('toastContainer');
             const t = document.createElement('div');
             t.className = `toast ${type}`;
             t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
-            c.appendChild(t); setTimeout(()=>t.remove(), 3500);
+            c.appendChild(t); setTimeout(()=> { t.style.opacity='0'; setTimeout(()=>t.remove(), 300); }, 3000);
         }
-
+        
+        // التنقل
         function navTo(page) {
             document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('d-none'));
             const target = document.getElementById(`page-${page}`);
             if(target) target.classList.remove('d-none');
+            
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            const btn = document.getElementById(`btn-${page}`);
+            const btnMap = {home:'home', add:'add', ai:'ai', list:'list'};
+            const btn = document.getElementById(`btn-${btnMap[page]||'home'}`);
             if(btn) btn.classList.add('active');
-            if(page==='list') updateStats();
-        }
-
+            
+            if(page === 'list') { loadData(); updateStats(); }
+            if(page === 'home') loadTodayAppointments();
+            window.scrollTo(0, 0);
+        }        
         function initTeeth() {
-            const grid = document.getElementById('toothGrid'); grid.innerHTML = '';
-            [18,17,16,15,14,13,12,11, 21,22,23,24,25,26,27,28, 48,47,46,45,44,43,42,41, 31,32,33,34,35,36,37,38].forEach(n => {
+            const grid = document.getElementById('toothGrid'); if(!grid) return; grid.innerHTML = '';
+            const teeth = [18,17,16,15,14,13,12,11, 21,22,23,24,25,26,27,28, 48,47,46,45,44,43,42,41, 31,32,33,34,35,36,37,38];
+            teeth.forEach(n => {
                 const b = document.createElement('button'); b.type = 'button'; b.className = 'tooth-btn'; b.innerText = n;
-                b.onclick = () => { document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); currentTooth=n; document.getElementById('selectedTooth').classList.remove('d-none'); document.getElementById('toothNum').innerText=n; };
+                b.onclick = () => { 
+                    document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); 
+                    b.classList.add('selected'); currentTooth = n; 
+                    document.getElementById('selectedTooth').classList.remove('d-none'); 
+                    document.getElementById('toothNum').innerText = n; 
+                };
                 grid.appendChild(b);
             });
         }
-
+        
+        // AI محاكاة
         function runMagicAI() {
             const diag = document.getElementById('pDiag').value.trim();
             const box = document.getElementById('aiBox');
             if(!diag) return showToast("اكتب الشكوى أولاً", "error");
             box.classList.remove('d-none'); box.innerHTML = `<div class="text-center"><i class="fas fa-spinner fa-spin text-indigo-600"></i> جاري التحليل...</div>`;
-            setTimeout(()=> box.innerHTML = `<b>💡 توصية:</b> السن #${currentTooth||'؟'} يحتاج فحصًا سريريًا. هذه المساعدة لا تغني عن التشخيص الطبي.`, 1200);
+            setTimeout(()=> box.innerHTML = `<b>💡 توصية:</b> السن #${currentTooth||'؟'} يحتاج فحصًا سريريًا وأشعة.<br><small class="text-gray-500">⚠️ لا يغني عن التشخيص الطبي</small>`, 1200);
         }
-
+        
         function aiFeature(type) {
             const r = document.getElementById('aiResult'); r.classList.remove('d-none'); r.innerHTML = `<div class="text-center"><i class="fas fa-spinner fa-spin text-purple-600"></i></div>`;
-            const d = { diagnosis: "🔍 <b>احتمالات:</b><br>• التهاب لبّي (60%)<br>• تسوس عميق (30%)<br>✅ إجراء: أشعة + اختبار حيوية", treatment: "💡 <b>خطة:</b><br>1. عزل + إزالة تسوس<br>2. تقييم العصب<br>3. حشو أو علاج لبّي", prevention: "🛡️ <b>نصائح:</b><br>• فرشاة + فلورايد<br>• خيط طبي يومي<br>• مراجعة كل 6 أشهر" };
-            setTimeout(()=> r.innerHTML = d[type], 800);
+            const d = { diagnosis: "🔍 <b>احتمالات:</b><br>• التهاب لبّي (60%)<br>• تسوس عميق (30%)<br>✅ إجراء: أشعة + اختبار حيوية", treatment: "💡 <b>خطة:</b><br>1. عزل + إزالة تسوس<br>2. تقييم العصب<br>3. حشو أو علاج لبّي", prevention: "🛡️ <b>نصائح:</b><br>• فرشاة + فلورايد<br>• خيط يومي<br>• مراجعة كل 6 أشهر" };
+            setTimeout(()=> r.innerHTML = d[type] || d.diagnosis, 800);
         }
+        
+        // حفظ فحص جديد
         function savePatient() {
             const name = document.getElementById('pName').value.trim(), diag = document.getElementById('pDiag').value.trim();
-            if(!name || !diag) return showToast("أكمل البيانات", "error");
+            if(!name || !diag) return showToast("أكمل الاسم والشكوى", "error");
             
-            const data = { name, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.email || 'admin' };
+            const pid = firebaseReady ? db.ref('patients').push().key : 'local_' + Date.now();
+            const data = { id: pid, name, phone: document.getElementById('pPhone').value.trim(), diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.email || currentUser?.id || 'admin', updatedAt: new Date().toISOString(), totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '' };
             
-            if(firebaseReady) {
-                db.ref('patients').push(data).then(()=>onSaveSuccess());
-            } else {
-                localDB.push(data); localStorage.setItem('basma_local', JSON.stringify(localDB)); onSaveSuccess();
-            }
+            if(firebaseReady) db.ref('patients/' + pid).set(data).then(onSaveSuccess);
+            else { const db = getLocalDB(); db.push(data); saveLocalDB(db); onSaveSuccess(); }
         }
-
+        
         function onSaveSuccess() {
             showToast("✅ تم الحفظ", "success");
-            document.getElementById('pName').value=''; document.getElementById('pDiag').value=''; document.getElementById('aiBox').classList.add('d-none'); currentTooth=null; document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none'); updateStats();
-        }
-
+            ['pName','pPhone','pDiag'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('aiBox').classList.add('d-none'); currentTooth = null; 
+            document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none');
+            updateStats(); loadTodayAppointments();
+            if(!document.getElementById('page-list').classList.contains('d-none')) loadData();        }
+        
         function registerPatient() {
             const name = document.getElementById('regName').value.trim(), phone = document.getElementById('regPhone').value.trim();
             if(!name || !phone) return showToast("أدخل الاسم والهاتف", "error");
-            const data = { name, phone, birth: document.getElementById('regBirth').value, gender: document.getElementById('regGender').value, date: new Date().toLocaleDateString('ar-EG') };
-            if(firebaseReady) db.ref('registered_patients').push(data);
-            else { localDB.push({type:'reg',...data}); localStorage.setItem('basma_local', JSON.stringify(localDB)); }
+            const pid = firebaseReady ? db.ref('registered_patients').push().key : 'reg_' + Date.now();
+            const data = { id: pid, name, phone, birth: document.getElementById('regBirth').value, gender: document.getElementById('regGender').value, date: new Date().toLocaleDateString('ar-EG'), createdAt: new Date().toISOString() };
+            if(firebaseReady) db.ref('registered_patients/' + pid).set(data);
+            else { const db = getLocalDB(); db.push({...data, type:'reg'}); saveLocalDB(db); }
             showToast("✅ تم التسجيل", "success"); ['regName','regPhone','regBirth','regGender'].forEach(id=>document.getElementById(id).value='');
         }
-
+        
         function submitDoctorSubscription() {
             const name = document.getElementById('subName').value.trim(), email = document.getElementById('subEmail').value.trim(), pwd = document.getElementById('subPassword').value.trim();
             if(!name || !email || !pwd) return showToast("أكمل الحقول", "error");
             if(pwd.length < 6) return showToast("كلمة المرور قصيرة", "error");
-            
             const data = { name, email, password: pwd, specialty: document.getElementById('subSpecialty').value.trim(), status: 'pending', requestedAt: new Date().toISOString() };
             if(firebaseReady) db.ref('doctor_subscriptions').push(data);
-            else showToast("⚠️ تم حفظ الطلب محلياً. سيتطلب اتصالاً لتفعيله.", "info");
+            else showToast("⚠️ تم الحفظ محلياً", "info");
             showToast("✅ تم الإرسال! انتظر التفعيل", "success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value='');
+            setTimeout(backToLogin, 2000);
         }
-
+        
+        // إدارة الأطباء (مدير)
         function loadDoctorRequests() {
-            if(!firebaseReady) return document.getElementById('doctorRequests').innerHTML = '<p class="text-xs text-gray-400 text-center">غير متاح بدون اتصال</p>';
+            if(!firebaseReady) return;
             db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').on('value', snap => {
                 const c = document.getElementById('doctorRequests'); c.innerHTML = ''; let cnt=0;
-                snap.forEach(child => { cnt++; const v=child.val(); c.innerHTML += `<div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between"><div><b>${v.name}</b><br>${v.email}</div><div class="flex gap-1"><button type="button" onclick="activateDoc('${child.key}')" class="px-2 py-1 bg-green-100 text-green-700 rounded">تفعيل</button><button type="button" onclick="rejectDoc('${child.key}')" class="px-2 py-1 bg-red-100 text-red-700 rounded">رفض</button></div></div>`; });
+                snap.forEach(child => { cnt++; const v=child.val(); c.innerHTML += `<div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between items-center"><div><b>${v.name}</b><br><span class="text-gray-500">${v.email}</span></div><div class="flex gap-1"><button onclick="activateDoc('${child.key}')" class="px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200">تفعيل</button><button onclick="rejectDoc('${child.key}')" class="px-2 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200">رفض</button></div></div>`; });
                 document.getElementById('pendingCount').innerText = cnt;
                 if(!cnt) c.innerHTML = '<p class="text-xs text-gray-400 text-center py-2">لا توجد طلبات معلقة</p>';
             });
         }
-        function activateDoc(id) { db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>showToast("✅ تم التفعيل","success")); }
-        function rejectDoc(id) { db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>showToast("تم رفض الطلب","info")); }
+        function activateDoc(id) { if(db) db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>showToast("✅ تم التفعيل","success")); }
+        function rejectDoc(id) { if(db) db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>showToast("تم رفض الطلب","info")); }
+        
         function loadActiveDoctors() {
             if(!firebaseReady) return;
             db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').on('value', snap => {
                 const c = document.getElementById('activeDoctors'); c.innerHTML = '';
-                snap.forEach(child => { const v=child.val(); c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border flex justify-between items-center text-xs"><span>👨‍⚕️ <b>${v.name}</b> | ${v.email}</span><div class="flex gap-1"><button type="button" onclick="suspendDoc('${child.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button><button type="button" onclick="deleteDoc('${child.key}')" class="px-2 py-1 bg-red-100 text-red-700 rounded">حذف</button></div></div>`; });
+                snap.forEach(child => { const v=child.val(); c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border flex justify-between items-center text-xs"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${child.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded hover:bg-amber-200">إيقاف</button></div>`; });
                 if(!snap.exists()) c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء نشطين</p>';
             });
         }
-        function suspendDoc(id) { db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>showToast("⛔ تم إيقاف الحساب","info")); }
-        function deleteDoc(id) { if(confirm("حذف نهائي؟") && db) db.ref('doctor_subscriptions/'+id).remove().then(()=>showToast("🗑️ تم الحذف","success")); }
-
+        function suspendDoc(id) { if(db) db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>showToast("⛔ تم الإيقاف","info")); }
+        
+        // 🔥 تحميل وعرض المرضى
         function loadData() {
-            let data = [];
-            if(firebaseReady) {
-                db.ref('patients').orderByChild('timestamp').on('value', snap => {
-                    data = []; snap.forEach(child => data.push(child.val())); renderPatients(data);
-                });
+            if(firebaseReady && db) {
+                db.ref('patients').orderByChild('timestamp').on('value', snap => {                    patientsCache = []; snap.forEach(child => patientsCache.push({firebaseId: child.key, ...child.val()}));
+                    renderPatients(patientsCache, 'firebase');
+                }, () => renderPatients(getLocalDB(), 'local'));
+            } else { renderPatients(getLocalDB(), 'local'); }
+        }
+        
+        function renderPatients(data, source) {
+            const c = document.getElementById('patientContainer'); if(!c) return; c.innerHTML = '';
+            if(!data || data.length === 0) {
+                document.getElementById('noRecords').classList.remove('d-none');
+                document.getElementById('recordsCount').innerText = '0'; return;
+            }
+            document.getElementById('noRecords').classList.add('d-none');
+            document.getElementById('recordsCount').innerText = data.length;
+            
+            [...data].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0)).forEach(v => {
+                const pid = v.firebaseId || v.id;
+                const displayTooth = v.tooth ? `<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">🦷 #${v.tooth}</span>` : '';
+                const shortDiag = v.diag ? (v.diag.length > 60 ? v.diag.substring(0,60)+'...' : v.diag) : 'بدون ملاحظات';
+                c.innerHTML += `
+                <div class="section-card py-3 border-r-4 border-r-blue-500 cursor-pointer hover:shadow-md hover:border-r-cyan-500 transition bg-white" 
+                     onclick="openPatientEdit('${pid}', '${source}')">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-sm text-blue-800">${v.name || 'مريض'}</span>
+                                ${v.phone ? `<span class="text-[10px] text-gray-400">📱 ${v.phone}</span>` : ''}
+                            </div>
+                            ${displayTooth ? `<div class="mt-1">${displayTooth}</div>` : ''}
+                            <p class="text-xs text-gray-600 mt-2 line-clamp-2">${shortDiag}</p>
+                        </div>
+                        <div class="text-left flex flex-col items-end gap-1">
+                            <span class="text-[10px] bg-gray-100 px-2 py-1 rounded">${v.date || '-'}</span>
+                            <i class="fas fa-chevron-left text-gray-300 text-xs"></i>
+                        </div>
+                    </div>
+                </div>`;
+            });
+        }
+        
+        // ⭐ فتح تعديل المريض
+        function openPatientEdit(pid, source) {
+            let patient = null;
+            if(source === 'firebase' && firebaseReady && db) {
+                db.ref('patients/' + pid).once('value').then(snap => {
+                    if(snap.exists()) { patient = { firebaseId: pid, ...snap.val() }; loadPatientToForm(patient, 'firebase'); }
+                    else { showToast("❌ لم يتم العثور على المريض", "error"); }
+                }).catch(() => { showToast("❌ فشل التحميل", "error"); });
             } else {
-                renderPatients(localDB);
+                patient = getLocalDB().find(p => p.id === pid || p.firebaseId === pid);                if(patient) loadPatientToForm(patient, 'local');
+                else showToast("❌ لم يتم العثور على المريض", "error");
+            }
+        }
+        
+        function loadPatientToForm(p, src) {
+            document.getElementById('editPatientId').value = p.firebaseId || p.id || '';
+            document.getElementById('editPatientSource').value = src;
+            document.getElementById('editName').value = p.name || '';
+            document.getElementById('editPhone').value = p.phone || '';
+            document.getElementById('editBirth').value = p.birth || '';
+            document.getElementById('editGender').value = p.gender || '';
+            document.getElementById('editDiag').value = p.diag || '';
+            document.getElementById('editTooth').value = p.tooth || '';
+            
+            // تحميل الموعد والمدفوعات
+            document.getElementById('editNextAppt').value = p.nextAppointment || '';
+            document.getElementById('editTotalCost').value = p.totalCost || '';
+            document.getElementById('payTotal').innerText = p.totalCost || 0;
+            document.getElementById('payPaid').innerText = p.paidAmount || 0;
+            document.getElementById('payRemain').innerText = (p.totalCost||0) - (p.paidAmount||0);
+            renderPayments(p.payments || []);
+            
+            const visitsDiv = document.getElementById('patientVisits');
+            const upd = p.updatedAt || p.timestamp || Date.now();
+            const dt = typeof upd === 'number' ? new Date(upd).toLocaleString('ar-EG') : upd;
+            visitsDiv.innerHTML = `<div class="p-2 bg-cyan-50 rounded-lg border border-cyan-200 text-xs"><div class="flex justify-between items-center"><span class="font-medium text-cyan-800">📅 آخر تحديث</span><span class="text-gray-500">${dt}</span></div>${p.addedBy ? `<div class="mt-1 text-gray-600">👤 أضافه: ${p.addedBy}</div>` : ''}</div>`;
+            navTo('patient');
+        }
+
+        // ⭐ دوال المواعيد والمدفوعات
+        function saveNextAppointment() {
+            const id = document.getElementById('editPatientId').value;
+            const appt = document.getElementById('editNextAppt').value;
+            if(!id) return;
+            const src = document.getElementById('editPatientSource').value;
+            if(src === 'firebase' && firebaseReady && db) {
+                db.ref('patients/' + id).update({ nextAppointment: appt, updatedAt: new Date().toISOString() }).then(()=>showToast("✅ تم حفظ الموعد", "success"));
+            } else {
+                const localDB = getLocalDB(); const idx = localDB.findIndex(p => p.id === id || p.firebaseId === id);
+                if(idx !== -1) { localDB[idx].nextAppointment = appt; localDB[idx].updatedAt = new Date().toISOString(); saveLocalDB(localDB); showToast("✅ تم الحفظ (محلياً)", "success"); }
             }
         }
 
-        function renderPatients(data) {
-            const c = document.getElementById('patientContainer'); c.innerHTML = '';
-            data.forEach(v => {
-                c.innerHTML += `<div class="section-card py-2 border-r-4 border-r-blue-500"><div class="flex justify-between"><span class="font-bold text-sm text-blue-800">${v.name}</span><span class="text-[10px] bg-gray-100 px-1 rounded">${v.date}</span></div>${v.tooth?`<span class="text-[10px] text-blue-600">🦷 #${v.tooth}</span><br>`:''}<p class="text-xs text-gray-600 mt-1">${v.diag}</p></div>`;
-            });
-            document.getElementById('recordsCount').innerText = data.length;
-            document.getElementById('noRecords').classList.toggle('d-none', data.length>0);
+        function updateTotalCost() {
+            const id = document.getElementById('editPatientId').value;
+            const cost = parseFloat(document.getElementById('editTotalCost').value) || 0;
+            if(!id) return;
+            const src = document.getElementById('editPatientSource').value;
+            document.getElementById('payTotal').innerText = cost;            document.getElementById('payRemain').innerText = cost - (parseFloat(document.getElementById('payPaid').innerText)||0);
+            
+            if(src === 'firebase' && firebaseReady && db) db.ref('patients/' + id).update({ totalCost: cost, updatedAt: new Date().toISOString() });
+            else { const localDB = getLocalDB(); const idx = localDB.findIndex(p => p.id === id || p.firebaseId === id); if(idx !== -1) { localDB[idx].totalCost = cost; saveLocalDB(localDB); } }
+            showToast("✅ تم تحديث التكلفة", "success");
         }
 
+        function renderPayments(payments) {
+            const c = document.getElementById('paymentHistory'); c.innerHTML = '';
+            if(!payments.length) { c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا توجد مدفوعات مسجلة</p>'; return; }
+            payments.slice().reverse().forEach(p => {
+                c.innerHTML += `<div class="p-2 bg-white rounded border flex justify-between items-center text-xs">
+                    <span class="font-bold text-green-600">💵 ${p.amount} ل.س</span>
+                    <span class="text-gray-600">${p.note || '-'}</span>
+                    <span class="text-gray-400">${p.date}</span>
+                </div>`;
+            });
+        }
+
+        function addPayment() {
+            const id = document.getElementById('editPatientId').value;
+            const amount = parseFloat(document.getElementById('newPayAmount').value);
+            const note = document.getElementById('newPayNote').value.trim();
+            if(!id || isNaN(amount) || amount <= 0) return showToast("❌ أدخل مبلغ صحيح", "error");
+
+            const newPay = { amount, note, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now() };
+            const src = document.getElementById('editPatientSource').value;
+
+            if(src === 'firebase' && firebaseReady && db) {
+                db.ref('patients/' + id).once('value').then(snap => {
+                    const p = snap.val() || {};
+                    const pays = p.payments || []; pays.push(newPay);
+                    const totalPaid = pays.reduce((sum, pay) => sum + pay.amount, 0);
+                    db.ref('patients/' + id).update({ payments: pays, paidAmount: totalPaid, updatedAt: new Date().toISOString() }).then(() => {
+                        document.getElementById('payPaid').innerText = totalPaid;
+                        document.getElementById('payRemain').innerText = (p.totalCost||0) - totalPaid;
+                        renderPayments(pays);
+                        document.getElementById('newPayAmount').value = ''; document.getElementById('newPayNote').value = '';
+                        showToast("✅ تم تسجيل الدفعة", "success");
+                    });
+                });
+            } else {
+                const localDB = getLocalDB(); const idx = localDB.findIndex(p => p.id === id || p.firebaseId === id);
+                if(idx !== -1) {
+                    const pays = localDB[idx].payments || []; pays.push(newPay);
+                    localDB[idx].payments = pays; localDB[idx].paidAmount = pays.reduce((s, pay) => s + pay.amount, 0); localDB[idx].updatedAt = new Date().toISOString();
+                    saveLocalDB(localDB);
+                    document.getElementById('payPaid').innerText = localDB[idx].paidAmount;
+                    document.getElementById('payRemain').innerText = (localDB[idx].totalCost||0) - localDB[idx].paidAmount;
+                    renderPayments(pays);                    document.getElementById('newPayAmount').value = ''; document.getElementById('newPayNote').value = '';
+                    showToast("✅ تم التسجيل (محلياً)", "success");
+                }
+            }
+        }
+
+        // ⭐ مواعيد اليوم
+        function loadTodayAppointments() {
+            const today = new Date().toISOString().split('T')[0];
+            let patients = [];
+            if(firebaseReady && db) {
+                db.ref('patients').once('value').then(snap => { snap.forEach(c => patients.push({id: c.key, ...c.val()})); renderTodayAppointments(patients, today); });
+            } else { patients = getLocalDB(); renderTodayAppointments(patients, today); }
+        }
+
+        function renderTodayAppointments(patients, todayDate) {
+            const container = document.getElementById('todayAppointmentsList');
+            const section = document.getElementById('todayAppointmentsSection');
+            container.innerHTML = '';
+            const todayMatches = patients.filter(p => {
+                if(!p.nextAppointment) return false;
+                return p.nextAppointment.startsWith(todayDate);
+            }).sort((a,b) => (a.nextAppointment||'').localeCompare(b.nextAppointment||''));
+
+            document.getElementById('todayCountBadge').innerText = todayMatches.length;
+            if(todayMatches.length === 0) { section.classList.add('d-none'); return; }
+            section.classList.remove('d-none');
+            todayMatches.forEach(p => {
+                const time = p.nextAppointment.includes('T') ? p.nextAppointment.split('T')[1].substring(0,5) : 'غير محدد';
+                container.innerHTML += `
+                <div class="p-2 bg-white rounded-lg border flex justify-between items-center cursor-pointer hover:bg-blue-50 transition" onclick="openPatientEdit('${p.firebaseId||p.id}', '${firebaseReady?'firebase':'local'}')">
+                    <div>
+                        <span class="font-bold text-sm">👤 ${p.name}</span>
+                        <div class="text-[10px] text-gray-500">🕒 ${time} | ${p.diag ? p.diag.substring(0,25)+'...' : 'بدون تشخيص'}</div>
+                    </div>
+                    <i class="fas fa-chevron-left text-gray-300"></i>
+                </div>`;
+            });
+        }
+        
+        // تحديث/حذف المريض
+        function updatePatient() {
+            const id = document.getElementById('editPatientId').value;
+            const src = document.getElementById('editPatientSource').value;
+            const name = document.getElementById('editName').value.trim();
+            if(!id) return showToast("❌ معرف غير صالح", "error");
+            if(!name) return showToast("❌ الاسم مطلوب", "error");
+            
+            const data = { name, phone: document.getElementById('editPhone').value.trim(), birth: document.getElementById('editBirth').value, gender: document.getElementById('editGender').value, diag: document.getElementById('editDiag').value.trim(), tooth: document.getElementById('editTooth').value || null, updatedAt: new Date().toISOString(), updatedBy: currentUser?.email || currentUser?.id || 'admin' };
+                        if(src === 'firebase' && firebaseReady && db) {
+                db.ref('patients/' + id).update(data).then(() => {
+                    showToast("✅ تم التحديث", "success"); syncToLocal(data, id); navTo('list'); updateStats(); loadTodayAppointments();
+                }).catch(e => showToast("❌ فشل: "+e.message, "error"));
+            } else {
+                const localDB = getLocalDB(); const idx = localDB.findIndex(p => p.id === id || p.firebaseId === id);
+                if(idx !== -1) { localDB[idx] = { ...localDB[idx], ...data }; saveLocalDB(localDB); }
+                else { localDB.push({ id, ...data }); saveLocalDB(localDB); }
+                showToast("✅ تم التحديث (محلياً)", "success"); navTo('list'); updateStats(); loadTodayAppointments();
+            }
+        }
+        
+        function deletePatient() {
+            const id = document.getElementById('editPatientId').value;
+            const src = document.getElementById('editPatientSource').value;
+            const name = document.getElementById('editName').value || 'هذا المريض';
+            if(!id || !confirm(`⚠️ حذف "${name}"؟`)) return;
+            
+            if(src === 'firebase' && firebaseReady && db) {
+                db.ref('patients/' + id).remove().then(() => { showToast("🗑️ تم الحذف", "success"); navTo('list'); updateStats(); loadTodayAppointments(); });
+            } else {
+                const newDB = getLocalDB().filter(p => p.id !== id && p.firebaseId !== id);
+                saveLocalDB(newDB); showToast("🗑️ تم الحذف", "success"); navTo('list'); updateStats(); loadTodayAppointments();
+            }
+        }
+        
         function updateStats() {
-            const data = firebaseReady ? [] : localDB;
-            if(firebaseReady) {
+            const today = new Date().toLocaleDateString('ar-EG');
+            if(firebaseReady && db) {
                 db.ref('patients').once('value').then(snap => {
                     document.getElementById('statPatients').innerText = snap.numChildren();
-                    let td=0; const today=new Date().toLocaleDateString('ar-EG');
-                    snap.forEach(c=>{if(c.val().date===today) td++});
+                    let td=0; snap.forEach(c=>{if(c.val().date===today) td++});
                     document.getElementById('statToday').innerText = td;
                 });
-                db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap => document.getElementById('statDoctors').innerText = snap.numChildren());
+                db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap=>document.getElementById('statDoctors').innerText=snap.numChildren());
             } else {
-                document.getElementById('statPatients').innerText = data.length;
-                document.getElementById('statToday').innerText = data.filter(d => d.date === new Date().toLocaleDateString('ar-EG')).length;
+                const db = getLocalDB();
+                document.getElementById('statPatients').innerText = db.length;
+                document.getElementById('statToday').innerText = db.filter(d => d.date === today).length;
+                document.getElementById('statDoctors').innerText = '0';
             }
         }
-
+        
         document.addEventListener('DOMContentLoaded', () => {
-            navTo('home');            document.getElementById('adminPassword').addEventListener('keypress', e => e.key==='Enter' && handleAdminLogin());
+            console.log("🦷 بَسْمَة AI جاهز");
         });
     </script>
 </body>
