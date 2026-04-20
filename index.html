@@ -11,7 +11,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
         * { box-sizing: border-box; }
-        body { font-family: 'Tajawal', sans-serif; background: linear-gradient(135deg, #f0f4f8 0%, #e6f7ff 100%); margin: 0; padding: 0; min-height: 100vh; }
+        body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; margin: 0; padding: 0; min-height: 100vh; }
         .d-none { display: none !important; }
         .main-footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #1e3a8a, #3b82f6); height: 65px; display: flex; justify-content: space-around; align-items: center; border-top: 3px solid #60a5fa; z-index: 9999; padding: 0 10px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); }
         .nav-btn { flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #bfdbfe; border: none; background: none; transition: 0.3s; font-size: 10px; cursor: pointer; }
@@ -38,20 +38,23 @@
         .status-active { background: #dcfce7; color: #166534; }
         .app-header { background: white; padding: 10px 16px; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
         .app-logo { width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6, #60a5fa); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; }
+        
+        /* 📢 شريط الإشعارات */
+        .announce-bar { background: linear-gradient(to right, #f59e0b, #d97706); color: white; padding: 8px 12px; text-align: center; font-size: 13px; font-weight: 500; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; position: relative; transition: 0.3s; }
+        .announce-edit { position: absolute; top: 6px; left: 12px; background: rgba(255,255,255,0.3); border: none; border-radius: 6px; padding: 4px 8px; cursor: pointer; color: white; font-size: 11px; }
+        .announce-edit:hover { background: rgba(255,255,255,0.5); }
+        
         .wa-float { position: fixed; bottom: 80px; left: 16px; z-index: 9998; background: #25D366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(37,211,102,0.4); transition: 0.3s; text-decoration: none; }
         .wa-float:hover { background: #128C7E; transform: scale(1.1); }
         @keyframes pulse-wa { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
-        .wa-pulse { animation: pulse-wa 2s infinite; }
-        .wa-pulse:hover { animation: none; }
+        .wa-pulse { animation: pulse-wa 2s infinite; }        .wa-pulse:hover { animation: none; }
         .conn-indicator { font-size: 9px; padding: 2px 6px; border-radius: 10px; }
         .conn-online { background: #dcfce7; color: #166534; }
         .conn-offline { background: #fee2e2; color: #991b1b; }
-        
-        /* 📱 قائمة الإشعارات المنسدلة */        .notif-dropdown { position: absolute; top: 50px; left: 16px; width: 280px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 10002; max-height: 60vh; overflow-y: auto; border: 1px solid #e2e8f0; }
+        .notif-dropdown { position: absolute; top: 50px; left: 16px; width: 280px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 10002; max-height: 60vh; overflow-y: auto; border: 1px solid #e2e8f0; }
         .notif-item { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12px; display: flex; gap: 8px; align-items: start; }
         .notif-item:last-child { border-bottom: none; }
         .notif-unread { background: #eff6ff; border-right: 3px solid #3b82f6; }
-        .notif-time { font-size: 10px; color: #64748b; margin-top: 2px; }
     </style>
 </head>
 <body class="pb-20">
@@ -62,17 +65,14 @@
             <div class="app-logo mx-auto mb-3"><i class="fas fa-tooth"></i></div>
             <h1 class="text-xl font-bold text-gray-800 mb-1">بَسْمَة AI</h1>
             <p class="text-gray-500 text-xs mb-4">نظام إدارة العيادة السنية</p>
-            
             <div class="flex gap-2 mb-4">
                 <button type="button" onclick="switchLogin('admin')" id="tabAdmin" class="flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium">مدير</button>
                 <button type="button" onclick="switchLogin('doctor')" id="tabDoctor" class="flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium">طبيب</button>
             </div>
-            
             <div id="adminLoginForm">
                 <input type="password" id="adminPassword" placeholder="كلمة مرور المدير" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-blue-500">
                 <button type="button" onclick="handleAdminLogin()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 rounded-xl">دخول</button>
             </div>
-            
             <div id="doctorLoginForm" class="d-none">
                 <input type="email" id="doctorEmail" placeholder="البريد الإلكتروني" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-3 text-center outline-none focus:border-amber-500">
                 <input type="password" id="doctorPassword" placeholder="كلمة المرور" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-amber-500">
@@ -96,7 +96,12 @@
                 </button>
             </div>
         </header>
-        <!-- 📱 قائمة الإشعارات المنسدلة -->
+        <!-- 📢 شريط الإشعارات (يظهر فقط للنشر) -->
+        <div id="announceBar" class="announce-bar d-none">
+            <span id="announceText"></span>
+            <button type="button" id="editAnnounceBtn" onclick="editAnnouncement()" class="announce-edit d-none"><i class="fas fa-pen ml-1"></i>تعديل</button>
+        </div>
+
         <div id="notifDropdown" class="notif-dropdown d-none">
             <div class="p-3 border-b bg-gray-50 flex justify-between items-center">
                 <span class="font-bold text-sm">🔔 الإشعارات</span>
@@ -140,12 +145,12 @@
 
                 <div class="section-card">
                     <h3 class="font-bold text-sm mb-2"><i class="fas fa-chart-pie text-blue-500 ml-1"></i> إحصائيات</h3>
-                    <div class="grid grid-cols-3 gap-2 text-center">
-                        <div class="bg-blue-50 p-2 rounded-lg"><div class="font-bold text-blue-600" id="statPatients">0</div><div class="text-[10px] text-gray-500">مرضى</div></div>
+                    <div class="grid grid-cols-3 gap-2 text-center">                        <div class="bg-blue-50 p-2 rounded-lg"><div class="font-bold text-blue-600" id="statPatients">0</div><div class="text-[10px] text-gray-500">مرضى</div></div>
                         <div class="bg-green-50 p-2 rounded-lg"><div class="font-bold text-green-600" id="statToday">0</div><div class="text-[10px] text-gray-500">اليوم</div></div>
                         <div class="bg-amber-50 p-2 rounded-lg"><div class="font-bold text-amber-600" id="statDoctors">0</div><div class="text-[10px] text-gray-500">أطباء</div></div>
                     </div>
-                </div>            </div>
+                </div>
+            </div>
 
             <div id="page-add" class="d-none space-y-3">
                 <div class="section-card">
@@ -189,12 +194,12 @@
                 </div>
             </div>
 
-            <div id="page-ai" class="d-none space-y-3">
-                <div class="section-card border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
+            <div id="page-ai" class="d-none space-y-3">                <div class="section-card border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
                     <div class="flex items-center gap-2 mb-3">
                         <div class="bg-purple-100 p-2 rounded-lg"><i class="fas fa-robot text-purple-600"></i></div>
                         <h2 class="font-bold text-sm">المساعد الذكي</h2>
-                    </div>                    <div class="space-y-2">
+                    </div>
+                    <div class="space-y-2">
                         <button type="button" onclick="aiFeature('diagnosis')" class="w-full text-right p-3 bg-white rounded-lg border text-sm">🔍 تشخيص أولي</button>
                         <button type="button" onclick="aiFeature('treatment')" class="w-full text-right p-3 bg-white rounded-lg border text-sm">💡 خطة علاج</button>
                         <button type="button" onclick="aiFeature('prevention')" class="w-full text-right p-3 bg-white rounded-lg border text-sm">🛡️ نصائح وقائية</button>
@@ -205,14 +210,11 @@
 
             <div id="page-list" class="d-none space-y-3 pb-16">
                 <div class="flex justify-between items-center mb-2 px-1">
-                    <h2 class="font-bold text-sm"><i class="fas fa-clipboard-list text-blue-500 ml-1"></i> السجلات</h2>
-                    <div class="flex gap-2 items-center">
-                        <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full" id="recordsCount">0</span>
-                        <button type="button" onclick="refreshPatients()" class="text-blue-600 hover:text-blue-800 text-xs"><i class="fas fa-sync-alt ml-1"></i>تحديث</button>
-                    </div>
+                    <h2 class="font-bold text-sm"><i class="fas fa-clipboard-list text-blue-500 ml-1"></i> سجل المرضى</h2>
+                    <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full" id="recordsCount">0</span>
                 </div>
                 <div id="patientContainer" class="space-y-2"></div>
-                <div id="noRecords" class="text-center py-6 text-gray-400 text-sm d-none"><i class="fas fa-inbox text-2xl mb-2"></i><br>لا توجد سجلات</div>
+                <div id="noRecords" class="text-center py-8 text-gray-400 text-sm d-none"><i class="fas fa-user-inbox text-3xl mb-2"></i><br>لا توجد سجلات بعد</div>
             </div>
         </main>
 
@@ -229,103 +231,86 @@
     </a>
 
     <script>
-        // 🛡️ تهيئة آمنة
+        // === إعدادات وآمان ===
         let db = null, firebaseReady = false;
         try {
             if (typeof firebase !== 'undefined' && !window.fbBlocked) {
                 const config = { databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/" };
                 if (!firebase.apps.length) firebase.initializeApp(config);
-                db = firebase.database();
-                firebaseReady = true;
+                db = firebase.database(); firebaseReady = true;
             }
-        } catch (e) { console.warn("Firebase غير متاح:", e); }
+        } catch(e){ console.warn("Firebase غير متاح"); }
 
-        const connBadge = document.getElementById('connBadge');
-        if(firebaseReady) { connBadge.className = 'conn-indicator conn-online'; connBadge.innerText = '🟢 متصل'; } 
-        else { connBadge.className = 'conn-indicator conn-offline'; connBadge.innerText = '🔴 وضع محلي'; }
+        document.getElementById('connBadge').className = `conn-indicator ${firebaseReady ? 'conn-online' : 'conn-offline'}`;
+        document.getElementById('connBadge').innerText = firebaseReady ? '🟢 متصل' : '🔴 محلي';
         let currentTooth = null, currentUser = null, isNotifReady = false;
         let notifications = JSON.parse(localStorage.getItem('basma_notifs') || '[]');
-        let allPatients = JSON.parse(localStorage.getItem('basma_patients') || '[]');
+        let patients = JSON.parse(localStorage.getItem('basma_patients') || '[]');
+        let announcement = localStorage.getItem('basma_announce') || "";
 
+        // === نظام الدخول ===
         function switchLogin(type) {
             const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');
             const formA = document.getElementById('adminLoginForm'), formD = document.getElementById('doctorLoginForm');
-            if(type === 'admin'){
-                tabA.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium';
-                tabD.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium';
-                formA.classList.remove('d-none'); formD.classList.add('d-none');
-            } else {
-                tabD.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium';
-                tabA.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium';
-                formD.classList.remove('d-none'); formA.classList.add('d-none');
-            }
+            if(type === 'admin'){ tabA.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabD.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formA.classList.remove('d-none'); formD.classList.add('d-none'); }
+            else { tabD.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabA.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formD.classList.remove('d-none'); formA.classList.add('d-none'); }
         }
 
-        function openSubscribe() {
-            document.getElementById('loginPage').classList.add('d-none');
-            document.getElementById('mainContent').classList.remove('d-none');
-            navTo('subscribe');
-        }
+        function openSubscribe() { document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); navTo('subscribe'); }
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
 
         function handleAdminLogin() {
-            if(document.getElementById('adminPassword').value.trim() === "zak1959") { 
-                currentUser = { role: 'admin' }; afterLogin(); 
-            } else { showToast("❌ كلمة المرور غير صحيحة", "error"); }
+            if(document.getElementById('adminPassword').value.trim() === "zak1959") { currentUser = { role: 'admin' }; afterLogin(); }
+            else showToast("❌ كلمة المرور غير صحيحة", "error");
         }
 
         function handleDoctorLogin() {
-            const email = document.getElementById('doctorEmail').value.trim(), password = document.getElementById('doctorPassword').value.trim();
-            if(!email || !password) return showToast("أدخل البريد وكلمة المرور", "error");
+            const email = document.getElementById('doctorEmail').value.trim(), pass = document.getElementById('doctorPassword').value.trim();
+            if(!email || !pass) return showToast("أدخل البريد وكلمة المرور", "error");
             if(!firebaseReady) return showToast("⚠️ الدخول متوقف بسبب انقطاع الاتصال", "info");
-
-            db.ref('doctor_subscriptions').orderByChild('email').equalTo(email).once('value')
-              .then(snap => {
+            db.ref('doctor_subscriptions').orderByChild('email').equalTo(email).once('value').then(snap => {
                 if(!snap.exists()) return showToast("❌ حساب غير موجود", "error");
-                let found = null;
-                snap.forEach(c => { if(c.val().password === password) found = {id: c.key, ...c.val()}; });
+                let found = null; snap.forEach(c => { if(c.val().password === pass) found = {id: c.key, ...c.val()}; });
                 if(!found) return showToast("❌ كلمة المرور خاطئة", "error");
                 if(found.status !== 'active') return showToast("⏳ حسابك قيد المراجعة أو مُوقف", "info");
                 currentUser = { role: 'doctor', ...found }; afterLogin();
-              }).catch(() => showToast("فشل الاتصال بالخادم", "error"));
+            }).catch(() => showToast("فشل الاتصال بالخادم", "error"));
         }
 
         function afterLogin() {
             document.getElementById('loginPage').classList.add('d-none');
-            document.getElementById('mainContent').classList.remove('d-none');            document.getElementById('userBar').classList.remove('d-none');
-            
+            document.getElementById('mainContent').classList.remove('d-none');
+            document.getElementById('userBar').classList.remove('d-none');
             if(currentUser.role === 'admin') {
                 document.getElementById('userTypeDisplay').innerText = 'مدير النظام';
                 document.getElementById('adminSection').classList.remove('d-none');
-                loadDoctorRequests(); loadActiveDoctors(); initNotifications(); requestNotificationPermission();
+                loadDoctorRequests(); loadActiveDoctors(); initNotifications();
                 navTo('home');
             } else {
                 document.getElementById('userTypeDisplay').innerText = `د. ${currentUser.name}`;
                 document.getElementById('adminSection').classList.add('d-none');
                 navTo('add');
             }
-            initTeeth(); loadPatients(); updateStats();
+            initTeeth(); loadPatients(); loadAnnouncement(); updateStats();
         }
-
         function logout() { currentUser = null; backToLogin(); ['adminPassword','doctorEmail','doctorPassword'].forEach(id => document.getElementById(id).value = ''); }
-
         function showToast(msg, type='info') {
             const c = document.getElementById('toastContainer'), t = document.createElement('div');
-            t.className = `toast ${type}`;
-            t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
+            t.className = `toast ${type}`; t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
             c.appendChild(t); setTimeout(()=>t.remove(), 3500);
         }
 
+        // === التنقل ===
         function navTo(page) {
             document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('d-none'));
-            const target = document.getElementById(`page-${page}`);
-            if(target) target.classList.remove('d-none');
+            document.getElementById(`page-${page}`).classList.remove('d-none');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             const btn = document.getElementById(`btn-${page}`);
             if(btn) btn.classList.add('active');
-            if(page==='list') { loadPatients(); updateStats(); }
+            if(page==='list') renderPatients();
         }
 
+        // === الأسنان ===
         function initTeeth() {
             const grid = document.getElementById('toothGrid'); grid.innerHTML = '';
             [18,17,16,15,14,13,12,11, 21,22,23,24,25,26,27,28, 48,47,46,45,44,43,42,41, 31,32,33,34,35,36,37,38].forEach(n => {
@@ -335,8 +320,9 @@
             });
         }
 
+        // === AI & حفظ ===
         function runMagicAI() {
-            const diag = document.getElementById('pDiag').value.trim(); const box = document.getElementById('aiBox');
+            const diag = document.getElementById('pDiag').value.trim(), box = document.getElementById('aiBox');
             if(!diag) return showToast("اكتب الشكوى أولاً", "error");
             box.classList.remove('d-none'); box.innerHTML = `<div class="text-center"><i class="fas fa-spinner fa-spin text-indigo-600"></i> جاري التحليل...</div>`;
             setTimeout(()=> box.innerHTML = `<b>💡 توصية:</b> السن #${currentTooth||'؟'} يحتاج فحصًا سريريًا. هذه المساعدة لا تغني عن التشخيص الطبي.`, 1200);
@@ -351,25 +337,24 @@
             const name = document.getElementById('pName').value.trim(), diag = document.getElementById('pDiag').value.trim();
             if(!name || !diag) return showToast("أكمل البيانات", "error");
             
-            const data = { name, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.email || 'admin', id: 'local_' + Date.now() };
+            const newP = { name, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.email || 'admin' };
             
-            // ✅ تحديث فوري للواجهة
-            allPatients.push(data);
-            renderPatients(allPatients);
-            saveToLocal('basma_patients', allPatients);
+            // ✅ تحديث فوري للواجهة والذاكرة المحلية
+            patients.unshift(newP);
+            localStorage.setItem('basma_patients', JSON.stringify(patients));            renderPatients();
             
-            // مزامنة خلفية مع فايربيس
-            if(firebaseReady) db.ref('patients').push(data).catch(e => console.warn("مزامنة خلفية:", e));
+            // مزامنة خلفية
+            if(firebaseReady) db.ref('patients').push(newP).catch(e=>console.warn("مزامنة:",e));
             
-            showToast("✅ تم الحفظ", "success");
-            document.getElementById('pName').value=''; document.getElementById('pDiag').value=''; document.getElementById('aiBox').classList.add('d-none'); currentTooth=null; document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none'); updateStats();
+            showToast("✅ تم الحفظ وعرضه في السجل", "success");
+            document.getElementById('pName').value=''; document.getElementById('pDiag').value=''; document.getElementById('aiBox').classList.add('d-none'); currentTooth=null; document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none');
+            updateStats();
         }
 
         function registerPatient() {
             const name = document.getElementById('regName').value.trim(), phone = document.getElementById('regPhone').value.trim();
             if(!name || !phone) return showToast("أدخل الاسم والهاتف", "error");
-            const data = { name, phone, birth: document.getElementById('regBirth').value, gender: document.getElementById('regGender').value, date: new Date().toLocaleDateString('ar-EG') };
-            if(firebaseReady) db.ref('registered_patients').push(data);
+            if(firebaseReady) db.ref('registered_patients').push({ name, phone, birth: document.getElementById('regBirth').value, gender: document.getElementById('regGender').value, date: new Date().toLocaleDateString('ar-EG') });
             showToast("✅ تم التسجيل", "success"); ['regName','regPhone','regBirth','regGender'].forEach(id=>document.getElementById(id).value='');
         }
 
@@ -377,11 +362,11 @@
             const name = document.getElementById('subName').value.trim(), email = document.getElementById('subEmail').value.trim(), pwd = document.getElementById('subPassword').value.trim();
             if(!name || !email || !pwd) return showToast("أكمل الحقول", "error");
             if(pwd.length < 6) return showToast("كلمة المرور قصيرة", "error");
-            const data = { name, email, password: pwd, specialty: document.getElementById('subSpecialty').value.trim(), status: 'pending', requestedAt: new Date().toISOString() };
-            if(firebaseReady) db.ref('doctor_subscriptions').push(data);
+            if(firebaseReady) db.ref('doctor_subscriptions').push({ name, email, password: pwd, specialty: document.getElementById('subSpecialty').value.trim(), status: 'pending', requestedAt: new Date().toISOString() });
             showToast("✅ تم الإرسال! انتظر التفعيل", "success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value='');
         }
 
+        // === إدارة الأطباء ===
         function loadDoctorRequests() {
             if(!firebaseReady) return document.getElementById('doctorRequests').innerHTML = '<p class="text-xs text-gray-400 text-center">غير متاح بدون اتصال</p>';
             db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').on('value', snap => {
@@ -390,9 +375,9 @@
                 document.getElementById('pendingCount').innerText = cnt;
                 if(!cnt) c.innerHTML = '<p class="text-xs text-gray-400 text-center py-2">لا توجد طلبات معلقة</p>';
             });
-        }        function activateDoc(id) { db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>showToast("✅ تم التفعيل","success")); }
+        }
+        function activateDoc(id) { db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>showToast("✅ تم التفعيل","success")); }
         function rejectDoc(id) { db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>showToast("تم رفض الطلب","info")); }
-
         function loadActiveDoctors() {
             if(!firebaseReady) return;
             db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').on('value', snap => {
@@ -404,86 +389,111 @@
         function suspendDoc(id) { db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>showToast("⛔ تم إيقاف الحساب","info")); }
         function deleteDoc(id) { if(confirm("حذف نهائي؟") && db) db.ref('doctor_subscriptions/'+id).remove().then(()=>showToast("🗑️ تم الحذف","success")); }
 
-        // ✅ إدارة المرضى الموحدة
-        function loadPatients() {
-            allPatients = JSON.parse(localStorage.getItem('basma_patients') || '[]');
-            renderPatients(allPatients);
+        // ✅ نظام المرضى الثابت والمضمون
+        function loadPatients() {            patients = JSON.parse(localStorage.getItem('basma_patients') || '[]');
+            renderPatients();
             if(firebaseReady) {
                 db.ref('patients').orderByChild('timestamp').on('value', snap => {
                     const fbData = []; snap.forEach(child => fbData.push(child.val()));
-                    if(fbData.length > 0) { allPatients = fbData; renderPatients(fbData); saveToLocal('basma_patients', fbData); }
+                    if(fbData.length > 0) { patients = fbData; localStorage.setItem('basma_patients', JSON.stringify(patients)); renderPatients(); }
                 });
             }
         }
-        function refreshPatients() { showToast("جاري المزامنة...", "info"); loadPatients(); }
-        function renderPatients(data) {
-            const c = document.getElementById('patientContainer'); c.innerHTML = '';
-            const sorted = [...data].sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
-            sorted.forEach(v => {
-                c.innerHTML += `<div class="section-card py-2 border-r-4 border-r-blue-500"><div class="flex justify-between"><span class="font-bold text-sm text-blue-800">${v.name}</span><span class="text-[10px] bg-gray-100 px-1 rounded">${v.date}</span></div>${v.tooth?`<span class="text-[10px] text-blue-600">🦷 #${v.tooth}</span><br>`:''}<p class="text-xs text-gray-600 mt-1">${v.diag}</p></div>`;
+        function renderPatients() {
+            const container = document.getElementById('patientContainer');
+            const noRec = document.getElementById('noRecords');
+            const countEl = document.getElementById('recordsCount');
+            container.innerHTML = '';
+            
+            if(patients.length === 0) { noRec.classList.remove('d-none'); countEl.innerText = '0'; return; }
+            
+            noRec.classList.add('d-none');
+            // ترتيب من الأحدث للأقدم
+            const sorted = [...patients].sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
+            countEl.innerText = sorted.length;
+            
+            sorted.forEach(p => {
+                container.innerHTML += `
+                <div class="section-card py-2 border-r-4 border-r-blue-500">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-sm text-blue-800">${p.name || 'غير معروف'}</span>
+                        <span class="text-[10px] bg-gray-100 px-2 py-1 rounded">${p.date || ''}</span>
+                    </div>
+                    ${p.tooth ? `<span class="text-[10px] text-blue-600">🦷 سن #${p.tooth}</span><br>` : ''}
+                    <p class="text-xs text-gray-600 mt-1 leading-relaxed">${p.diag || ''}</p>
+                </div>`;
             });
-            document.getElementById('recordsCount').innerText = sorted.length;
-            document.getElementById('noRecords').classList.toggle('d-none', sorted.length>0);
         }
 
         function updateStats() {
             const today = new Date().toLocaleDateString('ar-EG');
+            document.getElementById('statPatients').innerText = patients.length;
+            document.getElementById('statToday').innerText = patients.filter(d => d.date === today).length;
             if(firebaseReady) {
-                db.ref('patients').once('value').then(snap => {
-                    document.getElementById('statPatients').innerText = snap.numChildren();
-                    let td=0; snap.forEach(c=>{if(c.val().date===today) td++});
-                    document.getElementById('statToday').innerText = td;
-                });
                 db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap => document.getElementById('statDoctors').innerText = snap.numChildren());
-            } else {
-                document.getElementById('statPatients').innerText = allPatients.length;
-                document.getElementById('statToday').innerText = allPatients.filter(d => d.date === today).length;
             }
         }
+
         // 🔔 نظام الإشعارات
-        function requestNotificationPermission() {
-            if ("Notification" in window && Notification.permission !== "granted") {
-                Notification.requestPermission();
-            }
-        }
         function initNotifications() {
-            if(!firebaseReady) return;
-            isNotifReady = true;
+            if(!firebaseReady) return; isNotifReady = true;
             db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').on('child_added', snap => {
                 if(!isNotifReady) return;
-                const doc = snap.val();
-                addNotif(`🩺 د. ${doc.name} (${doc.email})`, 'طلب اشتراك جديد');
+                const doc = snap.val();                addNotif(`🩺 د. ${doc.name} (${doc.email})`, 'طلب اشتراك جديد');
                 showToast(`🩺 طلب جديد من: د. ${doc.name}`, 'info');
-                if (Notification.permission === "granted") {
-                    new Notification("بَسْمَة AI - طلب طبيب", { body: `د. ${doc.name} ينتظر التفعيل`, icon: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/tooth.svg" });
+                if ("Notification" in window && Notification.permission === "granted") {
+                    new Notification("بَسْمَة AI", { body: `د. ${doc.name} ينتظر التفعيل` });
                 }
             });
         }
+        function requestNotificationPermission() { if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission(); }
         function addNotif(title, desc) {
             const n = { id: Date.now(), title, desc, time: new Date().toLocaleTimeString('ar-EG'), read: false };
-            notifications.unshift(n);
-            if(notifications.length > 20) notifications.pop();
-            saveToLocal('basma_notifs', notifications); renderNotifs();
+            notifications.unshift(n); if(notifications.length > 20) notifications.pop();
+            localStorage.setItem('basma_notifs', JSON.stringify(notifications)); renderNotifs();
         }
         function renderNotifs() {
             const list = document.getElementById('notifList'); list.innerHTML = '';
-            notifications.forEach(n => {
-                list.innerHTML += `<div class="notif-item ${n.read?'':'notif-unread'}"><div class="flex-1"><div class="font-bold">${n.title}</div><div class="notif-time">${n.desc} • ${n.time}</div></div></div>`;
-            });
+            notifications.forEach(n => list.innerHTML += `<div class="notif-item ${n.read?'':'notif-unread'}"><div class="flex-1"><div class="font-bold">${n.title}</div><div style="font-size:10px;color:#64748b;margin-top:2px">${n.desc} • ${n.time}</div></div></div>`);
             const unread = notifications.filter(n=>!n.read).length;
             const badge = document.getElementById('notifBadge');
-            if(unread > 0) { badge.classList.remove('d-none'); badge.innerText = unread; }
-            else badge.classList.add('d-none');
+            unread > 0 ? (badge.classList.remove('d-none'), badge.innerText=unread) : badge.classList.add('d-none');
         }
         function toggleNotifDropdown() {
-            const dd = document.getElementById('notifDropdown');
-            dd.classList.toggle('d-none');
-            if(!dd.classList.contains('d-none')) { notifications.forEach(n=>n.read=true); saveToLocal('basma_notifs', notifications); renderNotifs(); }
+            const dd = document.getElementById('notifDropdown'); dd.classList.toggle('d-none');
+            if(!dd.classList.contains('d-none')) { notifications.forEach(n=>n.read=true); localStorage.setItem('basma_notifs', JSON.stringify(notifications)); renderNotifs(); }
         }
-        function clearNotifs() { notifications = []; saveToLocal('basma_notifs', notifications); renderNotifs(); }
-        function saveToLocal(key, data) { try { localStorage.setItem(key, JSON.stringify(data)); } catch(e){} }
+        function clearNotifs() { notifications=[]; localStorage.setItem('basma_notifs','[]'); renderNotifs(); }
 
-        document.addEventListener('DOMContentLoaded', () => { navTo('home'); renderNotifs(); document.getElementById('adminPassword').addEventListener('keypress', e => e.key==='Enter' && handleAdminLogin()); });
+        // 📢 شريط الإشعارات (للمدير فقط)
+        function loadAnnouncement() {
+            renderAnnouncement();
+            if(firebaseReady) db.ref('app_config/announcement').on('value', snap => {
+                if(snap.val()) { announcement = snap.val(); localStorage.setItem('basma_announce', announcement); renderAnnouncement(); }
+            });
+        }
+        function renderAnnouncement() {
+            const bar = document.getElementById('announceBar');
+            const text = document.getElementById('announceText');
+            const btn = document.getElementById('editAnnounceBtn');
+            if(announcement) { bar.classList.remove('d-none'); text.innerText = announcement; }
+            else bar.classList.add('d-none');
+            btn.classList.toggle('d-none', currentUser?.role !== 'admin');
+        }
+        function editAnnouncement() {
+            if(currentUser?.role !== 'admin') return;
+            const txt = prompt("أدخل نص الإشعار الجديد (سطرين كحد أقصى):", announcement);
+            if(txt !== null) {
+                announcement = txt.trim();
+                localStorage.setItem('basma_announce', announcement);
+                if(firebaseReady) db.ref('app_config/announcement').set(announcement);
+                renderAnnouncement(); showToast("✅ تم تحديث الإشعار", "success");
+            }        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            navTo('home'); renderNotifs(); requestNotificationPermission();
+            document.getElementById('adminPassword').addEventListener('keypress', e => e.key==='Enter' && handleAdminLogin());
+        });
     </script>
 </body>
 </html>
