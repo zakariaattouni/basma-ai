@@ -15,7 +15,6 @@
         body { font-family: 'Tajawal', sans-serif; background: linear-gradient(135deg, #f0f4f8 0%, #e6f7ff 100%); margin: 0; padding: 0; min-height: 100vh; }
         .d-none { display: none !important; }
         
-        /* الترويسة البسيطة */
         .simple-header { background: white; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .logo-area { display: flex; align-items: center; gap: 8px; }
         .logo-icon { width: 30px; height: 30px; background: #2563eb; color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
@@ -28,8 +27,8 @@
         .tooth-btn:hover { border-color: #3b82f6; }
         .tooth-btn.selected { background: #2563eb; color: white; border-color: #1e40af; }
         .section-card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
-        .quick-action { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; border: none; border-radius: 12px; padding: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.3s; width: 100%; margin-bottom: 10px; font-size: 14px; }
-        .quick-action:hover { transform: scale(1.02); opacity: 0.95; }
+        .quick-action { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; border: none; border-radius: 12px; padding: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: 0.3s; width: 100%; margin-bottom: 0; font-size: 13px; }
+        .quick-action:hover { transform: scale(1.03); opacity: 0.95; }
         .quick-action.register { background: linear-gradient(135deg, #10b981, #34d399); }
         .quick-action.ai { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
         #aiBox { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 2px solid #7dd3fc; border-radius: 12px; padding: 12px; font-size: 12px; line-height: 1.5; color: #0c4a6e; margin-top: 10px; }
@@ -44,11 +43,15 @@
         .cursor-pointer { cursor: pointer; }
         .copyright-footer { background: linear-gradient(to right, #1e3a8a, #3b82f6); color: white; text-align: center; padding: 8px; font-size: 10px; font-weight: 500; position: fixed; bottom: 0; left: 0; right: 0; z-index: 998; }
         .copyright-footer strong { font-weight: 700; color: #fff; }
-    </style>
+        
+        .alert-card { border-right: 4px solid; }
+        .alert-purple { background: #fdf4ff; border-color: #9333ea; }
+        .alert-amber { background: #fffbeb; border-color: #d97706; }
+        .empty-msg { text-align: center; color: #94a3b8; padding: 10px; font-size: 12px; }    </style>
 </head>
 <body class="pb-8">
-    <div id="toastContainer"></div>    
-    <!-- الترويسة البسيطة -->
+    <div id="toastContainer"></div>
+    
     <header id="mainHeader" class="simple-header d-none">
         <div class="logo-area">
             <div class="logo-icon"><i class="fas fa-tooth"></i></div>
@@ -60,7 +63,6 @@
         </div>
     </header>
 
-    <!-- شاشة الدخول -->
     <div id="loginPage" class="fixed inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 z-[10000] flex items-center justify-center p-6">
         <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm text-center">
             <div class="logo-icon mx-auto mb-3" style="width:50px;height:50px;font-size:20px;margin:0 auto 15px;"><i class="fas fa-tooth"></i></div>
@@ -78,41 +80,40 @@
                 <input type="email" id="doctorEmail" placeholder="البريد الإلكتروني" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-3 text-center outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') handleDoctorLogin()">
                 <input type="password" id="doctorPassword" placeholder="كلمة المرور" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') handleDoctorLogin()">
                 <button type="button" onclick="handleDoctorLogin()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">دخول</button>
+                <p class="text-xs text-gray-400 mt-3">ليس لديك حساب؟ <span class="text-amber-600 cursor-pointer font-medium hover:underline" onclick="openSubscribe()">اشترك الآن</span></p>
             </div>
         </div>
     </div>
 
-    <!-- المحتوى الرئيسي -->
     <div id="mainContent" class="d-none">
         <main class="p-4 max-w-md mx-auto">
-            <!-- الرئيسية -->
             <div id="page-home" class="page space-y-4">
-                <div class="grid grid-cols-1 gap-3">
-                    <button type="button" onclick="navTo('register')" class="quick-action register py-4 text-lg"><i class="fas fa-user-plus"></i> تسجيل مريض جديد</button>
-                    <button type="button" onclick="navTo('add')" class="quick-action py-4 text-lg"><i class="fas fa-stethoscope"></i> بدء فحص جديد</button>
-                    <button type="button" onclick="navTo('ai')" class="quick-action ai py-4 text-lg"><i class="fas fa-robot"></i> المساعد الذكي</button>
-                    <button type="button" onclick="navTo('list')" class="quick-action py-4 text-lg" style="background: linear-gradient(135deg, #64748b, #475569);"><i class="fas fa-clipboard-list"></i> سجلات المرضى</button>
+                <!-- ✅ تم التعديل هنا لتوزيع الأزرار 2×2 -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" onclick="navTo('register')" class="quick-action register"><i class="fas fa-user-plus"></i> مريض جديد</button>
+                    <button type="button" onclick="navTo('add')" class="quick-action"><i class="fas fa-stethoscope"></i> فحص جديد</button>
+                    <button type="button" onclick="navTo('ai')" class="quick-action ai"><i class="fas fa-robot"></i> مساعد ذكي</button>
+                    <button type="button" onclick="navTo('list')" class="quick-action" style="background: linear-gradient(135deg, #64748b, #475569);"><i class="fas fa-clipboard-list"></i> السجلات</button>
                 </div>
                 
-                <!-- ✅ نافذة مواعيد اليوم -->
-                <div id="todayApptsBox" class="section-card border-2 border-purple-200 bg-purple-50 d-none">
-                    <div class="flex justify-between items-center mb-2">                        <h3 class="font-bold text-sm text-purple-800"><i class="fas fa-calendar-day ml-1"></i> مواعيد اليوم</h3>
+                <div id="todayApptsBox" class="section-card alert-card alert-purple">                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-sm text-purple-800"><i class="fas fa-calendar-day ml-1"></i> مواعيد اليوم</h3>
                         <span id="apptCount" class="bg-purple-200 text-purple-800 text-xs px-2 py-1 rounded-full">0</span>
                     </div>
-                    <div id="apptList" class="space-y-2 max-h-40 overflow-y-auto text-sm"></div>
+                    <div id="apptList" class="space-y-2 max-h-40 overflow-y-auto"></div>
+                    <div id="apptEmpty" class="empty-msg">لا توجد مواعيد لليوم</div>
                 </div>
 
-                <!-- ✅ نافذة طبيب ينتظر الموافقة -->
-                <div id="pendingDoctorsBox" class="section-card border-2 border-amber-200 bg-amber-50 d-none">
+                <div id="pendingDoctorsBox" class="section-card alert-card alert-amber d-none">
                     <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-bold text-sm text-amber-800"><i class="fas fa-user-md ml-1"></i> أطباء ينتظرون التفعيل</h3>
+                        <h3 class="font-bold text-sm text-amber-800"><i class="fas fa-user-md ml-1"></i> طلبات تفعيل أطباء جدد</h3>
                         <span id="docCount" class="bg-amber-200 text-amber-800 text-xs px-2 py-1 rounded-full">0</span>
                     </div>
-                    <div id="docList" class="space-y-2 max-h-40 overflow-y-auto text-sm"></div>
+                    <div id="docList" class="space-y-2 max-h-40 overflow-y-auto"></div>
+                    <div id="docEmpty" class="empty-msg">لا توجد طلبات جديدة</div>
                 </div>
             </div>
 
-            <!-- فحص جديد -->
             <div id="page-add" class="page d-none space-y-3">
                 <div class="section-card">
                     <h2 class="font-bold text-sm mb-3 text-blue-800"><i class="fas fa-plus-circle ml-1"></i> فحص جديد</h2>
@@ -129,7 +130,6 @@
                 </div>
             </div>
 
-            <!-- تسجيل مريض -->
             <div id="page-register" class="page d-none space-y-3">
                 <div class="section-card border-green-200">
                     <h2 class="font-bold text-sm mb-3 text-green-700"><i class="fas fa-user-plus ml-1"></i> بيانات المريض الأساسية</h2>
@@ -139,18 +139,16 @@
                 </div>
             </div>
 
-            <!-- الاشتراك -->
             <div id="page-subscribe" class="page d-none space-y-3">
                 <div class="section-card border-amber-300 bg-amber-50">
                     <h2 class="font-bold text-sm text-center mb-3 text-amber-800">اشتراك طبيب جديد</h2>
                     <input type="text" id="subName" placeholder="الاسم الكامل" class="w-full p-3 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
                     <input type="email" id="subEmail" placeholder="البريد الإلكتروني" class="w-full p-3 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
-                    <input type="password" id="subPassword" placeholder="كلمة مرور" class="w-full p-3 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">                    <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-amber-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
-                    <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-2">← خروج</button>
+                    <input type="password" id="subPassword" placeholder="كلمة مرور" class="w-full p-3 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">
+                    <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-amber-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>                    <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-2">← خروج</button>
                 </div>
             </div>
 
-            <!-- المساعد الذكي -->
             <div id="page-ai" class="page d-none space-y-3">
                 <div class="section-card border-purple-200 bg-purple-50">
                     <div class="flex items-center gap-2 mb-3"><div class="bg-purple-100 p-2 rounded-lg"><i class="fas fa-robot text-purple-600"></i></div><h2 class="font-bold text-sm text-purple-900">المساعد الذكي السريري</h2></div>
@@ -166,7 +164,6 @@
                 </div>
             </div>
 
-            <!-- قائمة السجلات -->
             <div id="page-list" class="page d-none space-y-3">
                 <div class="flex justify-between items-center mb-2">
                     <h2 class="font-bold text-sm text-blue-800">سجلات المرضى</h2>
@@ -180,7 +177,6 @@
                 <div id="noRecords" class="text-center py-10 text-gray-400 text-sm d-none"><i class="fas fa-inbox text-3xl mb-2"></i><br>لا توجد سجلات</div>
             </div>
 
-            <!-- صفحة تعديل المريض -->
             <div id="page-patient" class="page d-none space-y-3">
                 <div class="flex items-center gap-2 mb-2">
                     <button type="button" onclick="navTo('list')" class="text-blue-600 font-bold text-sm p-2"><i class="fas fa-arrow-right ml-1"></i> رجوع للسجل</button>
@@ -194,11 +190,11 @@
                     <label class="text-xs text-gray-600 font-bold block mb-1">التشخيص / الملاحظات</label>
                     <textarea id="editDiag" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none text-sm" rows="3"></textarea>
                     <div class="flex gap-2">
-                        <button type="button" onclick="deletePatient()" class="flex-1 bg-red-50 text-red-600 border border-red-200 font-bold py-2 rounded-lg text-sm">حذف</button>                        <button type="button" onclick="updatePatient()" class="flex-1 bg-blue-600 text-white font-bold py-2 rounded-lg text-sm">حفظ التعديلات</button>
+                        <button type="button" onclick="deletePatient()" class="flex-1 bg-red-50 text-red-600 border border-red-200 font-bold py-2 rounded-lg text-sm">حذف</button>
+                        <button type="button" onclick="updatePatient()" class="flex-1 bg-blue-600 text-white font-bold py-2 rounded-lg text-sm">حفظ التعديلات</button>
                     </div>
                 </div>
-                <div class="section-card border-amber-200 bg-amber-50">
-                    <h3 class="font-bold text-xs mb-2 text-amber-800">📅 الموعد القادم</h3>
+                <div class="section-card border-amber-200 bg-amber-50">                    <h3 class="font-bold text-xs mb-2 text-amber-800">📅 الموعد القادم</h3>
                     <input type="datetime-local" id="editNextAppt" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none text-sm">
                     <button onclick="saveNextAppointment()" class="w-full bg-amber-500 text-white text-xs font-bold py-2 rounded-lg">تأكيد الموعد</button>
                 </div>
@@ -243,11 +239,11 @@
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
         
         function handleAdminLogin() {
-            try {                const pwd = document.getElementById('adminPassword').value.trim();
+            try {
+                const pwd = document.getElementById('adminPassword').value.trim();
                 if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400); }
                 else showToast("❌ كلمة المرور غير صحيحة", "error");
-            } catch(e) { showToast("❌ خطأ في الدخول", "error"); }
-        }
+            } catch(e) { showToast("❌ خطأ في الدخول", "error"); }        }
         function handleDoctorLogin() {
             try {
                 const email = document.getElementById('doctorEmail').value.trim(), pwd = document.getElementById('doctorPassword').value.trim();
@@ -266,6 +262,9 @@
             document.getElementById('loginPage').classList.add('d-none'); 
             document.getElementById('mainContent').classList.remove('d-none'); 
             document.getElementById('mainHeader').classList.remove('d-none');
+            const pendingBox = document.getElementById('pendingDoctorsBox');
+            if(currentUser?.role === 'admin') pendingBox.classList.remove('d-none');
+            else pendingBox.classList.add('d-none');
             initTeeth(); updateHomeNotifications(); navTo('home');
         }
         function logout() { currentUser = null; backToLogin(); ['adminPassword','doctorEmail','doctorPassword'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; }); }
@@ -285,63 +284,36 @@
             window.scrollTo(0, 0);
         }
 
-        // ✅ دالة تحديث النافذتين المطلوبتين
         function updateHomeNotifications() {
-            // 1. نافذة مواعيد اليوم
             const today = new Date().toISOString().split('T')[0];
             const patients = getLocalDB();
-            const todayAppts = patients.filter(p => p.nextAppointment && p.nextAppointment.startsWith(today))
-                                       .sort((a,b) => a.nextAppointment.localeCompare(b.nextAppointment));
-                        const apptBox = document.getElementById('todayApptsBox');
-            const apptList = document.getElementById('apptList');
-            const apptCount = document.getElementById('apptCount');
-            
+            const todayAppts = patients.filter(p => p.nextAppointment && p.nextAppointment.startsWith(today)).sort((a,b) => a.nextAppointment.localeCompare(b.nextAppointment));
+            const apptBox = document.getElementById('todayApptsBox'), apptList = document.getElementById('apptList'), apptCount = document.getElementById('apptCount'), apptEmpty = document.getElementById('apptEmpty');
+            apptBox.classList.remove('d-none'); apptCount.innerText = todayAppts.length;
             if(todayAppts.length > 0) {
-                apptBox.classList.remove('d-none');
-                apptCount.innerText = todayAppts.length;
-                apptList.innerHTML = todayAppts.map(p => {
-                    const time = p.nextAppointment.includes('T') ? p.nextAppointment.split('T')[1].substring(0,5) : '--:--';
-                    return `<div class="flex justify-between items-center p-2 bg-white rounded border border-purple-100">
-                        <span class="font-bold text-gray-800">👤 ${p.name}</span>
-                        <span class="text-purple-600 font-mono text-xs bg-purple-100 px-2 py-1 rounded">🕒 ${time}</span>
-                    </div>`;
+                apptEmpty.classList.add('d-none'); apptList.classList.remove('d-none');
+                apptList.innerHTML = todayAppts.map(p => {                    const time = p.nextAppointment.includes('T') ? p.nextAppointment.split('T')[1].substring(0,5) : '--:--';
+                    return `<div class="flex justify-between items-center p-2 bg-white rounded border border-purple-100"><span class="font-bold text-gray-800">👤 ${p.name}</span><span class="text-purple-600 font-mono text-xs bg-purple-100 px-2 py-1 rounded">🕒 ${time}</span></div>`;
                 }).join('');
-            } else { apptBox.classList.add('d-none'); }
+            } else { apptEmpty.classList.remove('d-none'); apptList.innerHTML = ''; }
 
-            // 2. نافذة طبيب ينتظر الموافقة (للمدير فقط)
             if(currentUser?.role === 'admin' && firebaseReady && db) {
+                const docBox = document.getElementById('pendingDoctorsBox'), docList = document.getElementById('docList'), docCount = document.getElementById('docCount'), docEmpty = document.getElementById('docEmpty');
                 db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').once('value', snap => {
-                    const pending = [];
-                    snap.forEach(ch => pending.push({key: ch.key, ...ch.val()}));
-                    
-                    const docBox = document.getElementById('pendingDoctorsBox');
-                    const docList = document.getElementById('docList');
-                    const docCount = document.getElementById('docCount');
-                    
+                    const pending = []; snap.forEach(ch => pending.push({key: ch.key, ...ch.val()}));
+                    docCount.innerText = pending.length;
                     if(pending.length > 0) {
-                        docBox.classList.remove('d-none');
-                        docCount.innerText = pending.length;
-                        docList.innerHTML = pending.map(d => `
-                            <div class="flex justify-between items-center p-2 bg-white rounded border border-amber-100">
-                                <div class="text-xs">
-                                    <div class="font-bold text-amber-900">🩺 ${d.name}</div>
-                                    <div class="text-gray-500">${d.email}</div>
-                                </div>
-                                <button onclick="activateDoc('${d.key}')" class="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold hover:bg-green-600">تفعيل</button>
-                            </div>
-                        `).join('');
-                    } else { docBox.classList.add('d-none'); }
+                        docEmpty.classList.add('d-none'); docList.classList.remove('d-none');
+                        docList.innerHTML = pending.map(d => `<div class="flex justify-between items-center p-2 bg-white rounded border border-amber-100"><div class="text-xs"><div class="font-bold text-amber-900">🩺 ${d.name}</div><div class="text-gray-500">${d.email}</div></div><button onclick="activateDoc('${d.key}')" class="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold hover:bg-green-600">تفعيل</button></div>`).join('');
+                    } else { docEmpty.classList.remove('d-none'); docList.innerHTML = ''; }
                 });
             }
         }
 
-        function activateDoc(id){ 
-            if(db) db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>{
-                showToast("✅ تم تفعيل الطبيب بنجاح","success"); updateHomeNotifications(); 
-            }); 
-        }
+        function activateDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>{ showToast("✅ تم تفعيل الطبيب بنجاح","success"); updateHomeNotifications(); }); }
         
-        function initTeeth() {            const grid = document.getElementById('toothGrid'); if(!grid) return; grid.innerHTML = '';
+        function initTeeth() {
+            const grid = document.getElementById('toothGrid'); if(!grid) return; grid.innerHTML = '';
             [18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38].forEach(n => {
                 const b = document.createElement('button'); b.type = 'button'; b.className = 'tooth-btn'; b.innerText = n;
                 b.onclick = () => { document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); currentTooth = n; document.getElementById('selectedTooth').classList.remove('d-none'); document.getElementById('toothNum').innerText = n; };
@@ -350,22 +322,15 @@
         }
         
         async function runAdvancedAI_Live() {
-            const input = document.getElementById('aiInput').value.trim();
-            const outputBox = document.getElementById('aiOutputBox');
-            const resultDiv = document.getElementById('aiResult');
+            const input = document.getElementById('aiInput').value.trim(), outputBox = document.getElementById('aiOutputBox'), resultDiv = document.getElementById('aiResult');
             if(!input) return showToast("❌ اكتب الأعراض", "error");
-            outputBox.classList.remove('d-none');
-            resultDiv.innerHTML = '<div class="text-center py-2"><i class="fas fa-spinner fa-spin text-purple-500"></i> جاري التحليل...</div>';
+            outputBox.classList.remove('d-none'); resultDiv.innerHTML = '<div class="text-center py-2"><i class="fas fa-spinner fa-spin text-purple-500"></i> جاري التحليل...</div>';
             try {
                 const prompt = `طبيب أسنان خبير. حلل باختصار: 1. التشخيص 2. العلاج 3. نصيحة. الحالة: ${input}`;
                 const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?seed=${Math.floor(Math.random()*1000)}&model=openai`;
-                const response = await fetch(url);
-                if (!response.ok) throw new Error("فشل");
-                const aiText = await response.text();
-                resultDiv.innerHTML = `<div class="text-sm leading-relaxed">${aiText.replace(/\n/g, '<br>')}</div>`;
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="text-xs text-red-500">تعذر الاتصال.</div>`;
-            }
+                const response = await fetch(url); if (!response.ok) throw new Error("فشل");
+                const aiText = await response.text(); resultDiv.innerHTML = `<div class="text-sm leading-relaxed">${aiText.replace(/\n/g, '<br>')}</div>`;
+            } catch (error) { resultDiv.innerHTML = `<div class="text-xs text-red-500">تعذر الاتصال.</div>`; }
         }
         function clearAI() { document.getElementById('aiInput').value=''; document.getElementById('aiOutputBox').classList.add('d-none'); }
         function runMagicAI() {
@@ -376,21 +341,17 @@
         }
         
         function savePatient() {
-            const name = document.getElementById('pName').value.trim(), phone = document.getElementById('pPhone').value.trim(), diag = document.getElementById('pDiag').value.trim();
-            if(!name || !diag) return showToast("أكمل البيانات", "error");
-            const pid = 'local_' + Date.now();
-            const data = { id: pid, name, phone, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), nextAppointment: '' };
-            addToLocalDB(data);
-            if(firebaseReady && db) db.ref('patients/' + pid).set(data);
-            showToast("✅ تم الحفظ", "success");
-            ['pName','pPhone','pDiag'].forEach(id => document.getElementById(id).value = '');
-            currentTooth = null; document.querySelectorAll('.tooth-btn').forEach(x => x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none');
-            updateHomeNotifications();
+            const name = document.getElementById('pName').value.trim(), phone = document.getElementById('pPhone').value.trim(), diag = document.getElementById('pDiag').value.trim();            if(!name || !diag) return showToast("أكمل البيانات", "error");
+            const pid = 'local_' + Date.now(), data = { id: pid, name, phone, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), nextAppointment: '' };
+            addToLocalDB(data); if(firebaseReady && db) db.ref('patients/' + pid).set(data);
+            showToast("✅ تم الحفظ", "success"); ['pName','pPhone','pDiag'].forEach(id => document.getElementById(id).value = '');
+            currentTooth = null; document.querySelectorAll('.tooth-btn').forEach(x => x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none'); updateHomeNotifications();
         }
         function registerPatient() {
             const name = document.getElementById('regName').value.trim(), phone = document.getElementById('regPhone').value.trim();
             if(!name || !phone) return showToast("أدخل البيانات", "error");
-            addToLocalDB({ id: 'local_' + Date.now(), name, phone, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), diag: 'تسجيل أولي' });            showToast("✅ تم التسجيل", "success"); ['regName','regPhone'].forEach(id => document.getElementById(id).value = '');
+            addToLocalDB({ id: 'local_' + Date.now(), name, phone, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), diag: 'تسجيل أولي' });
+            showToast("✅ تم التسجيل", "success"); ['regName','regPhone'].forEach(id => document.getElementById(id).value = '');
         }
         function submitDoctorSubscription() {
             const name=document.getElementById('subName').value.trim(), email=document.getElementById('subEmail').value.trim(), pwd=document.getElementById('subPassword').value.trim();
@@ -413,8 +374,7 @@
         function loadPatientToForm(p) {
             document.getElementById('editPatientId').value=p.id;
             document.getElementById('editName').value=p.name||''; document.getElementById('editPhone').value=p.phone||'';
-            document.getElementById('editDiag').value=p.diag||'';
-            document.getElementById('editNextAppt').value=p.nextAppointment||'';
+            document.getElementById('editDiag').value=p.diag||''; document.getElementById('editNextAppt').value=p.nextAppointment||'';
             navTo('patient');
         }
         function updatePatient() {
@@ -430,14 +390,12 @@
         }
         function saveNextAppointment() {
             const id=document.getElementById('editPatientId').value, appt=document.getElementById('editNextAppt').value; if(!id) return;
-            updateLocalDB(id,{nextAppointment:appt}); showToast("✅ تم حفظ الموعد","success"); updateHomeNotifications();
-        }
+            updateLocalDB(id,{nextAppointment:appt}); showToast("✅ تم حفظ الموعد","success"); updateHomeNotifications();        }
         function filterPatients(q) {
-            const ql=q.toLowerCase().trim();
-            const all = getLocalDB();
-            const filtered = all.filter(p => (p.name||'').toLowerCase().includes(ql) || (p.phone||'').includes(ql));
+            const ql=q.toLowerCase().trim(), all = getLocalDB(), filtered = all.filter(p => (p.name||'').toLowerCase().includes(ql) || (p.phone||'').includes(ql));
             renderPatients(filtered);
         }
         document.addEventListener('DOMContentLoaded', () => { console.log("🦷 بَسْمَة AI جاهز!"); });
-    </script></body>
+    </script>
+</body>
 </html>
