@@ -14,60 +14,58 @@
         * { box-sizing: border-box; }
         body { font-family: 'Tajawal', sans-serif; background: linear-gradient(135deg, #f0f4f8 0%, #e6f7ff 100%); margin: 0; padding: 0; min-height: 100vh; }
         .d-none { display: none !important; }
-        .main-footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #1e3a8a, #3b82f6); height: 65px; display: flex; justify-content: space-around; align-items: center; border-top: 3px solid #60a5fa; z-index: 9999; padding: 0 10px; }
-        .nav-btn { flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #bfdbfe; border: none; background: none; transition: 0.3s; font-size: 10px; cursor: pointer; }
-        .nav-btn:hover { color: white; }
-        .nav-btn.active { color: white; background: rgba(255,255,255,0.15); border-radius: 12px 12px 0 0; font-weight: 700; }
-        .nav-btn i { font-size: 18px; margin-bottom: 2px; }
+        
+        /* الترويسة البسيطة */
+        .simple-header { background: white; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .logo-area { display: flex; align-items: center; gap: 8px; }
+        .logo-icon { width: 30px; height: 30px; background: #2563eb; color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .app-name { font-weight: 800; color: #1e3a8a; font-size: 16px; }
+        .home-btn { background: #f1f5f9; color: #475569; border: none; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; }
+        .home-btn:hover { background: #e2e8f0; color: #1e3a8a; }
+
         .tooth-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; max-height: 150px; overflow-y: auto; padding: 5px; }
         .tooth-btn { padding: 8px 2px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 10px; font-weight: 600; background: white; transition: 0.2s; cursor: pointer; }
         .tooth-btn:hover { border-color: #3b82f6; }
         .tooth-btn.selected { background: #2563eb; color: white; border-color: #1e40af; }
         .section-card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
-        .quick-action { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; border: none; border-radius: 12px; padding: 10px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.3s; width: 100%; margin-bottom: 8px; font-size: 13px; }
-        .quick-action:hover { transform: scale(1.02); }
+        .quick-action { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; border: none; border-radius: 12px; padding: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.3s; width: 100%; margin-bottom: 10px; font-size: 14px; }
+        .quick-action:hover { transform: scale(1.02); opacity: 0.95; }
         .quick-action.register { background: linear-gradient(135deg, #10b981, #34d399); }
+        .quick-action.ai { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
         #aiBox { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 2px solid #7dd3fc; border-radius: 12px; padding: 12px; font-size: 12px; line-height: 1.5; color: #0c4a6e; margin-top: 10px; }
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: white; padding: 10px 16px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 10002; display: flex; align-items: center; gap: 8px; animation: slideDown 0.3s ease; max-width: 90%; pointer-events: none; }
-        @keyframes slideDown { from { top: -100px; opacity: 0; } to { top: 20px; opacity: 1; } }
+        .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: white; padding: 10px 16px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 2000; display: flex; align-items: center; gap: 8px; animation: slideDown 0.3s ease; max-width: 90%; pointer-events: none; }
+        @keyframes slideDown { from { top: 20px; opacity: 0; } to { top: 70px; opacity: 1; } }
         .toast.success { border-right: 4px solid #10b981; }
         .toast.error { border-right: 4px solid #ef4444; }
         .toast.info { border-right: 4px solid #3b82f6; }
-        .toast.warning { border-right: 4px solid #f59e0b; }
-        .status-badge { padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; }
-        .status-pending { background: #fef3c7; color: #92400e; }
-        .status-active { background: #dcfce7; color: #166534; }
-        .status-urgent { background: #fee2e2; color: #991b1b; animation: pulse-urgent 2s infinite; }
-        @keyframes pulse-urgent { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-        .app-header { background: white; padding: 10px 16px; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .app-logo { width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6, #60a5fa); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; }
-        .wa-float { position: fixed; bottom: 80px; left: 16px; z-index: 9998; background: #25D366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(37,211,102,0.4); transition: 0.3s; text-decoration: none; }
-        .wa-float:hover { background: #128C7E; transform: scale(1.1); }
-        @keyframes pulse-wa { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
-        .wa-pulse { animation: pulse-wa 2s infinite; }
-        .wa-pulse:hover { animation: none; }
         .conn-indicator { font-size: 9px; padding: 2px 6px; border-radius: 10px; }
-        .conn-online { background: #dcfce7; color: #166534; }        .conn-offline { background: #fee2e2; color: #991b1b; }
+        .conn-online { background: #dcfce7; color: #166534; }
+        .conn-offline { background: #fee2e2; color: #991b1b; }
         .cursor-pointer { cursor: pointer; }
-        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .wa-btn-patient { background: #25D366; color: white; border: none; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: 0.2s; }
-        .wa-btn-patient:hover { background: #128C7E; transform: scale(1.1); }
-        .search-box { background: white; border-radius: 12px; padding: 8px 12px; border: 2px solid #e2e8f0; display: flex; align-items: center; gap: 6px; }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 12px; }
-        .search-box i { color: #64748b; }
-        .copyright-footer { background: linear-gradient(to right, #1e3a8a, #3b82f6); color: white; text-align: center; padding: 10px 15px; font-size: 11px; font-weight: 500; border-top: 2px solid #60a5fa; position: fixed; bottom: 65px; left: 0; right: 0; z-index: 9998; }
+        .copyright-footer { background: linear-gradient(to right, #1e3a8a, #3b82f6); color: white; text-align: center; padding: 8px; font-size: 10px; font-weight: 500; position: fixed; bottom: 0; left: 0; right: 0; z-index: 998; }
         .copyright-footer strong { font-weight: 700; color: #fff; }
-        .typing-effect::after { content: '...'; animation: typing 1.5s infinite; }
-        @keyframes typing { 0% { content: '.'; } 33% { content: '..'; } 66% { content: '...'; } }
     </style>
 </head>
-<body class="pb-32">
-    <div id="toastContainer"></div>
+<body class="pb-8">
+    <div id="toastContainer"></div>    
+    <!-- الترويسة البسيطة -->
+    <header id="mainHeader" class="simple-header d-none">
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fas fa-tooth"></i></div>
+            <span class="app-name">بَسْمَة AI</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <span id="connBadge" class="conn-indicator">...</span>
+            <button type="button" onclick="navTo('home')" class="home-btn"><i class="fas fa-home"></i> الرئيسية</button>
+        </div>
+    </header>
+
+    <!-- شاشة الدخول -->
     <div id="loginPage" class="fixed inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 z-[10000] flex items-center justify-center p-6">
         <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm text-center">
-            <div class="app-logo mx-auto mb-3"><i class="fas fa-tooth"></i></div>
+            <div class="logo-icon mx-auto mb-3" style="width:50px;height:50px;font-size:20px;margin:0 auto 15px;"><i class="fas fa-tooth"></i></div>
             <h1 class="text-xl font-bold text-gray-800 mb-1">بَسْمَة AI</h1>
-            <p class="text-gray-500 text-xs mb-4">نظام إدارة العيادة السنية</p>
+            <p class="text-gray-500 text-xs mb-6">نظام إدارة العيادة السنية</p>
             <div class="flex gap-2 mb-4">
                 <button type="button" onclick="switchLogin('admin')" id="tabAdmin" class="flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium">مدير</button>
                 <button type="button" onclick="switchLogin('doctor')" id="tabDoctor" class="flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium">طبيب</button>
@@ -80,190 +78,160 @@
                 <input type="email" id="doctorEmail" placeholder="البريد الإلكتروني" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-3 text-center outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') handleDoctorLogin()">
                 <input type="password" id="doctorPassword" placeholder="كلمة المرور" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') handleDoctorLogin()">
                 <button type="button" onclick="handleDoctorLogin()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">دخول</button>
-                <p class="text-xs text-gray-400 mt-3">ليس لديك حساب؟ <span class="text-amber-600 cursor-pointer font-medium hover:underline" onclick="openSubscribe()">اشترك الآن</span></p>
             </div>
         </div>
     </div>
+
+    <!-- المحتوى الرئيسي -->
     <div id="mainContent" class="d-none">
-        <header class="app-header">
-            <div class="app-logo"><i class="fas fa-tooth"></i></div>
-            <h1 class="font-bold text-blue-900">بَسْمَة AI</h1>
-            <span id="connBadge" class="conn-indicator">...</span>
-        </header>
-        <div id="userBar" class="bg-blue-50 px-4 py-2 text-center text-xs text-blue-700 d-none">
-            <i class="fas fa-user-circle ml-1"></i> <span id="userTypeDisplay">مدير النظام</span>
-            <button type="button" onclick="logout()" class="mr-3 text-red-500 hover:text-red-700"><i class="fas fa-sign-out-alt ml-1"></i>خروج</button>
-        </div>
         <main class="p-4 max-w-md mx-auto">
-            <div id="page-home" class="space-y-3">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 rounded-2xl shadow">                    <h2 class="font-bold mb-1">👋 لوحة التحكم</h2>
-                    <p class="text-blue-100 text-xs">اختر القسم للبدء</p>
+            <!-- الرئيسية -->
+            <div id="page-home" class="page space-y-4">
+                <div class="grid grid-cols-1 gap-3">
+                    <button type="button" onclick="navTo('register')" class="quick-action register py-4 text-lg"><i class="fas fa-user-plus"></i> تسجيل مريض جديد</button>
+                    <button type="button" onclick="navTo('add')" class="quick-action py-4 text-lg"><i class="fas fa-stethoscope"></i> بدء فحص جديد</button>
+                    <button type="button" onclick="navTo('ai')" class="quick-action ai py-4 text-lg"><i class="fas fa-robot"></i> المساعد الذكي</button>
+                    <button type="button" onclick="navTo('list')" class="quick-action py-4 text-lg" style="background: linear-gradient(135deg, #64748b, #475569);"><i class="fas fa-clipboard-list"></i> سجلات المرضى</button>
                 </div>
-                <div id="alertSection" class="d-none">
-                    <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-bell text-amber-600"></i>
-                            <h3 class="font-bold text-sm">تنبيهات المواعيد</h3>
-                            <span class="status-badge status-urgent ml-auto" id="alertCount">0</span>
-                        </div>
-                        <div id="alertList" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
+                
+                <!-- ✅ نافذة مواعيد اليوم -->
+                <div id="todayApptsBox" class="section-card border-2 border-purple-200 bg-purple-50 d-none">
+                    <div class="flex justify-between items-center mb-2">                        <h3 class="font-bold text-sm text-purple-800"><i class="fas fa-calendar-day ml-1"></i> مواعيد اليوم</h3>
+                        <span id="apptCount" class="bg-purple-200 text-purple-800 text-xs px-2 py-1 rounded-full">0</span>
                     </div>
+                    <div id="apptList" class="space-y-2 max-h-40 overflow-y-auto text-sm"></div>
                 </div>
-                <div id="todayAppointmentsSection" class="section-card border-indigo-200 bg-gradient-to-br from-indigo-50 to-blue-50 d-none">
+
+                <!-- ✅ نافذة طبيب ينتظر الموافقة -->
+                <div id="pendingDoctorsBox" class="section-card border-2 border-amber-200 bg-amber-50 d-none">
                     <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-bold text-sm"><i class="fas fa-clock text-indigo-600 ml-1"></i> مواعيد اليوم</h3>
-                        <span class="status-badge status-active" id="todayCountBadge">0</span>
+                        <h3 class="font-bold text-sm text-amber-800"><i class="fas fa-user-md ml-1"></i> أطباء ينتظرون التفعيل</h3>
+                        <span id="docCount" class="bg-amber-200 text-amber-800 text-xs px-2 py-1 rounded-full">0</span>
                     </div>
-                    <div id="todayAppointmentsList" class="space-y-2 max-h-40 overflow-y-auto text-sm"></div>
+                    <div id="docList" class="space-y-2 max-h-40 overflow-y-auto text-sm"></div>
                 </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <button type="button" onclick="navTo('register')" class="quick-action register"><i class="fas fa-user-plus"></i> مريض جديد</button>
-                    <button type="button" onclick="navTo('ai')" class="quick-action"><i class="fas fa-robot"></i> مساعد ذكي</button>
-                    <button type="button" onclick="navTo('add')" class="quick-action"><i class="fas fa-stethoscope"></i> فحص جديد</button>
-                    <button type="button" onclick="navTo('list')" class="quick-action"><i class="fas fa-clipboard-list"></i> السجلات</button>
-                    <button type="button" onclick="navTo('list')" class="quick-action" style="background: linear-gradient(135deg, #06b6d4, #22d3ee); grid-column: span 2;"><i class="fas fa-users"></i> 👥 قائمة المرضى</button>
-                </div>
-                <div id="adminSection" class="d-none">
-                    <div class="section-card border-2 border-indigo-200">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="font-bold text-sm"><i class="fas fa-user-clock text-amber-500 ml-1"></i> طلبات معلقة</h3>
-                            <span class="status-badge status-pending" id="pendingCount">0</span>
-                        </div>
-                        <div id="doctorRequests" class="space-y-2 max-h-36 overflow-y-auto text-sm mb-4"></div>
-                        <hr class="border-gray-200 my-2">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="font-bold text-sm"><i class="fas fa-user-check text-green-500 ml-1"></i> أطباء نشطين</h3>
-                        </div>
-                        <div id="activeDoctors" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
-                    </div>
-                </div>
+            </div>
+
+            <!-- فحص جديد -->
+            <div id="page-add" class="page d-none space-y-3">
                 <div class="section-card">
-                    <h3 class="font-bold text-sm mb-2"><i class="fas fa-chart-pie text-blue-500 ml-1"></i> إحصائيات</h3>
-                    <div class="grid grid-cols-3 gap-2 text-center">
-                        <div class="bg-blue-50 p-2 rounded-lg"><div class="font-bold text-blue-600" id="statPatients">0</div><div class="text-[10px] text-gray-500">مرضى</div></div>
-                        <div class="bg-green-50 p-2 rounded-lg"><div class="font-bold text-green-600" id="statToday">0</div><div class="text-[10px] text-gray-500">اليوم</div></div>
-                        <div class="bg-amber-50 p-2 rounded-lg"><div class="font-bold text-amber-600" id="statDoctors">0</div><div class="text-[10px] text-gray-500">أطباء</div></div>
-                    </div>
-                </div>
-            </div>            <div id="page-add" class="d-none space-y-3">
-                <div class="section-card">
-                    <h2 class="font-bold text-sm mb-3"><i class="fas fa-plus-circle text-blue-500 ml-1"></i> فحص جديد</h2>
+                    <h2 class="font-bold text-sm mb-3 text-blue-800"><i class="fas fa-plus-circle ml-1"></i> فحص جديد</h2>
                     <div class="tooth-grid mb-3" id="toothGrid"></div>
-                    <p id="selectedTooth" class="text-center text-xs text-blue-600 font-semibold mb-2 d-none">✅ السن: <span id="toothNum"></span></p>
-                    <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-blue-400 text-sm">
-                    <input type="tel" id="pPhone" placeholder="رقم الهاتف" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-blue-400 text-sm">
-                    <textarea id="pDiag" placeholder="وصف الشكوى..." class="w-full p-2 bg-gray-50 border rounded-lg mb-3 outline-none focus:border-blue-400 resize-none text-sm" rows="3"></textarea>
+                    <p id="selectedTooth" class="text-center text-xs text-blue-600 font-semibold mb-2 d-none">✅ السن المحدد: <span id="toothNum"></span></p>
+                    <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-3 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-blue-400 text-sm">
+                    <input type="tel" id="pPhone" placeholder="رقم الهاتف" class="w-full p-3 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-blue-400 text-sm">
+                    <textarea id="pDiag" placeholder="وصف الشكوى والتشخيص..." class="w-full p-3 bg-gray-50 border rounded-lg mb-3 outline-none focus:border-blue-400 resize-none text-sm" rows="4"></textarea>
                     <div id="aiBox" class="d-none"></div>
                     <div class="flex gap-2">
-                        <button type="button" onclick="runMagicAI()" class="flex-1 bg-indigo-100 text-indigo-700 font-bold py-2 rounded-lg text-sm">تحليل سريع</button>
-                        <button type="button" onclick="savePatient()" class="flex-1 bg-blue-600 text-white font-bold py-2 rounded-lg text-sm">حفظ</button>
+                        <button type="button" onclick="runMagicAI()" class="flex-1 bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold py-3 rounded-lg text-sm">تحليل سريع</button>
+                        <button type="button" onclick="savePatient()" class="flex-1 bg-blue-600 text-white font-bold py-3 rounded-lg text-sm">حفظ السجل</button>
                     </div>
                 </div>
             </div>
-            <div id="page-register" class="d-none space-y-3">
+
+            <!-- تسجيل مريض -->
+            <div id="page-register" class="page d-none space-y-3">
                 <div class="section-card border-green-200">
-                    <h2 class="font-bold text-sm mb-3"><i class="fas fa-user-plus text-green-500 ml-1"></i> مريض جديد</h2>
-                    <input type="text" id="regName" placeholder="الاسم الكامل" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
-                    <input type="tel" id="regPhone" placeholder="رقم الهاتف" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
-                    <input type="date" id="regBirth" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
-                    <select id="regGender" class="w-full p-2 bg-gray-50 border rounded-lg mb-3 outline-none focus:border-green-400 text-sm"><option value="">الجنس</option><option value="male">ذكر</option><option value="female">أنثى</option></select>
-                    <button type="button" onclick="registerPatient()" class="w-full bg-green-500 text-white font-bold py-2 rounded-lg">تسجيل</button>
+                    <h2 class="font-bold text-sm mb-3 text-green-700"><i class="fas fa-user-plus ml-1"></i> بيانات المريض الأساسية</h2>
+                    <input type="text" id="regName" placeholder="الاسم الكامل" class="w-full p-3 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
+                    <input type="tel" id="regPhone" placeholder="رقم الهاتف" class="w-full p-3 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
+                    <button type="button" onclick="registerPatient()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg">حفظ البيانات</button>
                 </div>
             </div>
-            <div id="page-subscribe" class="d-none space-y-3">
-                <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">
-                    <div class="text-center mb-3"><div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mx-auto mb-2"><i class="fas fa-user-md text-amber-600 text-lg"></i></div><h2 class="font-bold text-sm">اشتراك طبيب جديد</h2><p class="text-[10px] text-gray-500">سجل ليصلك التفعيل من المدير</p></div>
-                    <input type="text" id="subName" placeholder="الاسم الكامل" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
-                    <input type="email" id="subEmail" placeholder="البريد الإلكتروني" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
-                    <input type="password" id="subPassword" placeholder="كلمة مرور" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
-                    <input type="text" id="subSpecialty" placeholder="التخصص (اختياري)" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">
-                    <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
-                    <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-3 hover:bg-gray-300 transition">← العودة لتسجيل الدخول</button>
+
+            <!-- الاشتراك -->
+            <div id="page-subscribe" class="page d-none space-y-3">
+                <div class="section-card border-amber-300 bg-amber-50">
+                    <h2 class="font-bold text-sm text-center mb-3 text-amber-800">اشتراك طبيب جديد</h2>
+                    <input type="text" id="subName" placeholder="الاسم الكامل" class="w-full p-3 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
+                    <input type="email" id="subEmail" placeholder="البريد الإلكتروني" class="w-full p-3 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
+                    <input type="password" id="subPassword" placeholder="كلمة مرور" class="w-full p-3 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">                    <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-amber-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
+                    <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-2">← خروج</button>
                 </div>
             </div>
-            <div id="page-ai" class="d-none space-y-3">
-                <div class="section-card border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
-                    <div class="flex items-center gap-2 mb-3"><div class="bg-purple-100 p-2 rounded-lg"><i class="fas fa-robot text-purple-600"></i></div><h2 class="font-bold text-sm">🧠 المساعد الذكي السريري (Live AI)</h2></div>
+
+            <!-- المساعد الذكي -->
+            <div id="page-ai" class="page d-none space-y-3">
+                <div class="section-card border-purple-200 bg-purple-50">
+                    <div class="flex items-center gap-2 mb-3"><div class="bg-purple-100 p-2 rounded-lg"><i class="fas fa-robot text-purple-600"></i></div><h2 class="font-bold text-sm text-purple-900">المساعد الذكي السريري</h2></div>
                     <div class="bg-white p-3 rounded-xl border border-purple-200 mb-3 shadow-sm">
-                        <label class="text-xs text-gray-600 font-medium block mb-1">📝 الأعراض والعلامات السريرية</label>
-                        <textarea id="aiInput" placeholder="مثال: ألم نابض في السن 36 يزداد ليلاً، حساسية للبارد، تورم محدود في اللثة المجاورة..." class="w-full p-2 bg-gray-50 border rounded-lg outline-none focus:border-purple-400 resize-none text-sm" rows="4"></textarea>
-                        <button onclick="runAdvancedAI_Live()" class="mt-2 w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-2 rounded-lg text-sm hover:opacity-90 transition"><i class="fas fa-magic ml-1"></i> تحليل بالحالة الحقيقية (AI)</button>
+                        <label class="text-xs text-gray-600 font-medium block mb-1">اكتب الأعراض:</label>
+                        <textarea id="aiInput" placeholder="مثال: ألم نابض يزداد ليلاً..." class="w-full p-3 bg-gray-50 border rounded-lg outline-none focus:border-purple-400 resize-none text-sm" rows="4"></textarea>
+                        <button onclick="runAdvancedAI_Live()" class="mt-2 w-full bg-purple-600 text-white font-bold py-2 rounded-lg text-sm"><i class="fas fa-magic ml-1"></i> تحليل الحالة</button>
                     </div>
-                    <div id="aiOutputBox" class="d-none bg-white p-3 rounded-xl border-2 border-purple-300 shadow-inner">
-                        <div class="flex justify-between items-center mb-2 border-b border-gray-100 pb-2"><span class="text-xs font-bold text-purple-700">🤖 نتيجة التحليل الذكي</span><button onclick="clearAI()" class="text-[10px] text-gray-500 hover:text-red-500 flex items-center gap-1">مسح <i class="fas fa-times"></i></button></div>
-                        <div id="aiResult" class="text-sm text-gray-700 leading-relaxed space-y-2"></div>
+                    <div id="aiOutputBox" class="d-none bg-white p-3 rounded-xl border-2 border-purple-300">
+                        <div id="aiResult" class="text-sm text-gray-700 leading-relaxed"></div>
+                        <button onclick="clearAI()" class="mt-2 text-xs text-red-500 w-full text-center">مسح النتيجة</button>
                     </div>
                 </div>
-            </div>            <div id="page-list" class="d-none space-y-3 pb-16">
-                <div class="flex justify-between items-center mb-2 px-1"><h2 class="font-bold text-sm"><i class="fas fa-clipboard-list text-blue-500 ml-1"></i> سجلات المرضى</h2><span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full" id="recordsCount">0</span></div>
-                <div class="search-box mb-2"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="ابحث باسم المريض أو الهاتف..." oninput="filterPatients(this.value)"><button onclick="document.getElementById('searchInput').value=''; filterPatients('')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button></div>
-                <p class="text-[10px] text-gray-500 bg-gray-50 p-2 rounded-lg">💡 اضغط على أي مريض لفتح صفحة التعديل</p>
-                <div id="patientContainer" class="space-y-2"></div>
-                <div id="noRecords" class="text-center py-6 text-gray-400 text-sm d-none"><i class="fas fa-inbox text-2xl mb-2"></i><br>لا توجد سجلات</div>
             </div>
-            <div id="page-patient" class="d-none space-y-3 pb-16">
-                <div class="flex items-center gap-2 mb-2 px-1"><button type="button" onclick="navTo('list')" class="text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 rounded-lg transition"><i class="fas fa-arrow-right"></i> رجوع</button><h2 class="font-bold text-sm"><i class="fas fa-user-injured text-blue-500 ml-1"></i> تعديل بيانات المريض</h2></div>
-                <div class="section-card border-cyan-200 bg-gradient-to-br from-cyan-50 to-blue-50">
-                    <input type="hidden" id="editPatientId"><input type="hidden" id="editPatientSource">
-                    <label class="text-xs text-gray-600 font-medium block mb-1">👤 اسم المريض <span class="text-red-500">*</span></label>
-                    <input type="text" id="editName" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none focus:border-cyan-400 text-sm font-bold" placeholder="أدخل الاسم">
-                    <label class="text-xs text-gray-600 font-medium block mb-1">📱 رقم الهاتف</label>
-                    <input type="tel" id="editPhone" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none focus:border-cyan-400 text-sm" placeholder="09XXXXXXXX">
-                    <div class="grid grid-cols-2 gap-2"><div><label class="text-xs text-gray-600 font-medium block mb-1">🎂 تاريخ الميلاد</label><input type="date" id="editBirth" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none focus:border-cyan-400 text-sm"></div><div><label class="text-xs text-gray-600 font-medium block mb-1">⚧ الجنس</label><select id="editGender" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none focus:border-cyan-400 text-sm"><option value="">اختر</option><option value="male">ذكر</option><option value="female">أنثى</option></select></div></div>
-                    <label class="text-xs text-gray-600 font-medium block mb-1">🦷 رقم السن (إن وجد)</label><input type="number" id="editTooth" placeholder="مثال: 16" min="11" max="48" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none focus:border-cyan-400 text-sm">
-                    <label class="text-xs text-gray-600 font-medium block mb-1">📝 الشكوى / التشخيص</label><textarea id="editDiag" placeholder="وصف الحالة المرضية..." class="w-full p-2 bg-white border rounded-lg mb-4 outline-none focus:border-cyan-400 resize-none text-sm" rows="3"></textarea>
-                    <div class="flex gap-2"><button type="button" onclick="deletePatient()" class="flex-1 bg-red-100 text-red-700 font-bold py-2.5 rounded-lg text-sm hover:bg-red-200 transition flex items-center justify-center gap-1"><i class="fas fa-trash"></i> حذف</button><button type="button" onclick="updatePatient()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-2.5 rounded-lg text-sm hover:opacity-90 transition flex items-center justify-center gap-1"><i class="fas fa-save"></i> حفظ التعديلات</button></div>
+
+            <!-- قائمة السجلات -->
+            <div id="page-list" class="page d-none space-y-3">
+                <div class="flex justify-between items-center mb-2">
+                    <h2 class="font-bold text-sm text-blue-800">سجلات المرضى</h2>
+                    <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full" id="recordsCount">0</span>
                 </div>
-                <div class="section-card border-amber-200 bg-gradient-to-br from-amber-50 to-yellow-50">
-                    <h3 class="font-bold text-sm mb-2"><i class="fas fa-calendar-check text-amber-600 ml-1"></i> الموعد القادم</h3>
-                    <input type="datetime-local" id="editNextAppt" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
-                    <button onclick="saveNextAppointment()" class="w-full bg-amber-500 text-white text-xs font-bold py-2 rounded-lg hover:bg-amber-600 transition">حفظ وتأكيد الموعد</button>
+                <div class="search-box mb-2" style="background: white; border-radius: 12px; padding: 8px 12px; border: 2px solid #e2e8f0; display: flex; align-items: center; gap: 6px;">
+                    <i class="fas fa-search" style="color: #94a3b8;"></i>
+                    <input type="text" id="searchInput" placeholder="بحث بالاسم أو الهاتف..." oninput="filterPatients(this.value)" style="border: none; outline: none; width: 100%; font-size: 13px;">
                 </div>
-                <div class="section-card border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
-                    <h3 class="font-bold text-sm mb-2"><i class="fas fa-money-bill-wave text-green-600 ml-1"></i> المدفوعات</h3>
-                    <div class="flex gap-2 mb-2"><input type="number" id="editTotalCost" placeholder="التكلفة الإجمالية" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm"><button onclick="updateTotalCost()" class="bg-amber-500 text-white px-3 rounded-lg font-bold text-sm hover:bg-amber-600">تحديث</button></div>
-                    <div class="grid grid-cols-3 gap-2 mb-3 text-center text-xs"><div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">الإجمالي</div><div class="font-bold" id="payTotal">0</div></div><div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">المدفوع</div><div class="font-bold text-green-600" id="payPaid">0</div></div><div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">المتبقي</div><div class="font-bold text-red-600" id="payRemain">0</div></div></div>
-                    <div class="flex gap-2 mb-3"><input type="number" id="newPayAmount" placeholder="المبلغ" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm"><input type="text" id="newPayNote" placeholder="ملاحظة (اختياري)" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm"><button onclick="addPayment()" class="bg-green-500 text-white px-3 rounded-lg font-bold text-sm hover:bg-green-600">إضافة</button></div>
-                    <div id="paymentHistory" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
+                <div id="patientContainer" class="space-y-2"></div>
+                <div id="noRecords" class="text-center py-10 text-gray-400 text-sm d-none"><i class="fas fa-inbox text-3xl mb-2"></i><br>لا توجد سجلات</div>
+            </div>
+
+            <!-- صفحة تعديل المريض -->
+            <div id="page-patient" class="page d-none space-y-3">
+                <div class="flex items-center gap-2 mb-2">
+                    <button type="button" onclick="navTo('list')" class="text-blue-600 font-bold text-sm p-2"><i class="fas fa-arrow-right ml-1"></i> رجوع للسجل</button>
                 </div>
-                <div class="section-card"><h3 class="font-bold text-xs mb-2"><i class="fas fa-history text-gray-500 ml-1"></i> آخر تحديث</h3><div id="patientVisits" class="space-y-2 text-sm"><div class="p-2 bg-gray-50 rounded-lg border text-xs"><span class="text-gray-500">سيظهر هنا تاريخ آخر تعديل للبيانات</span></div></div></div>
+                <div class="section-card border-cyan-200 bg-cyan-50">
+                    <input type="hidden" id="editPatientId">
+                    <label class="text-xs text-gray-600 font-bold block mb-1">اسم المريض</label>
+                    <input type="text" id="editName" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none text-sm font-bold">
+                    <label class="text-xs text-gray-600 font-bold block mb-1">الهاتف</label>
+                    <input type="tel" id="editPhone" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none text-sm">
+                    <label class="text-xs text-gray-600 font-bold block mb-1">التشخيص / الملاحظات</label>
+                    <textarea id="editDiag" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none text-sm" rows="3"></textarea>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="deletePatient()" class="flex-1 bg-red-50 text-red-600 border border-red-200 font-bold py-2 rounded-lg text-sm">حذف</button>                        <button type="button" onclick="updatePatient()" class="flex-1 bg-blue-600 text-white font-bold py-2 rounded-lg text-sm">حفظ التعديلات</button>
+                    </div>
+                </div>
+                <div class="section-card border-amber-200 bg-amber-50">
+                    <h3 class="font-bold text-xs mb-2 text-amber-800">📅 الموعد القادم</h3>
+                    <input type="datetime-local" id="editNextAppt" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none text-sm">
+                    <button onclick="saveNextAppointment()" class="w-full bg-amber-500 text-white text-xs font-bold py-2 rounded-lg">تأكيد الموعد</button>
+                </div>
             </div>
         </main>
         
         <div class="copyright-footer">
-            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
+            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong>
         </div>
-        
-        <footer class="main-footer">
-            <button type="button" onclick="navTo('home')" id="btn-home" class="nav-btn active"><i class="fas fa-home"></i><span>الرئيسية</span></button>
-            <button type="button" onclick="navTo('add')" id="btn-add" class="nav-btn"><i class="fas fa-plus-circle"></i><span>فحص</span></button>
-            <button type="button" onclick="navTo('ai')" id="btn-ai" class="nav-btn"><i class="fas fa-robot"></i><span>AI</span></button>
-            <button type="button" onclick="navTo('list')" id="btn-list" class="nav-btn"><i class="fas fa-users"></i><span>المرضى</span></button>
-        </footer>
     </div>
-    <a href="https://wa.me/963939436998?text=مرحباً، أرغب باستفسار حول تطبيق بَسْمَة AI" target="_blank" class="wa-float wa-pulse" title="تواصل عبر واتساب"><i class="fab fa-whatsapp text-2xl"></i></a>
+
     <script>
-        let db = null, firebaseReady = false;        try {
+        let db = null, firebaseReady = false;
+        try {
             if (typeof firebase !== 'undefined' && !window.fbBlocked) {
                 const config = { databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/" };
                 if (!firebase.apps.length) firebase.initializeApp(config);
-                db = firebase.database();
-                firebaseReady = true;
+                db = firebase.database(); firebaseReady = true;
             }
         } catch (e) { console.error(e); }
         
         const connBadge = document.getElementById('connBadge');
-        if(firebaseReady) { connBadge.className = 'conn-indicator conn-online'; connBadge.innerText = '🟢 متصل'; }
-        else { connBadge.className = 'conn-indicator conn-offline'; connBadge.innerText = '🔴 وضع محلي'; }
+        if(firebaseReady) { connBadge.className = 'conn-indicator conn-online'; connBadge.innerText = '🟢'; }
+        else { connBadge.className = 'conn-indicator conn-offline'; connBadge.innerText = '🔴'; }
         
-        let currentTooth = null, currentUser = null, patientsCache = [];
+        let currentTooth = null, currentUser = null;
         const LOCAL_KEY = 'basma_patients';
         
         function getLocalDB() { try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); } catch { return []; } }
         function saveLocalDB(data) { try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); return true; } catch { showToast("❌ فشل الحفظ", "error"); return false; } }
         function addToLocalDB(record) { const localDB = getLocalDB(); if(!localDB.some(p => p.id === record.id)) { localDB.push(record); saveLocalDB(localDB); } }
-        function updateLocalDB(id, newData) { const localDB = getLocalDB(); const idx = localDB.findIndex(p => p.id === id || p.firebaseId === id); if(idx !== -1) { localDB[idx] = { ...localDB[idx], ...newData, id: localDB[idx].id, firebaseId: localDB[idx].firebaseId || id }; return saveLocalDB(localDB); } return false; }
-        function deleteFromLocalDB(id) { saveLocalDB(getLocalDB().filter(p => p.id !== id && p.firebaseId !== id)); }
+        function updateLocalDB(id, newData) { const localDB = getLocalDB(); const idx = localDB.findIndex(p => p.id === id); if(idx !== -1) { localDB[idx] = { ...localDB[idx], ...newData }; return saveLocalDB(localDB); } return false; }
+        function deleteFromLocalDB(id) { saveLocalDB(getLocalDB().filter(p => p.id !== id)); }
         
         function switchLogin(type) {
             const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');
@@ -275,8 +243,7 @@
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
         
         function handleAdminLogin() {
-            try {
-                const pwd = document.getElementById('adminPassword').value.trim();
+            try {                const pwd = document.getElementById('adminPassword').value.trim();
                 if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400); }
                 else showToast("❌ كلمة المرور غير صحيحة", "error");
             } catch(e) { showToast("❌ خطأ في الدخول", "error"); }
@@ -284,46 +251,97 @@
         function handleDoctorLogin() {
             try {
                 const email = document.getElementById('doctorEmail').value.trim(), pwd = document.getElementById('doctorPassword').value.trim();
-                if(!email || !pwd) return showToast("أدخل البريد وكلمة المرور", "error");
-                if(!firebaseReady) return showToast("⚠️ دخول الأطباء يتطلب اتصالاً بـ Firebase", "info");
-                showToast("🔄 جاري التحقق...", "info");
+                if(!email || !pwd) return showToast("أدخل البيانات", "error");
+                if(!firebaseReady) return showToast("⚠️ يتطلب اتصالاً", "info");
                 db.ref('doctor_subscriptions').orderByChild('email').equalTo(email).once('value').then(snap => {
                     if(!snap.exists()) return showToast("❌ حساب غير موجود", "error");
                     let found = null; snap.forEach(c => { if(c.val().password === pwd) found = {id: c.key, ...c.val()}; });
                     if(!found) return showToast("❌ كلمة المرور خاطئة", "error");
-                    if(found.status !== 'active') return showToast("⏳ حسابك قيد المراجعة", "warning");
-                    currentUser = { role: 'doctor', ...found }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400);                }).catch(() => showToast("فشل الاتصال", "error"));
-            } catch(e) { showToast("❌ خطأ في الدخول", "error"); }
+                    if(found.status !== 'active') return showToast("⏳ قيد المراجعة", "warning");
+                    currentUser = { role: 'doctor', ...found }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400);
+                }).catch(() => showToast("فشل الاتصال", "error"));
+            } catch(e) { showToast("❌ خطأ", "error"); }
         }
         function afterLogin() {
-            document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); document.getElementById('userBar').classList.remove('d-none');
-            if(currentUser.role === 'admin') { document.getElementById('userTypeDisplay').innerText = 'مدير النظام'; document.getElementById('adminSection').classList.remove('d-none'); loadDoctorRequests(); loadActiveDoctors(); }
-            else { document.getElementById('userTypeDisplay').innerText = `د. ${currentUser.name}`; document.getElementById('adminSection').classList.add('d-none'); }
-            initTeeth(); loadData(); updateStats(); checkAppointmentAlerts(); navTo('home');
-            if('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+            document.getElementById('loginPage').classList.add('d-none'); 
+            document.getElementById('mainContent').classList.remove('d-none'); 
+            document.getElementById('mainHeader').classList.remove('d-none');
+            initTeeth(); updateHomeNotifications(); navTo('home');
         }
         function logout() { currentUser = null; backToLogin(); ['adminPassword','doctorEmail','doctorPassword'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; }); }
         
         function showToast(msg, type='info') {
             const c = document.getElementById('toastContainer');
             const t = document.createElement('div'); t.className = `toast ${type}`; 
-            t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':type==='warning'?'triangle-exclamation':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
+            t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
             c.appendChild(t); setTimeout(()=> { t.style.opacity='0'; setTimeout(()=>t.remove(), 300); }, 3000);
         }
-        function showBrowserNotification(title, body) { if('Notification' in window && Notification.permission === 'granted') new Notification(title, { body, icon: '🦷' }); }
         
         function navTo(page) {
-            document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('d-none'));
+            document.querySelectorAll('.page').forEach(el => el.classList.add('d-none'));
             const target = document.getElementById(`page-${page}`); if(target) target.classList.remove('d-none');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            const btnMap = {home:'home', add:'add', ai:'ai', list:'list'}, btn = document.getElementById(`btn-${btnMap[page]||'home'}`);
-            if(btn) btn.classList.add('active');
-            if(page === 'list') { loadData(); updateStats(); }
-            if(page === 'home') { loadTodayAppointments(); checkAppointmentAlerts(); }
+            if(page === 'home') updateHomeNotifications();
+            if(page === 'list') loadData();
             window.scrollTo(0, 0);
         }
-        function initTeeth() {
-            const grid = document.getElementById('toothGrid'); if(!grid) return; grid.innerHTML = '';
+
+        // ✅ دالة تحديث النافذتين المطلوبتين
+        function updateHomeNotifications() {
+            // 1. نافذة مواعيد اليوم
+            const today = new Date().toISOString().split('T')[0];
+            const patients = getLocalDB();
+            const todayAppts = patients.filter(p => p.nextAppointment && p.nextAppointment.startsWith(today))
+                                       .sort((a,b) => a.nextAppointment.localeCompare(b.nextAppointment));
+                        const apptBox = document.getElementById('todayApptsBox');
+            const apptList = document.getElementById('apptList');
+            const apptCount = document.getElementById('apptCount');
+            
+            if(todayAppts.length > 0) {
+                apptBox.classList.remove('d-none');
+                apptCount.innerText = todayAppts.length;
+                apptList.innerHTML = todayAppts.map(p => {
+                    const time = p.nextAppointment.includes('T') ? p.nextAppointment.split('T')[1].substring(0,5) : '--:--';
+                    return `<div class="flex justify-between items-center p-2 bg-white rounded border border-purple-100">
+                        <span class="font-bold text-gray-800">👤 ${p.name}</span>
+                        <span class="text-purple-600 font-mono text-xs bg-purple-100 px-2 py-1 rounded">🕒 ${time}</span>
+                    </div>`;
+                }).join('');
+            } else { apptBox.classList.add('d-none'); }
+
+            // 2. نافذة طبيب ينتظر الموافقة (للمدير فقط)
+            if(currentUser?.role === 'admin' && firebaseReady && db) {
+                db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').once('value', snap => {
+                    const pending = [];
+                    snap.forEach(ch => pending.push({key: ch.key, ...ch.val()}));
+                    
+                    const docBox = document.getElementById('pendingDoctorsBox');
+                    const docList = document.getElementById('docList');
+                    const docCount = document.getElementById('docCount');
+                    
+                    if(pending.length > 0) {
+                        docBox.classList.remove('d-none');
+                        docCount.innerText = pending.length;
+                        docList.innerHTML = pending.map(d => `
+                            <div class="flex justify-between items-center p-2 bg-white rounded border border-amber-100">
+                                <div class="text-xs">
+                                    <div class="font-bold text-amber-900">🩺 ${d.name}</div>
+                                    <div class="text-gray-500">${d.email}</div>
+                                </div>
+                                <button onclick="activateDoc('${d.key}')" class="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold hover:bg-green-600">تفعيل</button>
+                            </div>
+                        `).join('');
+                    } else { docBox.classList.add('d-none'); }
+                });
+            }
+        }
+
+        function activateDoc(id){ 
+            if(db) db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>{
+                showToast("✅ تم تفعيل الطبيب بنجاح","success"); updateHomeNotifications(); 
+            }); 
+        }
+        
+        function initTeeth() {            const grid = document.getElementById('toothGrid'); if(!grid) return; grid.innerHTML = '';
             [18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38].forEach(n => {
                 const b = document.createElement('button'); b.type = 'button'; b.className = 'tooth-btn'; b.innerText = n;
                 b.onclick = () => { document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); currentTooth = n; document.getElementById('selectedTooth').classList.remove('d-none'); document.getElementById('toothNum').innerText = n; };
@@ -331,225 +349,95 @@
             });
         }
         
-        // 🧠 الذكاء المحلي المتقدم (كنسخة احتياطية عند فشل الاتصال)
-        function generateDentalAnalysis_Local(text) {
-            const normalize = (t) => t.replace(/[\u064B-\u065F\u0670]/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/\s+/g, ' ').trim().toLowerCase();
-            const cleanText = normalize(text);
-            
-            const KB = {
-                pulp_acute: { kw: ['الم نابض', 'الم شديد', 'يزداد ليلا', 'الم تلقائي', 'لا يستجيب للمسكن'], dx: "التهاب لبّي حاد غير عكوس", prob: "مرتفع", tests: ["اختبار البرودة", "اختبار الكهرباء", "أشعة بيريابيكال"], tx: "علاج لبّي طارئ أو استخراج حسب قابلية السن للحفظ", note: "⚠️ الألم الليلي علامة مميزة لاشتراك الألياف العصبية" },
-                pulp_rev: { kw: ['حساسية للبارد', 'يزول بزوال المؤثر', 'الم خفيف', 'تسوس سطحي'], dx: "التهاب لبّي عكوس", prob: "مرتفع", tests: ["اختبار البرودة", "فحص التسوس"], tx: "إزالة التسوس + حشو وقائي. تجنب كشف اللب", note: "اللب سليم وقابل للشفاء" },
-                necrosis: { kw: ['تغير لون السن', 'عدم احساس', 'الم عند الضغط', 'خراج', 'صديد'], dx: "نخر لبّي مع التهاب حول الذروي", prob: "مرتفع", tests: ["اختبار الحيوية (سلبي)", "جس قمي", "أشعة"], tx: "علاج لبي طارئ لتصريف الخراج ثم إكمال المعالجة", note: "السن ميت عصبياً" },
-                abscess: { kw: ['تورم وجه', 'انتفاخ', 'صديد', 'حرارة', 'الم نبض'], dx: "خراج سني حاد", prob: "مرتفع جداً", tests: ["فحص سريري", "أشعة", "فحص العقد اللمفاوية"], tx: "1. تصريف الخراج 2. مضاد حيوي إذا لزم 3. علاج السبب", note: "🚨 حالة طارئة: انتبه لانتشار العدوى" },
-                gingivitis: { kw: ['نزيف اللثة', 'احمرار', 'تورم بسيط', 'رائحة فم', 'جير'], dx: "التهاب لثة حافي", prob: "مرتفع", tests: ["فحص مؤشر اللثة", "قياس الجيوب"], tx: "تنظيف احترافي + تعليمات نظافة صارمة", note: "حالة عكوسة بالالتزام" },                periodontitis: { kw: ['حركة اسنان', 'جيوب لثوية', 'انحسار', 'الم مضغ', 'تخلخل'], dx: "التهاب دواعم سن مزمن", prob: "متوسط-مرتفع", tests: ["خريطة جيوب", "أشعة بانورامية"], tx: "تقليح وجذري + متابعة كل 3 أشهر", note: "⚠️ مرض مدمر للعظم الداعم" },
-                pericoronitis: { kw: ['ضرس عقل', 'الم بلع', 'صعوبة فتح فم', 'لثة منتفخة خلف'], dx: "التهاب ما حول التاج", prob: "مرتفع", tests: ["فحص المنطقة", "أشعة OPG"], tx: "غسيل موضعي + مضاد + تقييم القلع", note: "شائع في الأعمار 18-25" },
-                fracture: { kw: ['كسر', 'رضة', 'وقوع', 'قطعة مكسورة'], dx: "كسر سني", prob: "حسب الفحص", tests: ["أشعة زاويتين", "اختبار حيوية"], tx: "ترميم أو علاج لبّي أو خلع حسب عمق الكسر", note: "احتفظ بالقطعة في الحليب" },
-                early_caries: { kw: ['بقع بيضاء', 'تسوس اطفال', 'رضاعة', 'اسنان امامية'], dx: "تسوس الطفولة المبكر", prob: "مرتفع", tests: ["فحص بصري", "تقييم الغذاء"], tx: "ترميم زجاجي + فلورايد + تعديل العادات", note: "يصيب الأسطح الملساء" }
-            };
-            
-            let scores = {};
-            for(const [key, data] of Object.entries(KB)) {
-                let s = 0; data.kw.forEach(k => { if(cleanText.includes(normalize(k))) s++; });
-                if(s > 0) scores[key] = s;
-            }
-            const sorted = Object.keys(scores).sort((a,b) => scores[b] - scores[a]).slice(0,2);
-            
-            if(sorted.length === 0) return `<div class="p-3 bg-gray-50 rounded border text-sm text-center">🔍 لم يتم رصد نمط واضح. حاول وصف الأعراض بدقة أكبر.</div>`;
-            
-            let html = `<div class="space-y-3 text-sm">`;
-            sorted.forEach((key, idx) => {
-                const d = KB[key];
-                html += `<div class="bg-white p-3 rounded-lg border ${idx===0?'border-indigo-300':'border-gray-200'}">
-                    <h4 class="font-bold text-gray-800 flex items-center gap-2"><i class="fas fa-stethoscope text-indigo-500"></i> ${d.dx}</h4>
-                    <span class="text-[10px] text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">الاحتمال: ${d.prob}</span>
-                    <div class="mt-2 text-xs text-gray-600 space-y-1">
-                        <div><b class="text-gray-700">🧪 فحوصات:</b> ${d.tests.join(' • ')}</div>
-                        <div><b class="text-gray-700">💊 علاج:</b> ${d.tx}</div>
-                        ${d.note ? `<div class="bg-amber-50 p-2 rounded border border-amber-100 mt-1 text-amber-800"><i class="fas fa-exclamation-triangle"></i> ${d.note}</div>` : ''}
-                    </div>
-                </div>`;
-            });
-            html += `<div class="text-[10px] text-gray-400 text-center pt-2 border-t">تحليل محلي مساعد • لا يغني عن الفحص السريري</div></div>`;
-            return html;
-        }
-        
-        // ✅ الذكاء الاصطناعي الحقيقي المصحح (يعمل مع Pollinations المجاني)
         async function runAdvancedAI_Live() {
             const input = document.getElementById('aiInput').value.trim();
             const outputBox = document.getElementById('aiOutputBox');
             const resultDiv = document.getElementById('aiResult');
-            
-            if(!input) return showToast("❌ اكتب الأعراض أولاً", "error");
-            
+            if(!input) return showToast("❌ اكتب الأعراض", "error");
             outputBox.classList.remove('d-none');
-            resultDiv.innerHTML = '<div class="text-center py-4"><i class="fas fa-brain fa-pulse text-purple-600 text-2xl mb-2"></i><br><span class="text-xs text-gray-500 typing-effect">جاري استدعاء الذكاء الاصطناعي الطبي</span></div>';
-            
+            resultDiv.innerHTML = '<div class="text-center py-2"><i class="fas fa-spinner fa-spin text-purple-500"></i> جاري التحليل...</div>';
             try {
-                const prompt = `أنت طبيب أسنان خبير ومستشار سريري دقيق. حلل الحالة التالية باللغة العربية باختصار ووضوح: "${input}". 
-                أعطني: 1. التشخيص الأكثر احتمالاً. 2. الخطة العلاجية المقترحة خطوة بخطوة. 3. نصيحة هامة للمريض. 
-                استخدم تنسيق HTML بسيط (عناوين h4 وقوائم ul li).`;
-                
+                const prompt = `طبيب أسنان خبير. حلل باختصار: 1. التشخيص 2. العلاج 3. نصيحة. الحالة: ${input}`;
                 const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?seed=${Math.floor(Math.random()*1000)}&model=openai`;
-                const response = await fetch(url);                
-                if (!response.ok) throw new Error(`فشل الاتصال: ${response.status}`);
-                const data = await response.text();
-                
-                resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed">${data}</div>
-                <div class="text-[10px] text-gray-400 mt-2 text-center">* تم التحليل بواسطة نموذج ذكاء اصطناعي مفتوح المصدر. يرجى مراجعة التشخيص السريري.</div>`;
-                
-                showToast("✅ تم التحليل الذكي بنجاح", "success");
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("فشل");
+                const aiText = await response.text();
+                resultDiv.innerHTML = `<div class="text-sm leading-relaxed">${aiText.replace(/\n/g, '<br>')}</div>`;
             } catch (error) {
-                console.error("AI Error:", error);
-                // 🔄 fallback للذكاء المحلي عند فشل الاتصال
-                const localResult = generateDentalAnalysis_Local(input);
-                resultDiv.innerHTML = `<div class="space-y-2">
-                    <div class="bg-amber-50 p-2 rounded border border-amber-200 text-xs text-amber-800">
-                        <i class="fas fa-wifi"></i> تعذر الاتصال بالخادم الذكي. تم التحليل محلياً.
-                    </div>
-                    ${localResult}
-                </div>`;
-                showToast("⚠️ تم التحليل محلياً (بدون إنترنت)", "warning");
+                resultDiv.innerHTML = `<div class="text-xs text-red-500">تعذر الاتصال.</div>`;
             }
         }
-        function clearAI() { document.getElementById('aiInput').value=''; document.getElementById('aiOutputBox').classList.add('d-none'); document.getElementById('aiResult').innerHTML=''; }
-        
+        function clearAI() { document.getElementById('aiInput').value=''; document.getElementById('aiOutputBox').classList.add('d-none'); }
         function runMagicAI() {
             const diag = document.getElementById('pDiag').value.trim(), b=document.getElementById('aiBox');
-            if(!diag) return showToast("اكتب الشكوى أولاً","error");
-            b.classList.remove('d-none'); b.innerHTML='<div class="text-center"><i class="fas fa-spinner fa-spin text-indigo-600"></i> جاري...</div>';
-            setTimeout(()=>b.innerHTML=`<b>💡 توصية سريعة:</b> السن #${currentTooth||'؟'} يحتاج فحصاً سريرياً وأشعة.<br><small class="text-gray-500">⚠️ لا يغني عن التشخيص الطبي</small>`,600);
+            if(!diag) return showToast("اكتب الشكوى","error");
+            b.classList.remove('d-none'); b.innerHTML='<div class="text-center"><i class="fas fa-spinner fa-spin"></i> جاري...</div>';
+            setTimeout(()=>b.innerHTML=`<b>💡 توصية:</b> السن #${currentTooth||'؟'} يحتاج فحصاً وأشعة.`,600);
         }
         
         function savePatient() {
-            const name = document.getElementById('pName').value.trim();
-            const phone = document.getElementById('pPhone').value.trim();
-            const diag = document.getElementById('pDiag').value.trim();
-            if(!name || !diag) return showToast("أكمل الاسم والشكوى", "error");
+            const name = document.getElementById('pName').value.trim(), phone = document.getElementById('pPhone').value.trim(), diag = document.getElementById('pDiag').value.trim();
+            if(!name || !diag) return showToast("أكمل البيانات", "error");
             const pid = 'local_' + Date.now();
-            const data = { id: pid, name, phone, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.id || 'admin', updatedAt: new Date().toISOString(), totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '' };
+            const data = { id: pid, name, phone, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), nextAppointment: '' };
             addToLocalDB(data);
-            if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync failed:", err));
-            showToast("✅ تم حفظ المريض بنجاح", "success");
+            if(firebaseReady && db) db.ref('patients/' + pid).set(data);
+            showToast("✅ تم الحفظ", "success");
             ['pName','pPhone','pDiag'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('aiBox').classList.add('d-none'); currentTooth = null; document.querySelectorAll('.tooth-btn').forEach(x => x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none');
-            updateStats(); loadTodayAppointments();
-            if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
+            currentTooth = null; document.querySelectorAll('.tooth-btn').forEach(x => x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none');
+            updateHomeNotifications();
         }
         function registerPatient() {
-            const name = document.getElementById('regName').value.trim();
-            const phone = document.getElementById('regPhone').value.trim();
-            if(!name || !phone) return showToast("أدخل الاسم والهاتف", "error");
-            const pid = 'local_' + Date.now();            const data = { id: pid, name, phone, birth: document.getElementById('regBirth').value, gender: document.getElementById('regGender').value, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), createdAt: new Date().toISOString(), diag: 'تم التسجيل الأولي', totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '', addedBy: currentUser?.id || 'system' };
-            addToLocalDB(data);
-            if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync failed:", err));
-            showToast("✅ تم تسجيل المريض بنجاح", "success");
-            ['regName','regPhone','regBirth','regGender'].forEach(id => document.getElementById(id).value = '');
-            updateStats();
-            if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
+            const name = document.getElementById('regName').value.trim(), phone = document.getElementById('regPhone').value.trim();
+            if(!name || !phone) return showToast("أدخل البيانات", "error");
+            addToLocalDB({ id: 'local_' + Date.now(), name, phone, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), diag: 'تسجيل أولي' });            showToast("✅ تم التسجيل", "success"); ['regName','regPhone'].forEach(id => document.getElementById(id).value = '');
         }
         function submitDoctorSubscription() {
             const name=document.getElementById('subName').value.trim(), email=document.getElementById('subEmail').value.trim(), pwd=document.getElementById('subPassword').value.trim();
             if(!name||!email||!pwd) return showToast("أكمل الحقول","error");
-            if(firebaseReady) db.ref('doctor_subscriptions').push({name,email,password:pwd,specialty:document.getElementById('subSpecialty').value.trim(),status:'pending',requestedAt:new Date().toISOString()});
-            showToast("✅ تم الإرسال! انتظر التفعيل","success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value=''); setTimeout(backToLogin,1500);
-        }
-        function loadDoctorRequests() { if(!firebaseReady) return; db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').on('value', snap=>{const c=document.getElementById('doctorRequests');c.innerHTML='';let n=0;snap.forEach(ch=>{n++;const v=ch.val();c.innerHTML+=`<div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between items-center"><div><b>${v.name}</b><br><span class="text-gray-500">${v.email}</span></div><div class="flex gap-1"><button onclick="activateDoc('${ch.key}')" class="px-2 py-1 bg-green-100 text-green-700 rounded">تفعيل</button><button onclick="rejectDoc('${ch.key}')" class="px-2 py-1 bg-red-100 text-red-700 rounded">رفض</button></div></div>`;});document.getElementById('pendingCount').innerText=n||'لا توجد طلبات';}); }
-        function activateDoc(id){db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>showToast("✅ تم التفعيل","success"));}
-        function rejectDoc(id){db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>showToast("تم الرفض","info"));}
-        function loadActiveDoctors() { if(!firebaseReady) return; db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').on('value', snap=>{const c=document.getElementById('activeDoctors');c.innerHTML='';if(!snap.exists()){c.innerHTML='<p class="text-xs text-gray-400 text-center">لا يوجد أطباء</p>';return;}snap.forEach(ch=>{const v=ch.val();c.innerHTML+=`<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`;});}); }
-        function suspendDoc(id){db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>showToast("⛔ تم الإيقاف","info"));}
-        
-        function checkAppointmentAlerts() {
-            const pts = getLocalDB(), now=new Date(), el=document.getElementById('alertList'), sec=document.getElementById('alertSection'), cnt=document.getElementById('alertCount');
-            if(!el||!sec||!cnt) return; el.innerHTML=''; let ac=0, uc=0;
-            pts.forEach(p=>{if(!p.nextAppointment) return; const ad=new Date(p.nextAppointment), dh=(ad-now)/(36e5); if(dh>0&&dh<=24){ac++; const u=dh<=2; if(u) uc++; const ts=ad.toLocaleString('ar-EG',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'}); el.innerHTML+=`<div class="p-2 rounded-lg border flex justify-between items-center ${u?'bg-red-50 border-red-200':'bg-amber-50 border-amber-200'}"><div><span class="font-bold text-sm">${p.name}</span><div class="text-[10px] text-gray-600">🕒 ${ts}</div></div><button onclick="event.stopPropagation();openWhatsApp('${p.phone}','${p.name}','موعدك ${ts}')" class="wa-btn-patient"><i class="fab fa-whatsapp"></i></button></div>`; if(u) { showBrowserNotification(`⏰ موعد عاجل: ${p.name}`,`بعد ${Math.round(dh*60)} دقيقة`); showToast(`⚠️ موعد عاجل: ${p.name}`,"warning"); }}});
-            cnt.innerText=ac; if(ac>0){sec.classList.remove('d-none');cnt.className=uc>0?'status-badge status-urgent ml-auto':'status-badge status-pending ml-auto';} else sec.classList.add('d-none');
+            if(firebaseReady) db.ref('doctor_subscriptions').push({name,email,password:pwd,status:'pending'});
+            showToast("✅ تم إرسال الطلب","success"); setTimeout(backToLogin,1500);
         }
         
-        function openWhatsApp(phone,name,custom='') {
-            if(!phone) return showToast("❌ لا يوجد رقم هاتف","error");
-            let c=phone.replace(/[\s\-\(\)]/g,''); if(c.startsWith('09')) c='963'+c.substring(1); else if(!c.startsWith('+963')) c='963'+c;
-            const m=custom||`مرحباً ${name}،\nمن عيادة بَسْمَة السنية.\nتذكير بموعدك القادم. 🦷✨`;
-            window.open(`https://wa.me/${c}?text=${encodeURIComponent(m)}`,'_blank');
-        }
-        function filterPatients(q) {
-            const ql=q.toLowerCase().trim(); let v=0;
-            document.querySelectorAll('#patientContainer > div').forEach(card=>{ const t=card.innerText.toLowerCase(); if(ql===''||t.includes(ql)){card.classList.remove('d-none');v++;} else card.classList.add('d-none'); });
-            document.getElementById('noRecords').classList.toggle('d-none',v>0);
-        }
-        
-        function loadData() { renderPatients(getLocalDB(),'local'); if(firebaseReady&&db) { db.ref('patients').orderByChild('timestamp').on('value', snap=>{patientsCache=[];snap.forEach(ch=>patientsCache.push({firebaseId:ch.key,...ch.val()}));}); } }
-        function renderPatients(data, source) {
+        function loadData() { renderPatients(getLocalDB()); }
+        function renderPatients(data) {
             const c=document.getElementById('patientContainer'); if(!c) return; c.innerHTML='';
-            if(!data||data.length===0){document.getElementById('noRecords').classList.remove('d-none');document.getElementById('recordsCount').innerText='0';return;}
+            if(!data||data.length===0){document.getElementById('noRecords').classList.remove('d-none');return;}
             document.getElementById('noRecords').classList.add('d-none'); document.getElementById('recordsCount').innerText=data.length;
             [...data].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0)).forEach(v=>{
-                const pid=v.firebaseId||v.id, tooth=v.tooth?`<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">🦷 #${v.tooth}</span>`:'',
-                diag=v.diag?(v.diag.length>60?v.diag.substring(0,60)+'...':v.diag):'بدون ملاحظات';
-                c.innerHTML+=`<div class="section-card py-3 border-r-4 border-r-blue-500 cursor-pointer hover:shadow-md hover:border-r-cyan-500 transition bg-white" onclick="openPatientEdit('${pid}','${source}')"><div class="flex justify-between items-start"><div class="flex-1"><div class="flex items-center gap-2"><span class="font-bold text-sm text-blue-800">${v.name||'مريض'}</span>${v.phone?`<span class="text-[10px] text-gray-400">📱 ${v.phone}</span>`:''}</div>${tooth?`<div class="mt-1">${tooth}</div>`:''}<p class="text-xs text-gray-600 mt-2 line-clamp-2">${diag}</p></div><div class="text-left flex flex-col items-end gap-1"><span class="text-[10px] bg-gray-100 px-2 py-1 rounded">${v.date||'-'}</span><button onclick="event.stopPropagation();openWhatsApp('${v.phone}','${v.name}')" class="wa-btn-patient mt-1" title="واتساب"><i class="fab fa-whatsapp"></i></button></div></div></div>`;
+                const appt = v.nextAppointment ? `<div class="text-[10px] text-amber-600 font-bold mt-1">🕒 ${v.nextAppointment.replace('T', ' ')}</div>` : '';
+                c.innerHTML+=`<div class="section-card py-3 border-r-4 border-r-blue-500 cursor-pointer hover:shadow-md bg-white" onclick="openPatientEdit('${v.id}')"><div class="flex justify-between"><span class="font-bold text-sm text-blue-800">${v.name}</span><span class="text-[10px] bg-gray-100 px-2 py-1 rounded">${v.date}</span></div><p class="text-xs text-gray-600 mt-1">${v.diag||''}</p>${appt}</div>`;
             });
-        }        function openPatientEdit(pid, source) { const p=getLocalDB().find(x=>x.id===pid||x.firebaseId===pid); if(p) loadPatientToForm(p,'local'); else showToast("❌ غير موجود","error"); }
-        function loadPatientToForm(p, src) {
-            document.getElementById('editPatientId').value=p.firebaseId||p.id||''; document.getElementById('editPatientSource').value=src;
-            document.getElementById('editName').value=p.name||''; document.getElementById('editPhone').value=p.phone||''; document.getElementById('editBirth').value=p.birth||''; document.getElementById('editGender').value=p.gender||'';
-            document.getElementById('editDiag').value=p.diag||''; document.getElementById('editTooth').value=p.tooth||''; document.getElementById('editNextAppt').value=p.nextAppointment||'';
-            document.getElementById('editTotalCost').value=p.totalCost||''; document.getElementById('payTotal').innerText=p.totalCost||0; document.getElementById('payPaid').innerText=p.paidAmount||0; document.getElementById('payRemain').innerText=(p.totalCost||0)-(p.paidAmount||0);
-            renderPayments(p.payments||[]);
-            const dt=p.updatedAt||p.timestamp?new Date(p.updatedAt||p.timestamp).toLocaleString('ar-EG'):'-';
-            document.getElementById('patientVisits').innerHTML=`<div class="p-2 bg-cyan-50 rounded-lg border text-xs"><span class="text-gray-500">📅 آخر تحديث: ${dt}</span></div>`;
+        }
+        function openPatientEdit(pid) { const p=getLocalDB().find(x=>x.id===pid); if(p) loadPatientToForm(p); else showToast("❌ غير موجود","error"); }
+        function loadPatientToForm(p) {
+            document.getElementById('editPatientId').value=p.id;
+            document.getElementById('editName').value=p.name||''; document.getElementById('editPhone').value=p.phone||'';
+            document.getElementById('editDiag').value=p.diag||'';
+            document.getElementById('editNextAppt').value=p.nextAppointment||'';
             navTo('patient');
         }
         function updatePatient() {
             const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value.trim();
             if(!id||!name) return showToast("الاسم مطلوب","error");
-            const data={name,phone:document.getElementById('editPhone').value.trim(),birth:document.getElementById('editBirth').value,gender:document.getElementById('editGender').value,diag:document.getElementById('editDiag').value.trim(),tooth:document.getElementById('editTooth').value||null,updatedAt:new Date().toISOString(),updatedBy:currentUser?.id||'admin'};
-            if(updateLocalDB(id,data)){ showToast("✅ تم التحديث","success"); navTo('list'); } else { showToast("❌ فشل التحديث","error"); }
+            updateLocalDB(id,{name,phone:document.getElementById('editPhone').value.trim(),diag:document.getElementById('editDiag').value.trim()});
+            showToast("✅ تم التحديث","success"); navTo('list'); updateHomeNotifications();
         }
         function deletePatient() {
-            const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value||'المريض';
-            if(!id||!confirm(`حذف "${name}"؟`)) return;
-            deleteFromLocalDB(id); showToast("🗑️ تم الحذف","success"); navTo('list'); 
+            const id=document.getElementById('editPatientId').value;
+            if(!id||!confirm("حذف المريض؟")) return;
+            deleteFromLocalDB(id); showToast("🗑️ تم الحذف","success"); navTo('list'); updateHomeNotifications();
         }
         function saveNextAppointment() {
             const id=document.getElementById('editPatientId').value, appt=document.getElementById('editNextAppt').value; if(!id) return;
-            const data={nextAppointment:appt,updatedAt:new Date().toISOString()};
-            updateLocalDB(id,data); showToast("✅ تم الحفظ","success"); checkAppointmentAlerts(); 
+            updateLocalDB(id,{nextAppointment:appt}); showToast("✅ تم حفظ الموعد","success"); updateHomeNotifications();
         }
-        function updateTotalCost() {
-            const id=document.getElementById('editPatientId').value, cost=parseFloat(document.getElementById('editTotalCost').value)||0; if(!id) return;
-            document.getElementById('payTotal').innerText=cost; document.getElementById('payRemain').innerText=cost-(parseFloat(document.getElementById('payPaid').innerText)||0);
-            const data={totalCost:cost,updatedAt:new Date().toISOString()};
-            updateLocalDB(id,data); showToast("✅ تم تحديث التكلفة","success");
+        function filterPatients(q) {
+            const ql=q.toLowerCase().trim();
+            const all = getLocalDB();
+            const filtered = all.filter(p => (p.name||'').toLowerCase().includes(ql) || (p.phone||'').includes(ql));
+            renderPatients(filtered);
         }
-        function renderPayments(payments) {
-            const c=document.getElementById('paymentHistory'); c.innerHTML='';
-            if(!payments.length) { c.innerHTML='<p class="text-xs text-gray-400 text-center">لا توجد مدفوعات</p>'; return; }
-            payments.slice().reverse().forEach(p=>{c.innerHTML+=`<div class="p-2 bg-white rounded border flex justify-between items-center text-xs"><span class="font-bold text-green-600">💵 ${p.amount} ل.س</span><span class="text-gray-600">${p.note||'-'}</span><span class="text-gray-400">${p.date}</span></div>`;});
-        }
-        function addPayment() {
-            const id=document.getElementById('editPatientId').value, amount=parseFloat(document.getElementById('newPayAmount').value), note=document.getElementById('newPayNote').value.trim();
-            if(!id||isNaN(amount)||amount<=0) return showToast("أدخل مبلغاً صحيحاً","error");
-            const newPay={amount,note,date:new Date().toLocaleDateString('ar-EG'),timestamp:Date.now()};
-            const l=getLocalDB(), idx=l.findIndex(p=>p.id===id||p.firebaseId===id); 
-            if(idx!==-1){
-                const pays=l[idx].payments||[]; pays.push(newPay); const total=pays.reduce((s,x)=>s+x.amount,0); 
-                l[idx].payments=pays; l[idx].paidAmount=total; l[idx].updatedAt=new Date().toISOString(); saveLocalDB(l);
-                document.getElementById('payPaid').innerText=total; document.getElementById('payRemain').innerText=(l[idx].totalCost||0)-total; renderPayments(pays); 
-                document.getElementById('newPayAmount').value=''; document.getElementById('newPayNote').value=''; showToast("✅ تم التسجيل","success");
-            }
-        }        function loadTodayAppointments() { const today=new Date().toISOString().split('T')[0]; const pts=getLocalDB(); renderTodayAppts(pts,today); }
-        function renderTodayAppts(pts,today) {
-            const con=document.getElementById('todayAppointmentsList'), sec=document.getElementById('todayAppointmentsSection'); con.innerHTML='';
-            const tm=pts.filter(p=>p.nextAppointment&&p.nextAppointment.startsWith(today)).sort((a,b)=>(a.nextAppointment||'').localeCompare(b.nextAppointment||''));
-            document.getElementById('todayCountBadge').innerText=tm.length;
-            if(tm.length===0){sec.classList.add('d-none');return;} sec.classList.remove('d-none');
-            tm.forEach(p=>{const t=p.nextAppointment.includes('T')?p.nextAppointment.split('T')[1].substring(0,5):'-'; con.innerHTML+=`<div class="p-2 bg-white rounded-lg border flex justify-between items-center hover:bg-blue-50 cursor-pointer" onclick="openPatientEdit('${p.firebaseId||p.id}','local')"><div><span class="font-bold text-sm">👤 ${p.name}</span><div class="text-[10px] text-gray-500">🕒 ${t}</div></div><button onclick="event.stopPropagation();openWhatsApp('${p.phone}','${p.name}','موعدك اليوم ${t}')" class="wa-btn-patient"><i class="fab fa-whatsapp"></i></button></div>`;});
-        }
-        function updateStats() {
-            const today=new Date().toLocaleDateString('ar-EG');
-            const l=getLocalDB(); document.getElementById('statPatients').innerText=l.length; document.getElementById('statToday').innerText=l.filter(d=>d.date===today).length; document.getElementById('statDoctors').innerText='0'; 
-        }
-        document.addEventListener('DOMContentLoaded', () => { console.log("🦷 بَسْمَة AI جاهز مع ذكاء اصطناعي حي!"); });
-    </script>
-</body>
+        document.addEventListener('DOMContentLoaded', () => { console.log("🦷 بَسْمَة AI جاهز!"); });
+    </script></body>
 </html>
