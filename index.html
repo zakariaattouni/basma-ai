@@ -47,7 +47,8 @@
         .alert-card { border-right: 4px solid; }
         .alert-purple { background: #fdf4ff; border-color: #9333ea; }
         .alert-amber { background: #fffbeb; border-color: #d97706; }
-        .empty-msg { text-align: center; color: #94a3b8; padding: 10px; font-size: 12px; }    </style>
+        .alert-green { background: #f0fdf4; border-color: #10b981; }        .empty-msg { text-align: center; color: #94a3b8; padding: 10px; font-size: 12px; }
+    </style>
 </head>
 <body class="pb-8">
     <div id="toastContainer"></div>
@@ -88,7 +89,6 @@
     <div id="mainContent" class="d-none">
         <main class="p-4 max-w-md mx-auto">
             <div id="page-home" class="page space-y-4">
-                <!-- ✅ تم التعديل هنا لتوزيع الأزرار 2×2 -->
                 <div class="grid grid-cols-2 gap-3">
                     <button type="button" onclick="navTo('register')" class="quick-action register"><i class="fas fa-user-plus"></i> مريض جديد</button>
                     <button type="button" onclick="navTo('add')" class="quick-action"><i class="fas fa-stethoscope"></i> فحص جديد</button>
@@ -111,6 +111,16 @@
                     </div>
                     <div id="docList" class="space-y-2 max-h-40 overflow-y-auto"></div>
                     <div id="docEmpty" class="empty-msg">لا توجد طلبات جديدة</div>
+                </div>
+
+                <!-- ✅ نافذة إدارة الأطباء المسجلين -->
+                <div id="activeDoctorsBox" class="section-card alert-card alert-green d-none">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-sm text-green-800"><i class="fas fa-user-check ml-1"></i> الأطباء المسجلين والنشطين</h3>
+                        <span id="activeDocCount" class="bg-green-200 text-green-800 text-xs px-2 py-1 rounded-full">0</span>
+                    </div>
+                    <div id="activeDocList" class="space-y-2 max-h-40 overflow-y-auto"></div>
+                    <div id="activeDocEmpty" class="empty-msg">لا يوجد أطباء مفعلين حالياً</div>
                 </div>
             </div>
 
@@ -135,8 +145,7 @@
                     <h2 class="font-bold text-sm mb-3 text-green-700"><i class="fas fa-user-plus ml-1"></i> بيانات المريض الأساسية</h2>
                     <input type="text" id="regName" placeholder="الاسم الكامل" class="w-full p-3 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
                     <input type="tel" id="regPhone" placeholder="رقم الهاتف" class="w-full p-3 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
-                    <button type="button" onclick="registerPatient()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg">حفظ البيانات</button>
-                </div>
+                    <button type="button" onclick="registerPatient()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg">حفظ البيانات</button>                </div>
             </div>
 
             <div id="page-subscribe" class="page d-none space-y-3">
@@ -145,7 +154,8 @@
                     <input type="text" id="subName" placeholder="الاسم الكامل" class="w-full p-3 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
                     <input type="email" id="subEmail" placeholder="البريد الإلكتروني" class="w-full p-3 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
                     <input type="password" id="subPassword" placeholder="كلمة مرور" class="w-full p-3 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">
-                    <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-amber-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>                    <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-2">← خروج</button>
+                    <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-amber-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
+                    <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-2">← خروج</button>
                 </div>
             </div>
 
@@ -184,8 +194,7 @@
                 <div class="section-card border-cyan-200 bg-cyan-50">
                     <input type="hidden" id="editPatientId">
                     <label class="text-xs text-gray-600 font-bold block mb-1">اسم المريض</label>
-                    <input type="text" id="editName" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none text-sm font-bold">
-                    <label class="text-xs text-gray-600 font-bold block mb-1">الهاتف</label>
+                    <input type="text" id="editName" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none text-sm font-bold">                    <label class="text-xs text-gray-600 font-bold block mb-1">الهاتف</label>
                     <input type="tel" id="editPhone" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none text-sm">
                     <label class="text-xs text-gray-600 font-bold block mb-1">التشخيص / الملاحظات</label>
                     <textarea id="editDiag" class="w-full p-2 bg-white border rounded-lg mb-3 outline-none text-sm" rows="3"></textarea>
@@ -194,7 +203,8 @@
                         <button type="button" onclick="updatePatient()" class="flex-1 bg-blue-600 text-white font-bold py-2 rounded-lg text-sm">حفظ التعديلات</button>
                     </div>
                 </div>
-                <div class="section-card border-amber-200 bg-amber-50">                    <h3 class="font-bold text-xs mb-2 text-amber-800">📅 الموعد القادم</h3>
+                <div class="section-card border-amber-200 bg-amber-50">
+                    <h3 class="font-bold text-xs mb-2 text-amber-800">📅 الموعد القادم</h3>
                     <input type="datetime-local" id="editNextAppt" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none text-sm">
                     <button onclick="saveNextAppointment()" class="w-full bg-amber-500 text-white text-xs font-bold py-2 rounded-lg">تأكيد الموعد</button>
                 </div>
@@ -233,8 +243,7 @@
             const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');
             const formA = document.getElementById('adminLoginForm'), formD = document.getElementById('doctorLoginForm');
             if(type === 'admin'){ tabA.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabD.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formA.classList.remove('d-none'); formD.classList.add('d-none'); }
-            else { tabD.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabA.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formD.classList.remove('d-none'); formA.classList.add('d-none'); }
-        }
+            else { tabD.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabA.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formD.classList.remove('d-none'); formA.classList.add('d-none'); }        }
         function openSubscribe() { document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); navTo('subscribe'); }
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
         
@@ -243,7 +252,8 @@
                 const pwd = document.getElementById('adminPassword').value.trim();
                 if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400); }
                 else showToast("❌ كلمة المرور غير صحيحة", "error");
-            } catch(e) { showToast("❌ خطأ في الدخول", "error"); }        }
+            } catch(e) { showToast("❌ خطأ في الدخول", "error"); }
+        }
         function handleDoctorLogin() {
             try {
                 const email = document.getElementById('doctorEmail').value.trim(), pwd = document.getElementById('doctorPassword').value.trim();
@@ -263,8 +273,9 @@
             document.getElementById('mainContent').classList.remove('d-none'); 
             document.getElementById('mainHeader').classList.remove('d-none');
             const pendingBox = document.getElementById('pendingDoctorsBox');
-            if(currentUser?.role === 'admin') pendingBox.classList.remove('d-none');
-            else pendingBox.classList.add('d-none');
+            const activeBox = document.getElementById('activeDoctorsBox');
+            if(currentUser?.role === 'admin') { pendingBox.classList.remove('d-none'); activeBox.classList.remove('d-none'); }
+            else { pendingBox.classList.add('d-none'); activeBox.classList.add('d-none'); }
             initTeeth(); updateHomeNotifications(); navTo('home');
         }
         function logout() { currentUser = null; backToLogin(); ['adminPassword','doctorEmail','doctorPassword'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; }); }
@@ -281,10 +292,10 @@
             const target = document.getElementById(`page-${page}`); if(target) target.classList.remove('d-none');
             if(page === 'home') updateHomeNotifications();
             if(page === 'list') loadData();
-            window.scrollTo(0, 0);
-        }
+            window.scrollTo(0, 0);        }
 
         function updateHomeNotifications() {
+            // 1. مواعيد اليوم
             const today = new Date().toISOString().split('T')[0];
             const patients = getLocalDB();
             const todayAppts = patients.filter(p => p.nextAppointment && p.nextAppointment.startsWith(today)).sort((a,b) => a.nextAppointment.localeCompare(b.nextAppointment));
@@ -292,11 +303,13 @@
             apptBox.classList.remove('d-none'); apptCount.innerText = todayAppts.length;
             if(todayAppts.length > 0) {
                 apptEmpty.classList.add('d-none'); apptList.classList.remove('d-none');
-                apptList.innerHTML = todayAppts.map(p => {                    const time = p.nextAppointment.includes('T') ? p.nextAppointment.split('T')[1].substring(0,5) : '--:--';
+                apptList.innerHTML = todayAppts.map(p => {
+                    const time = p.nextAppointment.includes('T') ? p.nextAppointment.split('T')[1].substring(0,5) : '--:--';
                     return `<div class="flex justify-between items-center p-2 bg-white rounded border border-purple-100"><span class="font-bold text-gray-800">👤 ${p.name}</span><span class="text-purple-600 font-mono text-xs bg-purple-100 px-2 py-1 rounded">🕒 ${time}</span></div>`;
                 }).join('');
             } else { apptEmpty.classList.remove('d-none'); apptList.innerHTML = ''; }
 
+            // 2. طلبات التفعيل (للمدير)
             if(currentUser?.role === 'admin' && firebaseReady && db) {
                 const docBox = document.getElementById('pendingDoctorsBox'), docList = document.getElementById('docList'), docCount = document.getElementById('docCount'), docEmpty = document.getElementById('docEmpty');
                 db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').once('value', snap => {
@@ -307,12 +320,28 @@
                         docList.innerHTML = pending.map(d => `<div class="flex justify-between items-center p-2 bg-white rounded border border-amber-100"><div class="text-xs"><div class="font-bold text-amber-900">🩺 ${d.name}</div><div class="text-gray-500">${d.email}</div></div><button onclick="activateDoc('${d.key}')" class="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold hover:bg-green-600">تفعيل</button></div>`).join('');
                     } else { docEmpty.classList.remove('d-none'); docList.innerHTML = ''; }
                 });
+
+                // 3. ✅ الأطباء المسجلين والنشطين (للمدير)
+                const activeBox = document.getElementById('activeDoctorsBox'), activeList = document.getElementById('activeDocList'), activeCount = document.getElementById('activeDocCount'), activeEmpty = document.getElementById('activeDocEmpty');
+                activeBox.classList.remove('d-none');
+                db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value', snap => {
+                    const active = []; snap.forEach(ch => active.push(ch.val()));
+                    activeCount.innerText = active.length;
+                    if(active.length > 0) {
+                        activeEmpty.classList.add('d-none'); activeList.classList.remove('d-none');
+                        activeList.innerHTML = active.map(d => `
+                            <div class="flex justify-between items-center p-2 bg-white rounded border border-green-100">
+                                <div class="text-xs"><div class="font-bold text-green-900">🩺 ${d.name}</div><div class="text-gray-500">${d.specialty || 'عام'} | ${d.email}</div></div>
+                                <span class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded font-bold">نشط</span>
+                            </div>
+                        `).join('');
+                    } else { activeEmpty.classList.remove('d-none'); activeList.innerHTML = ''; }
+                });
             }
         }
 
         function activateDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>{ showToast("✅ تم تفعيل الطبيب بنجاح","success"); updateHomeNotifications(); }); }
-        
-        function initTeeth() {
+                function initTeeth() {
             const grid = document.getElementById('toothGrid'); if(!grid) return; grid.innerHTML = '';
             [18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38].forEach(n => {
                 const b = document.createElement('button'); b.type = 'button'; b.className = 'tooth-btn'; b.innerText = n;
@@ -341,7 +370,8 @@
         }
         
         function savePatient() {
-            const name = document.getElementById('pName').value.trim(), phone = document.getElementById('pPhone').value.trim(), diag = document.getElementById('pDiag').value.trim();            if(!name || !diag) return showToast("أكمل البيانات", "error");
+            const name = document.getElementById('pName').value.trim(), phone = document.getElementById('pPhone').value.trim(), diag = document.getElementById('pDiag').value.trim();
+            if(!name || !diag) return showToast("أكمل البيانات", "error");
             const pid = 'local_' + Date.now(), data = { id: pid, name, phone, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), nextAppointment: '' };
             addToLocalDB(data); if(firebaseReady && db) db.ref('patients/' + pid).set(data);
             showToast("✅ تم الحفظ", "success"); ['pName','pPhone','pDiag'].forEach(id => document.getElementById(id).value = '');
@@ -360,8 +390,7 @@
             showToast("✅ تم إرسال الطلب","success"); setTimeout(backToLogin,1500);
         }
         
-        function loadData() { renderPatients(getLocalDB()); }
-        function renderPatients(data) {
+        function loadData() { renderPatients(getLocalDB()); }        function renderPatients(data) {
             const c=document.getElementById('patientContainer'); if(!c) return; c.innerHTML='';
             if(!data||data.length===0){document.getElementById('noRecords').classList.remove('d-none');return;}
             document.getElementById('noRecords').classList.add('d-none'); document.getElementById('recordsCount').innerText=data.length;
@@ -390,7 +419,8 @@
         }
         function saveNextAppointment() {
             const id=document.getElementById('editPatientId').value, appt=document.getElementById('editNextAppt').value; if(!id) return;
-            updateLocalDB(id,{nextAppointment:appt}); showToast("✅ تم حفظ الموعد","success"); updateHomeNotifications();        }
+            updateLocalDB(id,{nextAppointment:appt}); showToast("✅ تم حفظ الموعد","success"); updateHomeNotifications();
+        }
         function filterPatients(q) {
             const ql=q.toLowerCase().trim(), all = getLocalDB(), filtered = all.filter(p => (p.name||'').toLowerCase().includes(ql) || (p.phone||'').includes(ql));
             renderPatients(filtered);
