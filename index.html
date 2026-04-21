@@ -54,9 +54,29 @@
         .search-box { background: white; border-radius: 12px; padding: 8px 12px; border: 2px solid #e2e8f0; display: flex; align-items: center; gap: 6px; }
         .search-box input { border: none; outline: none; width: 100%; font-size: 12px; }
         .search-box i { color: #64748b; }
+        
+        /* ✨ فوتِر حقوق التصميم - آمن وبسيط */
+        .copyright-footer {
+            background: linear-gradient(to right, #1e3a8a, #3b82f6);
+            color: white;
+            text-align: center;
+            padding: 10px 15px;
+            font-size: 11px;
+            font-weight: 500;
+            border-top: 2px solid #60a5fa;
+            position: fixed;
+            bottom: 65px;
+            left: 0;
+            right: 0;
+            z-index: 9998;
+        }
+        .copyright-footer strong {
+            font-weight: 700;
+            color: #fff;
+        }
     </style>
 </head>
-<body class="pb-20">
+<body class="pb-32">
     <div id="toastContainer"></div>
     <div id="loginPage" class="fixed inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 z-[10000] flex items-center justify-center p-6">
         <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm text-center">
@@ -76,8 +96,7 @@
                 <input type="password" id="doctorPassword" placeholder="كلمة المرور" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') handleDoctorLogin()">
                 <button type="button" onclick="handleDoctorLogin()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">دخول</button>
                 <p class="text-xs text-gray-400 mt-3">ليس لديك حساب؟ <span class="text-amber-600 cursor-pointer font-medium hover:underline" onclick="openSubscribe()">اشترك الآن</span></p>
-            </div>
-        </div>
+            </div>        </div>
     </div>
     <div id="mainContent" class="d-none">
         <header class="app-header">
@@ -96,7 +115,8 @@
                     <p class="text-blue-100 text-xs">اختر القسم للبدء</p>
                 </div>
                 <div id="alertSection" class="d-none">
-                    <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">                        <div class="flex items-center gap-2 mb-2">
+                    <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">
+                        <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-bell text-amber-600"></i>
                             <h3 class="font-bold text-sm">تنبيهات المواعيد</h3>
                             <span class="status-badge status-urgent ml-auto" id="alertCount">0</span>
@@ -125,8 +145,7 @@
                             <span class="status-badge status-pending" id="pendingCount">0</span>
                         </div>
                         <div id="doctorRequests" class="space-y-2 max-h-36 overflow-y-auto text-sm mb-4"></div>
-                        <hr class="border-gray-200 my-2">
-                        <div class="flex justify-between items-center mb-2">
+                        <hr class="border-gray-200 my-2">                        <div class="flex justify-between items-center mb-2">
                             <h3 class="font-bold text-sm"><i class="fas fa-user-check text-green-500 ml-1"></i> أطباء نشطين</h3>
                         </div>
                         <div id="activeDoctors" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
@@ -145,7 +164,8 @@
                 <div class="section-card">
                     <h2 class="font-bold text-sm mb-3"><i class="fas fa-plus-circle text-blue-500 ml-1"></i> فحص جديد</h2>
                     <div class="tooth-grid mb-3" id="toothGrid"></div>
-                    <p id="selectedTooth" class="text-center text-xs text-blue-600 font-semibold mb-2 d-none">✅ السن: <span id="toothNum"></span></p>                    <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-blue-400 text-sm">
+                    <p id="selectedTooth" class="text-center text-xs text-blue-600 font-semibold mb-2 d-none">✅ السن: <span id="toothNum"></span></p>
+                    <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-blue-400 text-sm">
                     <input type="tel" id="pPhone" placeholder="رقم الهاتف" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-blue-400 text-sm">
                     <textarea id="pDiag" placeholder="وصف الشكوى..." class="w-full p-2 bg-gray-50 border rounded-lg mb-3 outline-none focus:border-blue-400 resize-none text-sm" rows="3"></textarea>
                     <div id="aiBox" class="d-none"></div>
@@ -174,8 +194,7 @@
                     <input type="text" id="subSpecialty" placeholder="التخصص (اختياري)" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">
                     <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
                     <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-3 hover:bg-gray-300 transition">← العودة لتسجيل الدخول</button>
-                </div>
-            </div>
+                </div>            </div>
             <div id="page-ai" class="d-none space-y-3">
                 <div class="section-card border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
                     <div class="flex items-center gap-2 mb-3"><div class="bg-purple-100 p-2 rounded-lg"><i class="fas fa-robot text-purple-600"></i></div><h2 class="font-bold text-sm">🧠 المساعد الذكي السريري المُوسّع</h2></div>
@@ -194,7 +213,8 @@
                 <div class="flex justify-between items-center mb-2 px-1"><h2 class="font-bold text-sm"><i class="fas fa-clipboard-list text-blue-500 ml-1"></i> سجلات المرضى</h2><span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full" id="recordsCount">0</span></div>
                 <div class="search-box mb-2"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="ابحث باسم المريض أو الهاتف..." oninput="filterPatients(this.value)"><button onclick="document.getElementById('searchInput').value=''; filterPatients('')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button></div>
                 <p class="text-[10px] text-gray-500 bg-gray-50 p-2 rounded-lg">💡 اضغط على أي مريض لفتح صفحة التعديل</p>
-                <div id="patientContainer" class="space-y-2"></div>                <div id="noRecords" class="text-center py-6 text-gray-400 text-sm d-none"><i class="fas fa-inbox text-2xl mb-2"></i><br>لا توجد سجلات</div>
+                <div id="patientContainer" class="space-y-2"></div>
+                <div id="noRecords" class="text-center py-6 text-gray-400 text-sm d-none"><i class="fas fa-inbox text-2xl mb-2"></i><br>لا توجد سجلات</div>
             </div>
             <div id="page-patient" class="d-none space-y-3 pb-16">
                 <div class="flex items-center gap-2 mb-2 px-1"><button type="button" onclick="navTo('list')" class="text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 rounded-lg transition"><i class="fas fa-arrow-right"></i> رجوع</button><h2 class="font-bold text-sm"><i class="fas fa-user-injured text-blue-500 ml-1"></i> تعديل بيانات المريض</h2></div>
@@ -223,7 +243,12 @@
                 </div>
                 <div class="section-card"><h3 class="font-bold text-xs mb-2"><i class="fas fa-history text-gray-500 ml-1"></i> آخر تحديث</h3><div id="patientVisits" class="space-y-2 text-sm"><div class="p-2 bg-gray-50 rounded-lg border text-xs"><span class="text-gray-500">سيظهر هنا تاريخ آخر تعديل للبيانات</span></div></div></div>
             </div>
-        </main>
+        </main>        
+        <!-- ✨ فوتِر حقوق التصميم - آمن -->
+        <div class="copyright-footer">
+            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
+        </div>
+        
         <footer class="main-footer">
             <button type="button" onclick="navTo('home')" id="btn-home" class="nav-btn active"><i class="fas fa-home"></i><span>الرئيسية</span></button>
             <button type="button" onclick="navTo('add')" id="btn-add" class="nav-btn"><i class="fas fa-plus-circle"></i><span>فحص</span></button>
@@ -243,41 +268,19 @@
                 firebaseReady = true;
             }
         } catch (e) { console.error(e); }
-                const connBadge = document.getElementById('connBadge');
+        
+        const connBadge = document.getElementById('connBadge');
         if(firebaseReady) { connBadge.className = 'conn-indicator conn-online'; connBadge.innerText = '🟢 متصل'; }
         else { connBadge.className = 'conn-indicator conn-offline'; connBadge.innerText = '🔴 وضع محلي'; }
         
         let currentTooth = null, currentUser = null, patientsCache = [];
         const LOCAL_KEY = 'basma_patients';
         
-        // === نظام التخزين المحلي الموثوق ===
-        function getLocalDB() { 
-            try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); } 
-            catch { return []; } 
-        }
-        function saveLocalDB(data) { 
-            try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); return true; } 
-            catch { showToast("❌ فشل الحفظ في المتصفح", "error"); return false; } 
-        }
-        function addToLocalDB(record) { 
-            const localDB = getLocalDB(); 
-            if(!localDB.some(p => p.id === record.id)) { 
-                localDB.push(record); 
-                saveLocalDB(localDB); 
-            } 
-        }
-        function updateLocalDB(id, newData) { 
-            const localDB = getLocalDB(); 
-            const idx = localDB.findIndex(p => p.id === id || p.firebaseId === id); 
-            if(idx !== -1) { 
-                localDB[idx] = { ...localDB[idx], ...newData, id: localDB[idx].id, firebaseId: localDB[idx].firebaseId || id }; 
-                return saveLocalDB(localDB); 
-            } 
-            return false; 
-        }
-        function deleteFromLocalDB(id) { 
-            saveLocalDB(getLocalDB().filter(p => p.id !== id && p.firebaseId !== id)); 
-        }
+        function getLocalDB() { try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); } catch { return []; } }
+        function saveLocalDB(data) { try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); return true; } catch { showToast("❌ فشل الحفظ", "error"); return false; } }
+        function addToLocalDB(record) { const localDB = getLocalDB(); if(!localDB.some(p => p.id === record.id)) { localDB.push(record); saveLocalDB(localDB); } }
+        function updateLocalDB(id, newData) { const localDB = getLocalDB(); const idx = localDB.findIndex(p => p.id === id || p.firebaseId === id); if(idx !== -1) { localDB[idx] = { ...localDB[idx], ...newData, id: localDB[idx].id, firebaseId: localDB[idx].firebaseId || id }; return saveLocalDB(localDB); } return false; }
+        function deleteFromLocalDB(id) { saveLocalDB(getLocalDB().filter(p => p.id !== id && p.firebaseId !== id)); }
         
         function switchLogin(type) {
             const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');
@@ -289,10 +292,10 @@
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
         
         function handleAdminLogin() {
-            try {
-                const pwd = document.getElementById('adminPassword').value.trim();
+            try {                const pwd = document.getElementById('adminPassword').value.trim();
                 if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400); }
-                else showToast("❌ كلمة المرور غير صحيحة", "error");            } catch(e) { showToast("❌ خطأ في الدخول", "error"); }
+                else showToast("❌ كلمة المرور غير صحيحة", "error");
+            } catch(e) { showToast("❌ خطأ في الدخول", "error"); }
         }
         function handleDoctorLogin() {
             try {
@@ -338,10 +341,10 @@
         }
         function initTeeth() {
             const grid = document.getElementById('toothGrid'); if(!grid) return; grid.innerHTML = '';
-            [18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38].forEach(n => {
-                const b = document.createElement('button'); b.type = 'button'; b.className = 'tooth-btn'; b.innerText = n;
+            [18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38].forEach(n => {                const b = document.createElement('button'); b.type = 'button'; b.className = 'tooth-btn'; b.innerText = n;
                 b.onclick = () => { document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); currentTooth = n; document.getElementById('selectedTooth').classList.remove('d-none'); document.getElementById('toothNum').innerText = n; };
-                grid.appendChild(b);            });
+                grid.appendChild(b);
+            });
         }
         
         function generateDentalAnalysis(text) {
@@ -373,99 +376,33 @@
         function clearAI() { document.getElementById('aiInput').value=''; document.getElementById('aiOutputBox').classList.add('d-none'); document.getElementById('aiResult').innerHTML=''; }
         function runMagicAI() { const d=document.getElementById('pDiag').value.trim(), b=document.getElementById('aiBox'); if(!d) return showToast("اكتب الشكوى أولاً","error"); b.classList.remove('d-none'); b.innerHTML='<div class="text-center"><i class="fas fa-spinner fa-spin text-indigo-600"></i> جاري...</div>'; setTimeout(()=>b.innerHTML=`<b>💡 توصية:</b> السن #${currentTooth||'؟'} يحتاج فحصاً.<br><small class="text-gray-500">⚠️ لا يغني عن التشخيص</small>`,600); }
         
-        // ✅ إصلاح جذري لدالة الحفظ لتعمل محلياً فوراً
         function savePatient() {
             const name = document.getElementById('pName').value.trim();
             const phone = document.getElementById('pPhone').value.trim();
             const diag = document.getElementById('pDiag').value.trim();
-            
             if(!name || !diag) return showToast("أكمل الاسم والشكوى", "error");
-            
             const pid = 'local_' + Date.now();
-            const data = { 
-                id: pid, 
-                name, 
-                phone, 
-                diag, 
-                tooth: currentTooth, 
-                date: new Date().toLocaleDateString('ar-EG'), 
-                timestamp: Date.now(), 
-                addedBy: currentUser?.id || 'admin',                 updatedAt: new Date().toISOString(), 
-                totalCost: 0, 
-                paidAmount: 0, 
-                payments: [], 
-                nextAppointment: '' 
-            };
-            
-            // الحفظ المباشر في LocalStorage
+            const data = { id: pid, name, phone, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.id || 'admin', updatedAt: new Date().toISOString(), totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '' };
             addToLocalDB(data);
-            
-            // محاولة الحفظ في Firebase كخلفية فقط (لا تؤثر على نجاح العملية)
-            if(firebaseReady && db) {
-                db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync failed:", err));
-            }
-
+            if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync failed:", err));
             showToast("✅ تم حفظ المريض بنجاح", "success");
-            
-            // تنظيف الحقول
             ['pName','pPhone','pDiag'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('aiBox').classList.add('d-none'); 
-            currentTooth = null; 
-            document.querySelectorAll('.tooth-btn').forEach(x => x.classList.remove('selected')); 
-            document.getElementById('selectedTooth').classList.add('d-none');
-            
-            updateStats(); 
-            loadTodayAppointments();
-            
-            // إذا كنا في صفحة القائمة، حدثها فوراً
-            if(!document.getElementById('page-list').classList.contains('d-none')) {
-                loadData();
-            }
+            document.getElementById('aiBox').classList.add('d-none'); currentTooth = null; document.querySelectorAll('.tooth-btn').forEach(x => x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none');
+            updateStats(); loadTodayAppointments();
+            if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
         }
-
-        // ✅ إصلاح جذري لدالة التسجيل لتعمل محلياً فوراً
         function registerPatient() {
             const name = document.getElementById('regName').value.trim();
             const phone = document.getElementById('regPhone').value.trim();
-            
             if(!name || !phone) return showToast("أدخل الاسم والهاتف", "error");
-            
             const pid = 'local_' + Date.now();
-            const data = { 
-                id: pid, 
-                name, 
-                phone, 
-                birth: document.getElementById('regBirth').value, 
-                gender: document.getElementById('regGender').value, 
-                date: new Date().toLocaleDateString('ar-EG'), 
-                timestamp: Date.now(), 
-                createdAt: new Date().toISOString(),                 diag: 'تم التسجيل الأولي', 
-                totalCost: 0, 
-                paidAmount: 0, 
-                payments: [], 
-                nextAppointment: '', 
-                addedBy: currentUser?.id || 'system' 
-            };
-            
-            // الحفظ المباشر في LocalStorage
+            const data = { id: pid, name, phone, birth: document.getElementById('regBirth').value, gender: document.getElementById('regGender').value, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), createdAt: new Date().toISOString(), diag: 'تم التسجيل الأولي', totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '', addedBy: currentUser?.id || 'system' };
             addToLocalDB(data);
-            
-            // محاولة الحفظ في Firebase كخلفية فقط
-            if(firebaseReady && db) {
-                db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync failed:", err));
-            }
-
+            if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync failed:", err));
             showToast("✅ تم تسجيل المريض بنجاح", "success");
-            
-            // تنظيف الحقول
             ['regName','regPhone','regBirth','regGender'].forEach(id => document.getElementById(id).value = '');
-            
             updateStats();
-            
-            // إذا كنا في صفحة القائمة، حدثها فوراً
-            if(!document.getElementById('page-list').classList.contains('d-none')) {
-                loadData();
-            }
+            if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
         }
 
         function submitDoctorSubscription() {
@@ -488,7 +425,8 @@
         }
         
         function openWhatsApp(phone,name,custom='') {
-            if(!phone) return showToast("❌ لا يوجد رقم هاتف","error");            let c=phone.replace(/[\s\-\(\)]/g,''); if(c.startsWith('09')) c='963'+c.substring(1); else if(!c.startsWith('+963')) c='963'+c;
+            if(!phone) return showToast("❌ لا يوجد رقم هاتف","error");
+            let c=phone.replace(/[\s\-\(\)]/g,''); if(c.startsWith('09')) c='963'+c.substring(1); else if(!c.startsWith('+963')) c='963'+c;
             const m=custom||`مرحباً ${name}،\nمن عيادة بَسْمَة السنية.\nتذكير بموعدك القادم. 🦷✨`;
             window.open(`https://wa.me/${c}?text=${encodeURIComponent(m)}`,'_blank');
         }
@@ -498,36 +436,17 @@
             document.getElementById('noRecords').classList.toggle('d-none',v>0);
         }
         
-        function loadData() { 
-            // تحميل البيانات محلياً دائماً لضمان السرعة والعمل
-            renderPatients(getLocalDB(),'local'); 
-            
-            // محاولة مزامنة خلفية مع Firebase إذا كان متصلاً
-            if(firebaseReady&&db) {
-                db.ref('patients').orderByChild('timestamp').on('value', snap=>{
-                    patientsCache=[];
-                    snap.forEach(ch=>patientsCache.push({firebaseId:ch.key,...ch.val()}));
-                    // دمج البيانات المحلية مع السحابية (الأحدث wins)
-                    // للتبسيط هنا نعتمد على المحلي للأساس والسحابي للنسخ الاحتياطي
-                });
-            }
-        }
+        function loadData() { renderPatients(getLocalDB(),'local'); if(firebaseReady&&db) { db.ref('patients').orderByChild('timestamp').on('value', snap=>{patientsCache=[];snap.forEach(ch=>patientsCache.push({firebaseId:ch.key,...ch.val()}));}); } }
         function renderPatients(data, source) {
             const c=document.getElementById('patientContainer'); if(!c) return; c.innerHTML='';
-            if(!data||data.length===0){document.getElementById('noRecords').classList.remove('d-none');document.getElementById('recordsCount').innerText='0';return;}
-            document.getElementById('noRecords').classList.add('d-none'); document.getElementById('recordsCount').innerText=data.length;
+            if(!data||data.length===0){document.getElementById('noRecords').classList.remove('d-none');document.getElementById('recordsCount').innerText='0';return;}            document.getElementById('noRecords').classList.add('d-none'); document.getElementById('recordsCount').innerText=data.length;
             [...data].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0)).forEach(v=>{
                 const pid=v.firebaseId||v.id, tooth=v.tooth?`<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">🦷 #${v.tooth}</span>`:'',
                 diag=v.diag?(v.diag.length>60?v.diag.substring(0,60)+'...':v.diag):'بدون ملاحظات';
                 c.innerHTML+=`<div class="section-card py-3 border-r-4 border-r-blue-500 cursor-pointer hover:shadow-md hover:border-r-cyan-500 transition bg-white" onclick="openPatientEdit('${pid}','${source}')"><div class="flex justify-between items-start"><div class="flex-1"><div class="flex items-center gap-2"><span class="font-bold text-sm text-blue-800">${v.name||'مريض'}</span>${v.phone?`<span class="text-[10px] text-gray-400">📱 ${v.phone}</span>`:''}</div>${tooth?`<div class="mt-1">${tooth}</div>`:''}<p class="text-xs text-gray-600 mt-2 line-clamp-2">${diag}</p></div><div class="text-left flex flex-col items-end gap-1"><span class="text-[10px] bg-gray-100 px-2 py-1 rounded">${v.date||'-'}</span><button onclick="event.stopPropagation();openWhatsApp('${v.phone}','${v.name}')" class="wa-btn-patient mt-1" title="واتساب"><i class="fab fa-whatsapp"></i></button></div></div></div>`;
             });
         }
-        function openPatientEdit(pid, source) {
-            // البحث في المحلي أولاً لأنه الأسرع والأضمن
-            const p=getLocalDB().find(x=>x.id===pid||x.firebaseId===pid); 
-            if(p) loadPatientToForm(p,'local'); 
-            else showToast("❌ غير موجود","error"); 
-        }
+        function openPatientEdit(pid, source) { const p=getLocalDB().find(x=>x.id===pid||x.firebaseId===pid); if(p) loadPatientToForm(p,'local'); else showToast("❌ غير موجود","error"); }
         function loadPatientToForm(p, src) {
             document.getElementById('editPatientId').value=p.firebaseId||p.id||''; document.getElementById('editPatientSource').value=src;
             document.getElementById('editName').value=p.name||''; document.getElementById('editPhone').value=p.phone||''; document.getElementById('editBirth').value=p.birth||''; document.getElementById('editGender').value=p.gender||'';
@@ -537,39 +456,28 @@
             const dt=p.updatedAt||p.timestamp?new Date(p.updatedAt||p.timestamp).toLocaleString('ar-EG'):'-';
             document.getElementById('patientVisits').innerHTML=`<div class="p-2 bg-cyan-50 rounded-lg border text-xs"><span class="text-gray-500">📅 آخر تحديث: ${dt}</span></div>`;
             navTo('patient');
-        }        function updatePatient() {
-            const id=document.getElementById('editPatientId').value, src=document.getElementById('editPatientSource').value, name=document.getElementById('editName').value.trim();
+        }
+        function updatePatient() {
+            const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value.trim();
             if(!id||!name) return showToast("الاسم مطلوب","error");
             const data={name,phone:document.getElementById('editPhone').value.trim(),birth:document.getElementById('editBirth').value,gender:document.getElementById('editGender').value,diag:document.getElementById('editDiag').value.trim(),tooth:document.getElementById('editTooth').value||null,updatedAt:new Date().toISOString(),updatedBy:currentUser?.id||'admin'};
-            
-            // التحديث المحلي المباشر
-            if(updateLocalDB(id,data)){
-                showToast("✅ تم التحديث","success");
-                navTo('list');
-            } else {
-                showToast("❌ فشل التحديث","error");
-            }
+            if(updateLocalDB(id,data)){ showToast("✅ تم التحديث","success"); navTo('list'); } else { showToast("❌ فشل التحديث","error"); }
         }
         function deletePatient() {
             const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value||'المريض';
             if(!id||!confirm(`حذف "${name}"؟`)) return;
-            deleteFromLocalDB(id); 
-            showToast("🗑️ تم الحذف","success"); 
-            navTo('list'); 
+            deleteFromLocalDB(id); showToast("🗑️ تم الحذف","success"); navTo('list'); 
         }
         function saveNextAppointment() {
             const id=document.getElementById('editPatientId').value, appt=document.getElementById('editNextAppt').value; if(!id) return;
             const data={nextAppointment:appt,updatedAt:new Date().toISOString()};
-            updateLocalDB(id,data); 
-            showToast("✅ تم الحفظ","success"); 
-            checkAppointmentAlerts(); 
+            updateLocalDB(id,data); showToast("✅ تم الحفظ","success"); checkAppointmentAlerts(); 
         }
         function updateTotalCost() {
             const id=document.getElementById('editPatientId').value, cost=parseFloat(document.getElementById('editTotalCost').value)||0; if(!id) return;
             document.getElementById('payTotal').innerText=cost; document.getElementById('payRemain').innerText=cost-(parseFloat(document.getElementById('payPaid').innerText)||0);
             const data={totalCost:cost,updatedAt:new Date().toISOString()};
-            updateLocalDB(id,data);
-            showToast("✅ تم تحديث التكلفة","success");
+            updateLocalDB(id,data); showToast("✅ تم تحديث التكلفة","success");
         }
         function renderPayments(payments) {
             const c=document.getElementById('paymentHistory'); c.innerHTML='';
@@ -580,27 +488,14 @@
             const id=document.getElementById('editPatientId').value, amount=parseFloat(document.getElementById('newPayAmount').value), note=document.getElementById('newPayNote').value.trim();
             if(!id||isNaN(amount)||amount<=0) return showToast("أدخل مبلغاً صحيحاً","error");
             const newPay={amount,note,date:new Date().toLocaleDateString('ar-EG'),timestamp:Date.now()};
-            const l=getLocalDB(), idx=l.findIndex(p=>p.id===id||p.firebaseId===id); 
-            if(idx!==-1){
-                const pays=l[idx].payments||[]; 
-                pays.push(newPay); 
-                const total=pays.reduce((s,x)=>s+x.amount,0); 
-                l[idx].payments=pays; 
-                l[idx].paidAmount=total;                 l[idx].updatedAt=new Date().toISOString(); 
-                saveLocalDB(l); 
-                document.getElementById('payPaid').innerText=total; 
-                document.getElementById('payRemain').innerText=(l[idx].totalCost||0)-total; 
-                renderPayments(pays); 
-                document.getElementById('newPayAmount').value=''; 
-                document.getElementById('newPayNote').value=''; 
-                showToast("✅ تم التسجيل","success");
+            const l=getLocalDB(), idx=l.findIndex(p=>p.id===id||p.firebaseId===id);             if(idx!==-1){
+                const pays=l[idx].payments||[]; pays.push(newPay); const total=pays.reduce((s,x)=>s+x.amount,0); 
+                l[idx].payments=pays; l[idx].paidAmount=total; l[idx].updatedAt=new Date().toISOString(); saveLocalDB(l); 
+                document.getElementById('payPaid').innerText=total; document.getElementById('payRemain').innerText=(l[idx].totalCost||0)-total; renderPayments(pays); 
+                document.getElementById('newPayAmount').value=''; document.getElementById('newPayNote').value=''; showToast("✅ تم التسجيل","success");
             }
         }
-        function loadTodayAppointments() {
-            const today=new Date().toISOString().split('T')[0]; 
-            const pts=getLocalDB(); 
-            renderTodayAppts(pts,today);
-        }
+        function loadTodayAppointments() { const today=new Date().toISOString().split('T')[0]; const pts=getLocalDB(); renderTodayAppts(pts,today); }
         function renderTodayAppts(pts,today) {
             const con=document.getElementById('todayAppointmentsList'), sec=document.getElementById('todayAppointmentsSection'); con.innerHTML='';
             const tm=pts.filter(p=>p.nextAppointment&&p.nextAppointment.startsWith(today)).sort((a,b)=>(a.nextAppointment||'').localeCompare(b.nextAppointment||''));
@@ -610,10 +505,7 @@
         }
         function updateStats() {
             const today=new Date().toLocaleDateString('ar-EG');
-            const l=getLocalDB(); 
-            document.getElementById('statPatients').innerText=l.length; 
-            document.getElementById('statToday').innerText=l.filter(d=>d.date===today).length; 
-            document.getElementById('statDoctors').innerText='0'; 
+            const l=getLocalDB(); document.getElementById('statPatients').innerText=l.length; document.getElementById('statToday').innerText=l.filter(d=>d.date===today).length; document.getElementById('statDoctors').innerText='0'; 
         }
         document.addEventListener('DOMContentLoaded', () => { console.log("🦷 بَسْمَة AI جاهز"); });
     </script>
