@@ -56,7 +56,7 @@
         .search-box input { border: none; outline: none; width: 100%; font-size: 12px; }
         .search-box i { color: #64748b; }
         
-        /* ✅ الفوتر النصي (مفصول بصرياً عن شريط الأزرار) */
+        /* ✅ الفوتر النصي */
         .copyright-footer { 
             background: #f8fafc; 
             color: #64748b; 
@@ -117,7 +117,7 @@
                     <p class="text-blue-100 text-xs">اختر القسم للبدء</p>
                 </div>
                 
-                <!-- 2. ✅ نافذة مواعيد اليوم (تظهر تلقائياً عند وجود موعد) -->
+                <!-- 2. ✅ نافذة مواعيد اليوم -->
                 <div id="todayAppointmentsSection" class="section-card border-indigo-200 bg-gradient-to-br from-indigo-50 to-blue-50 d-none">
                     <div class="flex justify-between items-center mb-2">
                         <h3 class="font-bold text-sm"><i class="fas fa-clock text-indigo-600 ml-1"></i> مواعيد اليوم</h3>
@@ -150,14 +150,14 @@
                         </div>
                         <div id="activeDoctors" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                         
-                        <!-- 🔑 إدارة مفتاح AI (للمدير فقط) -->
+                        <!-- 🔑 إدارة مفتاح AI (للمدير فقط) - يدعم Hugging Face -->
                         <hr class="border-gray-200 my-3">
                         <h3 class="font-bold text-sm mb-2"><i class="fas fa-key text-purple-500 ml-1"></i> مفتاح الذكاء الاصطناعي (API Key)</h3>
                         <div class="flex gap-2 mb-2">
-                            <input type="text" id="aiApiKey" placeholder="أدخل مفتاح API الخاص بك (اختياري)" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm">
+                            <input type="text" id="aiApiKey" placeholder="الصق مفتاح Hugging Face هنا" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm">
                             <button onclick="saveApiKey()" class="bg-purple-500 text-white px-3 rounded-lg font-bold text-sm hover:bg-purple-600">حفظ</button>
                         </div>
-                        <p class="text-[10px] text-gray-500">💡 إذا أدخلت مفتاحاً، سيستخدمه التطبيق للتحليل. اتركه فارغاً للاستخدام المجاني.</p>
+                        <p class="text-[10px] text-gray-500">💡 يدعم مفاتيح Hugging Face. اتركه فارغاً للاستخدام المجاني.</p>
                     </div>
                 </div>
                 
@@ -269,7 +269,7 @@
             </div>
         </main>
         
-        <!-- ✅ الفوتر النصي (مفصول عن الأزرار) -->
+        <!-- ✅ الفوتر النصي -->
         <div class="copyright-footer">
             حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
         </div>
@@ -393,14 +393,15 @@
             const key = document.getElementById('aiApiKey').value.trim();            if(key) {
                 localStorage.setItem(API_KEY, key);
                 aiApiKey = key;
-                showToast("✅ تم حفظ مفتاح AI بنجاح", "success");
+                showToast("✅ تم حفظ مفتاح Hugging Face", "success");
             } else {
                 localStorage.removeItem(API_KEY);
                 aiApiKey = '';
-                showToast("ℹ️ تم مسح مفتاح AI (سيتم استخدام المجاني)", "info");
+                showToast("ℹ️ تم المسح (سيتم استخدام المجاني)", "info");
             }
         }
         
+        // ✅ الذكاء الاصطناعي المطور ليدعم Hugging Face
         async function runAdvancedAI_Live() {
             const input = document.getElementById('aiInput').value.trim();
             const outputBox = document.getElementById('aiOutputBox');
@@ -411,37 +412,44 @@
             try {
                 const prompt = `أنت طبيب أسنان خبير. حلل الحالة التالية بالعربية باختصار: "${input}". أعطني: 1. التشخيص 2. الخطة العلاجية 3. نصيحة للمريض. استخدم تنسيق HTML بسيط (h4, ul li).`;
                 
-                let url;
+                let response, text;
+                
                 if(aiApiKey && aiApiKey.length > 10) {
-                    url = `https://api.openai.com/v1/chat/completions`;
-                    const response = await fetch(url, {
+                    // 🟢 استخدام Hugging Face
+                    const model = "mistralai/Mistral-7B-Instruct-v0.2";
+                    const url = `https://api-inference.huggingface.co/models/${model}`;
+                    
+                    response = await fetch(url, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${aiApiKey}`
                         },
-                        body: JSON.stringify({
-                            model: "gpt-3.5-turbo",
-                            messages: [{ role: "user", content: prompt }],
-                            max_tokens: 500,
-                            temperature: 0.7
-                        })
+                        body: JSON.stringify({ inputs: prompt })
                     });
-                    if (!response.ok) throw new Error(`فشل الاتصال: ${response.status}`);
+
+                    if (!response.ok) {
+                        const errData = await response.json();
+                        throw new Error(errData.error || `فشل الخادم: ${response.status}`);
+                    }
                     const data = await response.json();
-                    const text = data.choices[0].message.content;
+                    // Hugging Face Inference API returns array of objects
+                    text = data[0].generated_text || JSON.stringify(data);
+                    
                     resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</div>
-                    <div class="text-[10px] text-gray-400 mt-2 text-center">* تحليل بواسطة مفتاح API الخاص بك. راجع التشخيص السريري.</div>`;
+                    <div class="text-[10px] text-gray-400 mt-2 text-center">* تحليل بواسطة Hugging Face (مفتاحك الخاص).</div>`;
                 } else {
-                    url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?seed=${Math.floor(Math.random()*1000)}&model=openai`;
-                    const response = await fetch(url);
+                    // 🟢 استخدام الخدمة المجانية (بدون مفتاح)                    const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?seed=${Math.floor(Math.random()*1000)}&model=openai`;
+                    response = await fetch(url);
                     if (!response.ok) throw new Error(`فشل الاتصال: ${response.status}`);
-                    const text = await response.text();
+                    text = await response.text();
                     resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed">${text}</div>
-                    <div class="text-[10px] text-gray-400 mt-2 text-center">* تحليل بواسطة AI مجاني مفتوح المصدر. راجع التشخيص السريري.</div>`;
-                }                showToast("✅ تم التحليل الذكي بنجاح", "success");
+                    <div class="text-[10px] text-gray-400 mt-2 text-center">* تحليل بواسطة AI مجاني مفتوح المصدر.</div>`;
+                }
+                showToast("✅ تم التحليل الذكي بنجاح", "success");
             } catch (error) {
-                resultDiv.innerHTML = `<div class="bg-red-50 p-2 rounded-lg border border-red-200 text-xs text-red-600">⚠️ تعذر الاتصال بالخادم الذكي.</div>`;
+                console.error(error);
+                resultDiv.innerHTML = `<div class="bg-red-50 p-2 rounded-lg border border-red-200 text-xs text-red-600">⚠️ تعذر الاتصال: ${error.message}</div>`;
                 showToast("❌ فشل الاتصال بالذكاء الاصطناعي", "error");
             }
         }
@@ -480,15 +488,15 @@
             ['regName','regPhone','regBirth','regGender'].forEach(id => document.getElementById(id).value = '');
             updateStats(); if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
         }
-        function submitDoctorSubscription() {
-            const name=document.getElementById('subName').value.trim(), email=document.getElementById('subEmail').value.trim(), pwd=document.getElementById('subPassword').value.trim();
+        function submitDoctorSubscription() {            const name=document.getElementById('subName').value.trim(), email=document.getElementById('subEmail').value.trim(), pwd=document.getElementById('subPassword').value.trim();
             if(!name||!email||!pwd) return showToast("أكمل الحقول","error");
             if(firebaseReady && auth.currentUser) db.ref('doctor_subscriptions').push({name,email,password:pwd,specialty:document.getElementById('subSpecialty').value.trim(),status:'pending',requestedAt:new Date().toISOString()});
             showToast("✅ تم الإرسال! انتظر التفعيل","success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value=''); setTimeout(backToLogin,1500);
         }
         function loadDoctorRequests() { if(!firebaseReady || !auth.currentUser) return; db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').on('value', snap=>{const c=document.getElementById('doctorRequests');c.innerHTML='';let n=0;snap.forEach(ch=>{n++;const v=ch.val();c.innerHTML+=`<div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between items-center"><div><b>${v.name}</b><br><span class="text-gray-500">${v.email}</span></div><div class="flex gap-1"><button onclick="activateDoc('${ch.key}')" class="px-2 py-1 bg-green-100 text-green-700 rounded">تفعيل</button><button onclick="rejectDoc('${ch.key}')" class="px-2 py-1 bg-red-100 text-red-700 rounded">رفض</button></div></div>`;});document.getElementById('pendingCount').innerText=n||'لا توجد طلبات';}); }
         function activateDoc(id){ if(auth.currentUser) db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>showToast("✅ تم التفعيل","success")); }
-        function rejectDoc(id){ if(auth.currentUser) db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>showToast("تم الرفض","info")); }        function loadActiveDoctors() { if(!firebaseReady || !auth.currentUser) return; db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').on('value', snap=>{const c=document.getElementById('activeDoctors');c.innerHTML='';if(!snap.exists()){c.innerHTML='<p class="text-xs text-gray-400 text-center">لا يوجد أطباء</p>';return;}snap.forEach(ch=>{const v=ch.val();c.innerHTML+=`<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`;});}); }
+        function rejectDoc(id){ if(auth.currentUser) db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>showToast("تم الرفض","info")); }
+        function loadActiveDoctors() { if(!firebaseReady || !auth.currentUser) return; db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').on('value', snap=>{const c=document.getElementById('activeDoctors');c.innerHTML='';if(!snap.exists()){c.innerHTML='<p class="text-xs text-gray-400 text-center">لا يوجد أطباء</p>';return;}snap.forEach(ch=>{const v=ch.val();c.innerHTML+=`<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`;});}); }
         function suspendDoc(id){ if(auth.currentUser) db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>showToast("⛔ تم الإيقاف","info")); }
         
         function checkAppointmentAlerts() {
@@ -529,15 +537,15 @@
             const dt=p.updatedAt||p.timestamp?new Date(p.updatedAt||p.timestamp).toLocaleString('ar-EG'):'-';
             document.getElementById('patientVisits').innerHTML=`<div class="p-2 bg-cyan-50 rounded-lg border text-xs"><span class="text-gray-500">📅 آخر تحديث: ${dt}</span></div>`;
             navTo('patient');
-        }
-        function updatePatient() {
+        }        function updatePatient() {
             const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value.trim();
             if(!id||!name) return showToast("الاسم مطلوب","error");
             const data={name,phone:document.getElementById('editPhone').value.trim(),birth:document.getElementById('editBirth').value,gender:document.getElementById('editGender').value,diag:document.getElementById('editDiag').value.trim(),tooth:document.getElementById('editTooth').value||null,updatedAt:new Date().toISOString(),updatedBy:currentUser?.id||'admin'};
             if(updateLocalDB(id,data)){ showToast("✅ تم التحديث","success"); navTo('list'); } else { showToast("❌ فشل التحديث","error"); }
         }
         function deletePatient() {
-            const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value||'المريض';            if(!id||!confirm(`حذف "${name}"؟`)) return;
+            const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value||'المريض';
+            if(!id||!confirm(`حذف "${name}"؟`)) return;
             deleteFromLocalDB(id); showToast("🗑️ تم الحذف","success"); navTo('list'); 
         }
         function saveNextAppointment() {
@@ -568,15 +576,8 @@
                 document.getElementById('newPayAmount').value=''; document.getElementById('newPayNote').value=''; showToast("✅ تم التسجيل","success");
             }
         }
-        
-        // ✅ إصلاح تاريخ اليوم ليعمل بالتوقيت المحلي بدقة
-        function loadTodayAppointments() { 
-            const d = new Date(); 
-            const today = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); 
-            const pts = getLocalDB(); 
-            renderTodayAppts(pts, today); 
-        }
-        function renderTodayAppts(pts, today) {
+        function loadTodayAppointments() { const d = new Date(); const today = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); const pts=getLocalDB(); renderTodayAppts(pts,today); }
+        function renderTodayAppts(pts,today) {
             const con=document.getElementById('todayAppointmentsList'), sec=document.getElementById('todayAppointmentsSection'); con.innerHTML='';
             const tm=pts.filter(p=>p.nextAppointment && p.nextAppointment.startsWith(today)).sort((a,b)=>(a.nextAppointment||'').localeCompare(b.nextAppointment||''));
             document.getElementById('todayCountBadge').innerText=tm.length;
@@ -585,8 +586,8 @@
         }
         function updateStats() {
             const today=new Date().toLocaleDateString('ar-EG');
-            const l=getLocalDB(); document.getElementById('statPatients').innerText=l.length; document.getElementById('statToday').innerText=l.filter(d=>d.date===today).length; document.getElementById('statDoctors').innerText='0'; 
-        }        document.addEventListener('DOMContentLoaded', () => { console.log("🦷 بَسْمَة AI جاهز مع حماية Firebase Auth!"); });
+            const l=getLocalDB(); document.getElementById('statPatients').innerText=l.length; document.getElementById('statToday').innerText=l.filter(d=>d.date===today).length; document.getElementById('statDoctors').innerText='0';         }
+        document.addEventListener('DOMContentLoaded', () => { console.log("🦷 بَسْمَة AI جاهز!"); });
     </script>
 </body>
 </html>
