@@ -272,7 +272,7 @@
         else { connBadge.className = 'conn-indicator conn-offline'; connBadge.innerText = '🔴 وضع محلي'; }
         
         let currentTooth = null, currentUser = null, patientsCache = [], aiApiKey = '';
-        let lastPendingCount = 0; // لمراقبة الطلبات الجديدة
+        let lastPendingCount = 0;
         let isDoctorListInitialized = false;
         
         const LOCAL_KEY = 'basma_patients';
@@ -492,8 +492,6 @@
             ['regName','regPhone','regBirth','regGender'].forEach(id => document.getElementById(id).value = '');
             updateStats(); if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
         }
-        
-        // ✅ إصلاح إرسال الاشتراك: إزالة شرط auth.currentUser لضمان العمل مع المفتاح الوهمي أو عدم اكتمال المصادقة
         function submitDoctorSubscription() {
             const name=document.getElementById('subName').value.trim(), email=document.getElementById('subEmail').value.trim(), pwd=document.getElementById('subPassword').value.trim();
             if(!name||!email||!pwd) return showToast("أكمل الحقول","error");
@@ -501,15 +499,17 @@
             showToast("✅ تم الإرسال! انتظر التفعيل","success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value=''); setTimeout(backToLogin,1500);
         }
         
-        // ✅ إصلاح مراقبة الطلبات: إزالة شرط auth.currentUser واستخدام currentUser المحلي، وإضافة تنبيه عند الوصول
+        // ✅ إصلاح جذري: إزالة شروط currentUser التي تمنع المدير من الاستماع، وإضافة مستمع للأخطاء
         function loadDoctorRequests() { 
-            if(!firebaseReady || !db || !currentUser) return; 
+            if(!firebaseReady || !db) return; 
             
-            // إلغاء المستمع السابق لمنع التكرار
-            db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').off('value');
+            // إيقاف أي مستمع سابق لضمان عدم التكرار
+            const requestsRef = db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending');
+            requestsRef.off('value');
             
-            db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').on('value', snap => {
+            requestsRef.on('value', snap => {
                 const c = document.getElementById('doctorRequests');
+                if(!c) return;
                 c.innerHTML = '';
                 let n = 0;
                 snap.forEach(ch => {
@@ -526,24 +526,31 @@
                 
                 document.getElementById('pendingCount').innerText = n || 'لا توجد طلبات';
                 
-                // إظهار تنبيه فقط إذا زاد العدد أثناء فتح التطبيق
+                // تنبيه عند وصول طلب جديد
                 if(isDoctorListInitialized && n > lastPendingCount) {
                     showToast("🔔 طلب اشتراك جديد وارد!", "info");
                     showBrowserNotification("بَسْمَة AI", "لديك طلب اشتراك طبيب جديد");
                 }
                 lastPendingCount = n;
                 isDoctorListInitialized = true;
-            });
+            }, err => {
+                console.error("Subscription listener error:", err);
+                if(err.code === 'PERMISSION_DENIED') {
+                    showToast("🚫 مرفوض: تأكد من قواعد قاعدة البيانات (Rules).", "error");
+                }            });
         }
 
         function activateDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>showToast("✅ تم التفعيل","success")); }
-        function rejectDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>showToast("تم الرفض","info")); }        
+        function rejectDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>showToast("تم الرفض","info")); }
+        
         // ✅ إصلاح مراقبة الأطباء النشطين
         function loadActiveDoctors() { 
-            if(!firebaseReady || !db || !currentUser) return; 
-            db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').off('value');
-            db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').on('value', snap => {
+            if(!firebaseReady || !db) return; 
+            const activeRef = db.ref('doctor_subscriptions').orderByChild('status').equalTo('active');
+            activeRef.off('value');
+            activeRef.on('value', snap => {
                 const c = document.getElementById('activeDoctors');
+                if(!c) return;
                 c.innerHTML = '';
                 if(!snap.exists()){
                     c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء</p>';
@@ -579,14 +586,14 @@
             document.getElementById('noRecords').classList.toggle('d-none',v>0);
         }
         
-        // ✅ إصلاح تحميل البيانات: إزالة شرط auth.currentUser لضمان المزامنة
-        function loadData() { 
+        // ✅ إصلاح تحميل البيانات: إزالة شرط currentUser        function loadData() { 
             renderPatients(getLocalDB(),'local'); 
             if(firebaseReady && db) { 
                 db.ref('patients').orderByChild('timestamp').off('value');
                 db.ref('patients').orderByChild('timestamp').on('value', snap=>{
                     patientsCache=[];
-                    snap.forEach(ch=>patientsCache.push({firebaseId:ch.key,...ch.val()}));                }); 
+                    snap.forEach(ch=>patientsCache.push({firebaseId:ch.key,...ch.val()}));
+                }); 
             } 
         }
         
@@ -628,14 +635,14 @@
             updateLocalDB(id,data); showToast("✅ تم الحفظ","success"); checkAppointmentAlerts(); 
         }
         function updateTotalCost() {
-            const id=document.getElementById('editPatientId').value, cost=parseFloat(document.getElementById('editTotalCost').value)||0; if(!id) return;
-            document.getElementById('payTotal').innerText=cost; document.getElementById('payRemain').innerText=cost-(parseFloat(document.getElementById('payPaid').innerText)||0);
+            const id=document.getElementById('editPatientId').value, cost=parseFloat(document.getElementById('editTotalCost').value)||0; if(!id) return;            document.getElementById('payTotal').innerText=cost; document.getElementById('payRemain').innerText=cost-(parseFloat(document.getElementById('payPaid').innerText)||0);
             const data={totalCost:cost,updatedAt:new Date().toISOString()};
             updateLocalDB(id,data); showToast("✅ تم تحديث التكلفة","success");
         }
         function renderPayments(payments) {
             const c=document.getElementById('paymentHistory'); c.innerHTML='';
-            if(!payments.length) { c.innerHTML='<p class="text-xs text-gray-400 text-center">لا توجد مدفوعات</p>'; return; }            payments.slice().reverse().forEach(p=>{c.innerHTML+=`<div class="p-2 bg-white rounded border flex justify-between items-center text-xs"><span class="font-bold text-green-600">💵 ${p.amount} ل.س</span><span class="text-gray-600">${p.note||'-'}</span><span class="text-gray-400">${p.date}</span></div>`;});
+            if(!payments.length) { c.innerHTML='<p class="text-xs text-gray-400 text-center">لا توجد مدفوعات</p>'; return; }
+            payments.slice().reverse().forEach(p=>{c.innerHTML+=`<div class="p-2 bg-white rounded border flex justify-between items-center text-xs"><span class="font-bold text-green-600">💵 ${p.amount} ل.س</span><span class="text-gray-600">${p.note||'-'}</span><span class="text-gray-400">${p.date}</span></div>`;});
         }
         function addPayment() {
             const id=document.getElementById('editPatientId').value, amount=parseFloat(document.getElementById('newPayAmount').value), note=document.getElementById('newPayNote').value.trim();
