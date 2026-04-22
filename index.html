@@ -368,7 +368,6 @@
             }
         }
 
-        // ✅ زر فحص المفتاح المباشر
         async function testApiKey() {
             const key = document.getElementById('aiApiKey').value.trim();
             if(!key) return showToast("❌ أدخل المفتاح أولاً", "error");
@@ -389,10 +388,9 @@
             } catch(e) { showToast(e.message, "error"); }
         }
         
-        // ✅ الذكاء الاصطناعي المُحصّن مع رسائل خطأ دقيقة
-        async function runAdvancedAI_Live() {            const input = document.getElementById('aiInput').value.trim();
-            const outputBox = document.getElementById('aiOutputBox');
-            const resultDiv = document.getElementById('aiResult');
+        async function runAdvancedAI_Live() {
+            const input = document.getElementById('aiInput').value.trim();
+            const outputBox = document.getElementById('aiOutputBox');            const resultDiv = document.getElementById('aiResult');
             if(!input) return showToast("❌ اكتب الأعراض أولاً", "error");
             outputBox.classList.remove('d-none');
             resultDiv.innerHTML = '<div class="text-center py-4"><i class="fas fa-brain fa-pulse text-purple-600 text-2xl mb-2"></i><br><span class="text-xs text-gray-500 typing-effect">جاري استدعاء الذكاء الاصطناعي الطبي</span></div>';
@@ -403,7 +401,6 @@
                 
                 let response, text, sourceName;
                 
-                // المحاولة 1: Hugging Face
                 if(aiApiKey && aiApiKey.length > 10) {
                     try {
                         const model = "HuggingFaceH4/zephyr-7b-beta";
@@ -426,12 +423,11 @@
                         sourceName = "Hugging Face (مفتاحك الخاص)";
                     } catch(e) {
                         console.warn("Hugging Face failed, trying backup...", e);
-                        if(e.message.includes("المفتاح") || e.message.includes("النموذج")) throw e; // اظهر الخطأ الحقيقي
-                        throw e; // انتقل للمحاولة التالية
+                        if(e.message.includes("المفتاح") || e.message.includes("النموذج")) throw e;
+                        throw e;
                     }
                 }
                 
-                // المحاولة 2: الخدمة المجانية
                 if(!text) {
                     const freeUrl = `https://text.pollinations.ai/${encodeURIComponent(systemPrompt + " " + userPrompt)}?seed=${Math.floor(Math.random()*1000)}&model=openai`;
                     response = await fetch(freeUrl);
@@ -439,13 +435,12 @@
                     text = await response.text();
                     sourceName = "الذكاء الاصطناعي المجاني";
                 }
-                                resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</div>
+                
+                resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</div>
                 <div class="text-[10px] text-gray-400 mt-2 text-center">* تم التحليل بواسطة ${sourceName}. راجع التشخيص السريري.</div>`;
                 showToast("✅ تم التحليل الذكي بنجاح", "success");
-                
-            } catch (error) {
+                            } catch (error) {
                 console.error("AI Error:", error);
-                // المحاولة 3: الذكاء المحلي كحل أخير
                 const localAnalysis = `<div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-sm">
                     <h4>🦷 تحليل محلي سريع</h4>
                     <ul>
@@ -488,22 +483,65 @@
             const name = document.getElementById('regName').value.trim(), phone = document.getElementById('regPhone').value.trim();
             if(!name || !phone) return showToast("أدخل الاسم والهاتف", "error");
             const pid = 'local_' + Date.now();
-            const data = { id: pid, name, phone, birth: document.getElementById('regBirth').value, gender: document.getElementById('regGender').value, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), createdAt: new Date().toISOString(), diag: 'تم التسجيل الأولي', totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '', addedBy: currentUser?.id || 'system' };            addToLocalDB(data);
+            const data = { id: pid, name, phone, birth: document.getElementById('regBirth').value, gender: document.getElementById('regGender').value, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), createdAt: new Date().toISOString(), diag: 'تم التسجيل الأولي', totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '', addedBy: currentUser?.id || 'system' };
+            addToLocalDB(data);
             if(firebaseReady && db && auth.currentUser) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync:", err));
             showToast("✅ تم تسجيل المريض بنجاح", "success");
             ['regName','regPhone','regBirth','regGender'].forEach(id => document.getElementById(id).value = '');
-            updateStats(); if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
-        }
+            updateStats(); if(!document.getElementById('page-list').classList.contains('d-none')) loadData();        }
         function submitDoctorSubscription() {
             const name=document.getElementById('subName').value.trim(), email=document.getElementById('subEmail').value.trim(), pwd=document.getElementById('subPassword').value.trim();
             if(!name||!email||!pwd) return showToast("أكمل الحقول","error");
             if(firebaseReady && auth.currentUser) db.ref('doctor_subscriptions').push({name,email,password:pwd,specialty:document.getElementById('subSpecialty').value.trim(),status:'pending',requestedAt:new Date().toISOString()});
             showToast("✅ تم الإرسال! انتظر التفعيل","success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value=''); setTimeout(backToLogin,1500);
         }
-        function loadDoctorRequests() { if(!firebaseReady || !auth.currentUser) return; db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').on('value', snap=>{const c=document.getElementById('doctorRequests');c.innerHTML='';let n=0;snap.forEach(ch=>{n++;const v=ch.val();c.innerHTML+=`<div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between items-center"><div><b>${v.name}</b><br><span class="text-gray-500">${v.email}</span></div><div class="flex gap-1"><button onclick="activateDoc('${ch.key}')" class="px-2 py-1 bg-green-100 text-green-700 rounded">تفعيل</button><button onclick="rejectDoc('${ch.key}')" class="px-2 py-1 bg-red-100 text-red-700 rounded">رفض</button></div></div>`;});document.getElementById('pendingCount').innerText=n||'لا توجد طلبات';}); }
+        
+        // ✅ إصلاح جذري: مراقبة فورية لقاعدة البيانات (Real-time Listener)
+        // هذا يضمن ظهور الطلبات من أي جهاز فوراً للمدير دون تحديث الصفحة
+        function loadDoctorRequests() { 
+            if(!firebaseReady || !auth.currentUser) return; 
+            // .on('value') تستمع لأي تغيير في قاعدة البيانات وتحدث القائمة تلقائياً
+            db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').on('value', snap => {
+                const c = document.getElementById('doctorRequests');
+                c.innerHTML = '';
+                let n = 0;
+                snap.forEach(ch => {
+                    n++;
+                    const v = ch.val();
+                    c.innerHTML += `<div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between items-center">
+                        <div><b>${v.name}</b><br><span class="text-gray-500">${v.email}</span></div>
+                        <div class="flex gap-1">
+                            <button onclick="activateDoc('${ch.key}')" class="px-2 py-1 bg-green-100 text-green-700 rounded">تفعيل</button>
+                            <button onclick="rejectDoc('${ch.key}')" class="px-2 py-1 bg-red-100 text-red-700 rounded">رفض</button>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('pendingCount').innerText = n || 'لا توجد طلبات';
+            });
+        }
+
         function activateDoc(id){ if(auth.currentUser) db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>showToast("✅ تم التفعيل","success")); }
         function rejectDoc(id){ if(auth.currentUser) db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>showToast("تم الرفض","info")); }
-        function loadActiveDoctors() { if(!firebaseReady || !auth.currentUser) return; db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').on('value', snap=>{const c=document.getElementById('activeDoctors');c.innerHTML='';if(!snap.exists()){c.innerHTML='<p class="text-xs text-gray-400 text-center">لا يوجد أطباء</p>';return;}snap.forEach(ch=>{const v=ch.val();c.innerHTML+=`<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`;});}); }
+        
+        // نفس المبدأ ينطبق على الأطباء النشطين
+        function loadActiveDoctors() { 
+            if(!firebaseReady || !auth.currentUser) return; 
+            db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').on('value', snap => {
+                const c = document.getElementById('activeDoctors');
+                c.innerHTML = '';
+                if(!snap.exists()){
+                    c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء</p>';
+                    return;
+                }
+                snap.forEach(ch => {
+                    const v = ch.val();
+                    c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between">
+                        <span>👨‍⚕️ <b>${v.name}</b></span>
+                        <button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button>                    </div>`;
+                });
+            });
+        }
+
         function suspendDoc(id){ if(auth.currentUser) db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>showToast("⛔ تم الإيقاف","info")); }
         
         function checkAppointmentAlerts() {
@@ -537,7 +575,8 @@
         function openPatientEdit(pid, source) { const p=getLocalDB().find(x=>x.id===pid||x.firebaseId===pid); if(p) loadPatientToForm(p,'local'); else showToast("❌ غير موجود","error"); }
         function loadPatientToForm(p, src) {
             document.getElementById('editPatientId').value=p.firebaseId||p.id||''; document.getElementById('editPatientSource').value=src;
-            document.getElementById('editName').value=p.name||''; document.getElementById('editPhone').value=p.phone||''; document.getElementById('editBirth').value=p.birth||''; document.getElementById('editGender').value=p.gender||'';            document.getElementById('editDiag').value=p.diag||''; document.getElementById('editTooth').value=p.tooth||''; document.getElementById('editNextAppt').value=p.nextAppointment||'';
+            document.getElementById('editName').value=p.name||''; document.getElementById('editPhone').value=p.phone||''; document.getElementById('editBirth').value=p.birth||''; document.getElementById('editGender').value=p.gender||'';
+            document.getElementById('editDiag').value=p.diag||''; document.getElementById('editTooth').value=p.tooth||''; document.getElementById('editNextAppt').value=p.nextAppointment||'';
             document.getElementById('editTotalCost').value=p.totalCost||''; document.getElementById('payTotal').innerText=p.totalCost||0; document.getElementById('payPaid').innerText=p.paidAmount||0; document.getElementById('payRemain').innerText=(p.totalCost||0)-(p.paidAmount||0);
             renderPayments(p.payments||[]);
             const dt=p.updatedAt||p.timestamp?new Date(p.updatedAt||p.timestamp).toLocaleString('ar-EG'):'-';
@@ -547,8 +586,7 @@
         function updatePatient() {
             const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value.trim();
             if(!id||!name) return showToast("الاسم مطلوب","error");
-            const data={name,phone:document.getElementById('editPhone').value.trim(),birth:document.getElementById('editBirth').value,gender:document.getElementById('editGender').value,diag:document.getElementById('editDiag').value.trim(),tooth:document.getElementById('editTooth').value||null,updatedAt:new Date().toISOString(),updatedBy:currentUser?.id||'admin'};
-            if(updateLocalDB(id,data)){ showToast("✅ تم التحديث","success"); navTo('list'); } else { showToast("❌ فشل التحديث","error"); }
+            const data={name,phone:document.getElementById('editPhone').value.trim(),birth:document.getElementById('editBirth').value,gender:document.getElementById('editGender').value,diag:document.getElementById('editDiag').value.trim(),tooth:document.getElementById('editTooth').value||null,updatedAt:new Date().toISOString(),updatedBy:currentUser?.id||'admin'};            if(updateLocalDB(id,data)){ showToast("✅ تم التحديث","success"); navTo('list'); } else { showToast("❌ فشل التحديث","error"); }
         }
         function deletePatient() {
             const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value||'المريض';
@@ -586,7 +624,8 @@
         function loadTodayAppointments() { const d = new Date(); const today = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); const pts=getLocalDB(); renderTodayAppts(pts,today); }
         function renderTodayAppts(pts,today) {
             const con=document.getElementById('todayAppointmentsList'), sec=document.getElementById('todayAppointmentsSection'); con.innerHTML='';
-            const tm=pts.filter(p=>p.nextAppointment && p.nextAppointment.startsWith(today)).sort((a,b)=>(a.nextAppointment||'').localeCompare(b.nextAppointment||''));            document.getElementById('todayCountBadge').innerText=tm.length;
+            const tm=pts.filter(p=>p.nextAppointment && p.nextAppointment.startsWith(today)).sort((a,b)=>(a.nextAppointment||'').localeCompare(b.nextAppointment||''));
+            document.getElementById('todayCountBadge').innerText=tm.length;
             if(tm.length===0){sec.classList.add('d-none');return;} sec.classList.remove('d-none');
             tm.forEach(p=>{const t=p.nextAppointment.includes('T')?p.nextAppointment.split('T')[1].substring(0,5):'-'; con.innerHTML+=`<div class="p-2 bg-white rounded-lg border flex justify-between items-center hover:bg-blue-50 cursor-pointer" onclick="openPatientEdit('${p.firebaseId||p.id}','local')"><div><span class="font-bold text-sm">👤 ${p.name}</span><div class="text-[10px] text-gray-500">🕒 ${t}</div></div><button onclick="event.stopPropagation();openWhatsApp('${p.phone}','${p.name}','موعدك اليوم ${t}')" class="wa-btn-patient"><i class="fab fa-whatsapp"></i></button></div>`;});
         }
@@ -596,5 +635,4 @@
         }
         document.addEventListener('DOMContentLoaded', () => { console.log("🦷 بَسْمَة AI جاهز!"); });
     </script>
-</body>
-</html>
+</body></html>
