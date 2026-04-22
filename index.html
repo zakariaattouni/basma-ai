@@ -6,6 +6,7 @@
     <title>بَسْمَة AI - المساعد السني الذكي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
@@ -46,8 +47,8 @@
         .wa-pulse { animation: pulse-wa 2s infinite; }
         .wa-pulse:hover { animation: none; }
         .conn-indicator { font-size: 9px; padding: 2px 6px; border-radius: 10px; }
-        .conn-online { background: #dcfce7; color: #166534; }
-        .conn-offline { background: #fee2e2; color: #991b1b; }        .cursor-pointer { cursor: pointer; }
+        .conn-online { background: #dcfce7; color: #166534; }        .conn-offline { background: #fee2e2; color: #991b1b; }
+        .cursor-pointer { cursor: pointer; }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .wa-btn-patient { background: #25D366; color: white; border: none; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: 0.2s; }
         .wa-btn-patient:hover { background: #128C7E; transform: scale(1.1); }
@@ -62,6 +63,7 @@
 </head>
 <body class="pb-32">
     <div id="toastContainer"></div>
+    <!-- شاشة الدخول -->
     <div id="loginPage" class="fixed inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 z-[10000] flex items-center justify-center p-6">
         <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm text-center">
             <div class="app-logo mx-auto mb-3"><i class="fas fa-tooth"></i></div>
@@ -83,6 +85,8 @@
             </div>
         </div>
     </div>
+
+    <!-- المحتوى الرئيسي -->
     <div id="mainContent" class="d-none">
         <header class="app-header">
             <div class="app-logo"><i class="fas fa-tooth"></i></div>
@@ -92,11 +96,11 @@
         <div id="userBar" class="bg-blue-50 px-4 py-2 text-center text-xs text-blue-700 d-none">
             <i class="fas fa-user-circle ml-1"></i> <span id="userTypeDisplay">مدير النظام</span>
             <button type="button" onclick="logout()" class="mr-3 text-red-500 hover:text-red-700"><i class="fas fa-sign-out-alt ml-1"></i>خروج</button>
-        </div>
-        <main class="p-4 max-w-md mx-auto">
+        </div>        <main class="p-4 max-w-md mx-auto">
             <div id="page-home" class="space-y-3">
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 rounded-2xl shadow">
-                    <h2 class="font-bold mb-1">👋 لوحة التحكم</h2>                    <p class="text-blue-100 text-xs">اختر القسم للبدء</p>
+                    <h2 class="font-bold mb-1">👋 لوحة التحكم</h2>
+                    <p class="text-blue-100 text-xs">اختر القسم للبدء</p>
                 </div>
                 <div id="todayAppointmentsSection" class="section-card border-indigo-200 bg-gradient-to-br from-indigo-50 to-blue-50 d-none">
                     <div class="flex justify-between items-center mb-2">
@@ -141,11 +145,11 @@
                     <div class="grid grid-cols-3 gap-2 text-center">
                         <div class="bg-blue-50 p-2 rounded-lg"><div class="font-bold text-blue-600" id="statPatients">0</div><div class="text-[10px] text-gray-500">مرضى</div></div>
                         <div class="bg-green-50 p-2 rounded-lg"><div class="font-bold text-green-600" id="statToday">0</div><div class="text-[10px] text-gray-500">اليوم</div></div>
-                        <div class="bg-amber-50 p-2 rounded-lg"><div class="font-bold text-amber-600" id="statDoctors">0</div><div class="text-[10px] text-gray-500">أطباء</div></div>
-                    </div>
+                        <div class="bg-amber-50 p-2 rounded-lg"><div class="font-bold text-amber-600" id="statDoctors">0</div><div class="text-[10px] text-gray-500">أطباء</div></div>                    </div>
                 </div>
                 <div id="alertSection" class="d-none">
-                    <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">                        <div class="flex items-center gap-2 mb-2">
+                    <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">
+                        <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-bell text-amber-600"></i>
                             <h3 class="font-bold text-sm">تنبيهات المواعيد</h3>
                             <span class="status-badge status-urgent ml-auto" id="alertCount">0</span>
@@ -154,6 +158,7 @@
                     </div>
                 </div>
             </div>
+            <!-- باقي الصفحات -->
             <div id="page-add" class="d-none space-y-3">
                 <div class="section-card">
                     <h2 class="font-bold text-sm mb-3"><i class="fas fa-plus-circle text-blue-500 ml-1"></i> فحص جديد</h2>
@@ -189,12 +194,12 @@
                     <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
                     <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-3 hover:bg-gray-300 transition">← العودة لتسجيل الدخول</button>
                 </div>
-            </div>
-            <div id="page-ai" class="d-none space-y-3">
+            </div>            <div id="page-ai" class="d-none space-y-3">
                 <div class="section-card border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
                     <div class="flex items-center gap-2 mb-3"><div class="bg-purple-100 p-2 rounded-lg"><i class="fas fa-robot text-purple-600"></i></div><h2 class="font-bold text-sm">🧠 المساعد الذكي السريري (Live AI)</h2></div>
                     <div class="bg-white p-3 rounded-xl border border-purple-200 mb-3 shadow-sm">
-                        <label class="text-xs text-gray-600 font-medium block mb-1">📝 الأعراض والعلامات السريرية</label>                        <textarea id="aiInput" placeholder="مثال: ألم نابض في السن 36 يزداد ليلاً، حساسية للبارد..." class="w-full p-2 bg-gray-50 border rounded-lg outline-none focus:border-purple-400 resize-none text-sm" rows="4"></textarea>
+                        <label class="text-xs text-gray-600 font-medium block mb-1">📝 الأعراض والعلامات السريرية</label>
+                        <textarea id="aiInput" placeholder="مثال: ألم نابض في السن 36 يزداد ليلاً، حساسية للبارد..." class="w-full p-2 bg-gray-50 border rounded-lg outline-none focus:border-purple-400 resize-none text-sm" rows="4"></textarea>
                         <button onclick="runAdvancedAI_Live()" class="mt-2 w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-2 rounded-lg text-sm hover:opacity-90 transition"><i class="fas fa-magic ml-1"></i> تحليل بالحالة الحقيقية (AI)</button>
                     </div>
                     <div id="aiOutputBox" class="d-none bg-white p-3 rounded-xl border-2 border-purple-300 shadow-inner">
@@ -238,12 +243,12 @@
                 <div class="section-card"><h3 class="font-bold text-xs mb-2"><i class="fas fa-history text-gray-500 ml-1"></i> آخر تحديث</h3><div id="patientVisits" class="space-y-2 text-sm"><div class="p-2 bg-gray-50 rounded-lg border text-xs"><span class="text-gray-500">سيظهر هنا تاريخ آخر تعديل للبيانات</span></div></div></div>
             </div>
         </main>
-        <div class="copyright-footer">
-            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
+        <div class="copyright-footer">            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
         </div>
         <footer class="main-footer">
             <button type="button" onclick="navTo('home')" id="btn-home" class="nav-btn active"><i class="fas fa-home"></i><span>الرئيسية</span></button>
-            <button type="button" onclick="navTo('add')" id="btn-add" class="nav-btn"><i class="fas fa-plus-circle"></i><span>فحص</span></button>            <button type="button" onclick="navTo('ai')" id="btn-ai" class="nav-btn"><i class="fas fa-robot"></i><span>AI</span></button>
+            <button type="button" onclick="navTo('add')" id="btn-add" class="nav-btn"><i class="fas fa-plus-circle"></i><span>فحص</span></button>
+            <button type="button" onclick="navTo('ai')" id="btn-ai" class="nav-btn"><i class="fas fa-robot"></i><span>AI</span></button>
             <button type="button" onclick="navTo('list')" id="btn-list" class="nav-btn"><i class="fas fa-users"></i><span>المرضى</span></button>
         </footer>
     </div>
@@ -287,12 +292,12 @@
         function openSubscribe() { document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); navTo('subscribe'); }
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
         
-        function handleAdminLogin() {
-            const pwd = document.getElementById('adminPassword').value.trim();
+        function handleAdminLogin() {            const pwd = document.getElementById('adminPassword').value.trim();
             if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400); }
             else showToast("❌ كلمة المرور غير صحيحة", "error");
         }
-        function handleDoctorLogin() {            try {
+        function handleDoctorLogin() {
+            try {
                 const email = document.getElementById('doctorEmail').value.trim(), pwd = document.getElementById('doctorPassword').value.trim();
                 if(!email || !pwd) return showToast("أدخل البريد وكلمة المرور", "error");
                 if(!firebaseReady) return showToast("⚠️ دخول الأطباء يتطلب اتصالاً بـ Firebase", "info");
@@ -336,12 +341,12 @@
             t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':type==='warning'?'triangle-exclamation':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
             c.appendChild(t); setTimeout(()=> { t.style.opacity='0'; setTimeout(()=>t.remove(), 300); }, 3000);
         }
-        function showBrowserNotification(title, body) { 
-            if('Notification' in window && Notification.permission === 'granted') {
+        function showBrowserNotification(title, body) {             if('Notification' in window && Notification.permission === 'granted') {
                 new Notification(title, { body, icon: '🦷' });
             }
         }
-                function navTo(page) {
+        
+        function navTo(page) {
             document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('d-none'));
             const target = document.getElementById(`page-${page}`); if(target) target.classList.remove('d-none');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -360,46 +365,98 @@
             });
         }
         
+        // ✅ دوال الذكاء الاصطناعي (محفوظة وجاهزة)
         function saveApiKey() {
             const key = document.getElementById('aiApiKey').value.trim();
-            if(key) { localStorage.setItem(API_KEY, key); aiApiKey = key; showToast("✅ تم حفظ المفتاح", "success"); } 
-            else { localStorage.removeItem(API_KEY); aiApiKey = ''; showToast("ℹ️ تم المسح", "info"); }
+            if(key) {
+                localStorage.setItem(API_KEY, key);
+                aiApiKey = key; // تحديث فوري للمتغير العام
+                showToast("✅ تم حفظ مفتاح Hugging Face بنجاح", "success");
+            } else {
+                localStorage.removeItem(API_KEY);
+                aiApiKey = '';
+                showToast("ℹ️ تم المسح (سيتم استخدام المجاني)", "info");
+            }
         }
+
         async function testApiKey() {
             const key = document.getElementById('aiApiKey').value.trim();
             if(!key) return showToast("❌ أدخل المفتاح أولاً", "error");
-            showToast("🔄 جاري الفحص...", "info");
+            showToast("🔄 جاري فحص المفتاح...", "info");
             try {
-                const res = await fetch("https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta", { headers: { "Authorization": `Bearer ${key}` }, body: JSON.stringify({ inputs: "test", parameters: { max_new_tokens: 5 } }), method: "POST" });
-                if(res.ok) { localStorage.setItem(API_KEY, key); aiApiKey = key; showToast("✅ المفتاح صالح", "success"); } else throw new Error("المفتاح غير صحيح");
+                const res = await fetch("https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta", {
+                    headers: { "Authorization": `Bearer ${key}` },
+                    body: JSON.stringify({ inputs: "test", parameters: { max_new_tokens: 5 } }),
+                    method: "POST"
+                });
+                if(res.status === 401) throw new Error("المفتاح غير صحيح أو منتهي");
+                if(res.status === 503) throw new Error("المفتاح صحيح، لكن النموذج قيد التحميل (انتظر دقيقة)");                if(res.ok) {
+                    localStorage.setItem(API_KEY, key);
+                    aiApiKey = key;
+                    showToast("✅ المفتاح صالح وجاهز للاستخدام!", "success");
+                } else throw new Error(`خطأ غير متوقع: ${res.status}`);
             } catch(e) { showToast(e.message, "error"); }
         }
-        
+
         async function runAdvancedAI_Live() {
             const input = document.getElementById('aiInput').value.trim();
-            const outputBox = document.getElementById('aiOutputBox'), resultDiv = document.getElementById('aiResult');
+            const outputBox = document.getElementById('aiOutputBox');
+            const resultDiv = document.getElementById('aiResult');
             if(!input) return showToast("❌ اكتب الأعراض أولاً", "error");
+            
             outputBox.classList.remove('d-none');
             resultDiv.innerHTML = '<div class="text-center py-4"><i class="fas fa-brain fa-pulse text-purple-600 text-2xl mb-2"></i><br><span class="text-xs text-gray-500 typing-effect">جاري التحليل...</span></div>';
+            
             try {
+                // قراءة آمنة للمفتاح
+                let currentKey = aiApiKey || localStorage.getItem(API_KEY) || '';
                 const prompt = `أنت طبيب أسنان خبير. حلل: "${input}". أعطي: 1. التشخيص 2. الخطة 3. نصيحة. استخدم HTML بسيط.`;
+                
                 let response, text, sourceName;
-                if(aiApiKey && aiApiKey.length > 10) {
+                
+                if(currentKey && currentKey.length > 10) {
+                    // ✅ نفس الإعداد الذي نجح سابقاً مع Hugging Face
                     const url = `https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta`;
-                    response = await fetch(url, { method: 'POST', headers: { 'Authorization': `Bearer ${aiApiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ inputs: prompt, parameters: { max_new_tokens: 500 } }) });
-                    if(!response.ok) throw new Error(`خطأ: ${response.status}`);
-                    const data = await response.json(); text = data[0]?.generated_text || JSON.stringify(data); sourceName = "Hugging Face";
+                    response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${currentKey}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ inputs: prompt, parameters: { max_new_tokens: 500, return_full_text: false } })
+                    });
+                    
+                    if(response.status === 401) throw new Error("❌ المفتاح غير صحيح أو منتهي الصلاحية");
+                    if(response.status === 503) throw new Error("⏳ النموذج قيد التحميل... انتظر دقيقة وأعد المحاولة");
+                    if(!response.ok) throw new Error(`خطأ في الخادم: ${response.status}`);
+                    
+                    const data = await response.json();
+                    text = data[0]?.generated_text || JSON.stringify(data);
+                    sourceName = "Hugging Face (مفتاحك الخاص)";
                 } else {
-                    response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai`);                    if(!response.ok) throw new Error(`فشل: ${response.status}`);
-                    text = await response.text(); sourceName = "مجاني";
+                    // العودة التلقائية للخدمة المجانية عند عدم وجود مفتاح
+                    const freeUrl = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai`;
+                    response = await fetch(freeUrl);
+                    if(!response.ok) throw new Error(`فشل الخادم المجاني: ${response.status}`);
+                    text = await response.text();
+                    sourceName = "الذكاء الاصطناعي المجاني";
                 }
-                resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</div><div class="text-[10px] text-gray-400 mt-2 text-center">* مصدر: ${sourceName}</div>`;
-                showToast("✅ تم التحليل", "success");
+                
+                resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</div>                <div class="text-[10px] text-gray-400 mt-2 text-center">* تم التحليل بواسطة ${sourceName}. راجع التشخيص السريري.</div>`;
+                showToast("✅ تم التحليل الذكي بنجاح", "success");
+                
             } catch (error) {
-                resultDiv.innerHTML = `<div class="bg-amber-50 p-3 rounded-lg border text-sm">⚠️ ${error.message}. تم عرض تحليل بديل.</div>`;
-                showToast("⚠️ تحليل بديل", "warning");
+                console.error("AI Error:", error);
+                resultDiv.innerHTML = `<div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-sm">
+                    <h4>🦷 تحليل محلي سريع</h4>
+                    <ul>
+                        <li>📋 <b>التشخيص المبدئي:</b> الحالة تحتاج فحصاً سريرياً مباشراً وأشعة سينية.</li>
+                        <li>💡 <b>الخطة:</b> فحص العلامات الحيوية، اختبار حساسية العصب، أشعة بيريابيكال.</li>
+                        <li>⚠️ <b>تنبيه:</b> لا تؤجل زيارة العيادة إذا كان الألم شديداً أو مصحوباً بتورم.</li>
+                    </ul>
+                </div>
+                <div class="text-[10px] text-gray-400 mt-2 text-center">⚠️ ${error.message || 'فشل الاتصال بالخوادم الذكية'}. تم عرض تحليل محلي بديل.</div>`;
+                showToast("⚠️ تم استخدام التحليل المحلي البديل", "warning");
             }
         }
+        
         function clearAI() { document.getElementById('aiInput').value=''; document.getElementById('aiOutputBox').classList.add('d-none'); document.getElementById('aiResult').innerHTML=''; }
         function runMagicAI() {
             const diag = document.getElementById('pDiag').value.trim(), b=document.getElementById('aiBox');
@@ -431,15 +488,15 @@
             ['regName','regPhone','regBirth','regGender'].forEach(id => document.getElementById(id).value = '');
             updateStats(); if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
         }
-        function submitDoctorSubscription() {
-            const name=document.getElementById('subName').value.trim(), email=document.getElementById('subEmail').value.trim(), pwd=document.getElementById('subPassword').value.trim();
+        function submitDoctorSubscription() {            const name=document.getElementById('subName').value.trim(), email=document.getElementById('subEmail').value.trim(), pwd=document.getElementById('subPassword').value.trim();
             if(!name||!email||!pwd) return showToast("أكمل الحقول","error");
             if(firebaseReady && db) db.ref('doctor_subscriptions').push({name,email,password:pwd,specialty:document.getElementById('subSpecialty').value.trim(),status:'pending',requestedAt:new Date().toISOString()});
             showToast("✅ تم الإرسال! انتظر التفعيل","success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value=''); setTimeout(backToLogin,1500);
         }
         
         // ✅ نظام الفحص التلقائي الذكي (يعمل بدون تعديل قواعد فايربيس)
-        function startSubscriptionPolling() {            if (pollingInterval) clearInterval(pollingInterval);
+        function startSubscriptionPolling() {
+            if (pollingInterval) clearInterval(pollingInterval);
             if (!firebaseReady || !db) return;
 
             // فحص فوري عند الدخول
@@ -480,15 +537,15 @@
             c.innerHTML = ''; let n = 0;
             snap.forEach(ch => {
                 n++; const v = ch.val();
-                c.innerHTML += `<div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between items-center">
-                    <div><b>${v.name}</b><br><span class="text-gray-500">${v.email}</span></div>
+                c.innerHTML += `<div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between items-center">                    <div><b>${v.name}</b><br><span class="text-gray-500">${v.email}</span></div>
                     <div class="flex gap-1">
                         <button onclick="activateDoc('${ch.key}')" class="px-2 py-1 bg-green-100 text-green-700 rounded">تفعيل</button>
                         <button onclick="rejectDoc('${ch.key}')" class="px-2 py-1 bg-red-100 text-red-700 rounded">رفض</button>
                     </div>
                 </div>`;
             });
-            document.getElementById('pendingCount').innerText = n || 'لا توجد طلبات';        }
+            document.getElementById('pendingCount').innerText = n || 'لا توجد طلبات';
+        }
 
         function activateDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>{ showToast("✅ تم التفعيل","success"); fetchPendingRequests(); }); }
         function rejectDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>{ showToast("تم الرفض","info"); fetchPendingRequests(); }); }
@@ -529,15 +586,15 @@
         }
         function openPatientEdit(pid, source) { const p=getLocalDB().find(x=>x.id===pid||x.firebaseId===pid); if(p) loadPatientToForm(p,'local'); else showToast("❌ غير موجود","error"); }
         function loadPatientToForm(p, src) {
-            document.getElementById('editPatientId').value=p.firebaseId||p.id||''; document.getElementById('editPatientSource').value=src;
-            document.getElementById('editName').value=p.name||''; document.getElementById('editPhone').value=p.phone||''; document.getElementById('editBirth').value=p.birth||''; document.getElementById('editGender').value=p.gender||'';
+            document.getElementById('editPatientId').value=p.firebaseId||p.id||''; document.getElementById('editPatientSource').value=src;            document.getElementById('editName').value=p.name||''; document.getElementById('editPhone').value=p.phone||''; document.getElementById('editBirth').value=p.birth||''; document.getElementById('editGender').value=p.gender||'';
             document.getElementById('editDiag').value=p.diag||''; document.getElementById('editTooth').value=p.tooth||''; document.getElementById('editNextAppt').value=p.nextAppointment||'';
             document.getElementById('editTotalCost').value=p.totalCost||''; document.getElementById('payTotal').innerText=p.totalCost||0; document.getElementById('payPaid').innerText=p.paidAmount||0; document.getElementById('payRemain').innerText=(p.totalCost||0)-(p.paidAmount||0);
             renderPayments(p.payments||[]);
             const dt=p.updatedAt||p.timestamp?new Date(p.updatedAt||p.timestamp).toLocaleString('ar-EG'):'-';
             document.getElementById('patientVisits').innerHTML=`<div class="p-2 bg-cyan-50 rounded-lg border text-xs"><span class="text-gray-500">📅 آخر تحديث: ${dt}</span></div>`;
             navTo('patient');
-        }        function updatePatient() { const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value.trim(); if(!id||!name) return showToast("الاسم مطلوب","error"); const data={name,phone:document.getElementById('editPhone').value.trim(),birth:document.getElementById('editBirth').value,gender:document.getElementById('editGender').value,diag:document.getElementById('editDiag').value.trim(),tooth:document.getElementById('editTooth').value||null,updatedAt:new Date().toISOString(),updatedBy:currentUser?.id||'admin'}; if(updateLocalDB(id,data)){ showToast("✅ تم التحديث","success"); navTo('list'); } else { showToast("❌ فشل التحديث","error"); } }
+        }
+        function updatePatient() { const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value.trim(); if(!id||!name) return showToast("الاسم مطلوب","error"); const data={name,phone:document.getElementById('editPhone').value.trim(),birth:document.getElementById('editBirth').value,gender:document.getElementById('editGender').value,diag:document.getElementById('editDiag').value.trim(),tooth:document.getElementById('editTooth').value||null,updatedAt:new Date().toISOString(),updatedBy:currentUser?.id||'admin'}; if(updateLocalDB(id,data)){ showToast("✅ تم التحديث","success"); navTo('list'); } else { showToast("❌ فشل التحديث","error"); } }
         function deletePatient() { const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value||'المريض'; if(!id||!confirm(`حذف "${name}"؟`)) return; deleteFromLocalDB(id); showToast("🗑️ تم الحذف","success"); navTo('list'); }
         function saveNextAppointment() { const id=document.getElementById('editPatientId').value, appt=document.getElementById('editNextAppt').value; if(!id) return; const data={nextAppointment:appt,updatedAt:new Date().toISOString()}; updateLocalDB(id,data); showToast("✅ تم الحفظ","success"); checkAppointmentAlerts(); }
         function updateTotalCost() { const id=document.getElementById('editPatientId').value, cost=parseFloat(document.getElementById('editTotalCost').value)||0; if(!id) return; document.getElementById('payTotal').innerText=cost; document.getElementById('payRemain').innerText=cost-(parseFloat(document.getElementById('payPaid').innerText)||0); const data={totalCost:cost,updatedAt:new Date().toISOString()}; updateLocalDB(id,data); showToast("✅ تم التحديث","success"); }
