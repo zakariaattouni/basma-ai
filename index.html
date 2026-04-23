@@ -45,9 +45,9 @@
         .app-logo { width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6, #60a5fa); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; }
         .wa-float { position: fixed; bottom: 80px; left: 16px; z-index: 9998; background: #25D366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(37,211,102,0.4); transition: 0.3s; text-decoration: none; }
         .wa-float:hover { background: #128C7E; transform: scale(1.1); }
-        .wa-pulse { animation: pulse-wa 2s infinite; }        .wa-pulse:hover { animation: none; }
+        .wa-pulse { animation: pulse-wa 2s infinite; } .wa-pulse:hover { animation: none; }
         @keyframes pulse-wa { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
-        .conn-indicator { font-size: 9px; padding: 2px 6px; border-radius: 10px; }        .conn-online { background: #dcfce7; color: #166534; }        .conn-offline { background: #fee2e2; color: #991b1b; }
+        .conn-indicator { font-size: 9px; padding: 2px 6px; border-radius: 10px; }        .conn-online { background: #dcfce7; color: #166534; } .conn-offline { background: #fee2e2; color: #991b1b; }
         .cursor-pointer { cursor: pointer; }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .wa-btn-patient { background: #25D366; color: white; border: none; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: 0.2s; }
@@ -350,7 +350,57 @@
             });
         }
         
-        // ✅ ✅ ✅ الذكاء المحلي المُثبت والمُحسَّن ✅ ✅ ✅
+        // ✅ ✅ ✅ محرك الذكاء المحلي المُوسّع والدقيق ✅ ✅ ✅
+        function analyzeDentalSymptoms(text) {
+            const clean = text.replace(/[^\u0600-\u06FF\s0-9]/g, ' ')
+                .replace(/أ|إ|آ|ٱ/g, 'ا').replace(/ة/g, 'ه').replace(/\s+/g, ' ').trim().toLowerCase();
+
+            // بنك البيانات السريري المُوسّع (ترتيب حسب الأولوية والإلحاح)
+            const rules = [
+                { k: ['الم', 'نابض', 'مستمر', 'ليل', 'لايزول', 'يمتد'], d: 'التهاب لب السن غير القابل للعكس (Irreversible Pulpitis)', p: 'فحص حيوية العصب كهربائياً وحرارياً + أشعة بيريابيكال + تقييم مدى تأثر العصب', a: 'مسكنات NSAIDs، تجنب المؤثرات الحرارية، ومراجعة عاجلة للعلاج اللبي أو الاستئصال' },
+                { k: ['حساس', 'بارد', 'حلو', 'يزولسريع', 'ثوان'], d: 'التهاب لب السن القابل للعكس أو حساسية عاجية (Reversible Pulpitis/Dentin Hypersensitivity)', p: 'كشف تسوس سطحي + اختبار حيوية + تقييم انحسار اللثة أو تآكل المينا', a: 'معجون فلورايد/حساسية عاجية، تجنب المشروبات الحمضية، حشو وقائي أو تطبيق مادة عازلة' },
+                { k: ['تورم', 'انتفاخ', 'قفزة', 'مضغ', 'مرتفع', 'صديد', 'قيح'], d: 'خراج قمة الجذر أو التهاب دواعم السن الحاد (Periapical/Periodontal Abscess)', p: 'فحص إكلينيكي + أشعة + تقييم الحاجة لشق وتصريف أو مضاد حيوي جهازي + فتح لب إن أمكن', a: '⚠️ مراجعة فورية. كمادات باردة خارجية. لا تضغط على المنطقة المتورمة. التزام بالمضاد إن وُصف' },
+                { k: ['لثه', 'نزف', 'فرشاه', 'رائحه', 'ترسبات', 'جيوب', 'تخلخل'], d: 'التهاب دواعم السن المزمن (Chronic Periodontitis)', p: 'تقييم عمق الجيوب (Probing) + أشعة بانوراما/بيريابيكال + خطة تنظيف عميق (SRP)', a: 'تحسين العناية المنزلية، غسول مطهر مؤقت، جلسات تنظيف دورية، وإقلاع عن التدخين إن وجد' },
+                { k: ['كسر', 'شرخ', 'جزء', 'سقط', 'حشوه', 'تلبيسه'], d: 'كسر سني أو فشل تعويض سابق (Fractured Tooth/Failed Restoration)', p: 'فحص ثبات الأجزاء + أشعة + تقييم إمكانية الترميم المباشر، التاج، أو الاستبدال اللبي', a: 'حفظ الجزء المكسور في وسط رطب (حليب/محلول ملحي)، تجنب المضغ على الجهة، ومراجعة عاجلة' },
+                { k: ['خلع', 'سنخ', 'رائحهكر', 'فراغ', 'يومين', 'ثلاثه', 'يتمدد'], d: 'السنخ الجاف بعد القلع (Dry Socket/Alveolar Osteitis)', p: 'غسل السنخ بمحلول ملحي دافئ + وضع ضمادة مسكنة (Alveogyl/Eugenol) + مسكنات فموية', a: 'تجنب المضمضة القوية أو الشفط، الامتناع عن التدخين 72 ساعة، والالتزام بالمسكنات الموصوفة' },
+                { k: ['ضرس', 'عقل', 'خلفي', 'يصعب', 'فتح', 'فم', 'نصف', 'ظاهر'], d: 'انحشار ضرس العقل مع التهاب حوله التاجي (Impacted 3rd Molar with Pericoronitis)', p: 'غسل المنطقة تحت الغطاء اللثوي + أشعة بانوراما/OPG + تقييم القلع الجراحي أو استئصال الغطاء', a: 'غسول كلورهيكسيدين، مسكنات، وأطعمة لينة. تجنب العبث بالمنطقة باللسان أو اليد' },
+                { k: ['طقطقه', 'صدغ', 'صداع', 'أسنان', 'تحتك', 'وجع', 'اذن', 'فك', 'قفل'], d: 'اضطراب المفصل الفكي الصدغي أو خلل وظيفي عضلي (TMD/Myofascial Pain)', p: 'فحص إطباق وعضلات المضغ + أشعة مفصلية إن لزم + تقييم الحاجة لواق ليلي أو علاج طبيعي', a: 'أطعمة لينة، كمادات دافئة، تجنب فتح الفم واسعاً، وتقليل التوتر العضلي والصرير الليلي' },
+                { k: ['صرير', 'طحن', 'اجهاد', 'صباح', 'متهالكه', 'تاكل'], d: 'صرير الأسنان الليلي أو النهاري (Bruxism)', p: 'تقييم تآكل المينا + فحص إطباق + تصميم واقي ليلي مخصص (Night Guard) + ترميم استعاضي', a: 'تقليل الكافيين، إدارة التوتر، تمارين استرخاء الفك، ومراجعة دورية لفحص الواقي' },
+                { k: ['قرحه', 'ابيض', 'اصفر', 'احمر', 'حولها', 'مؤلم', 'يتكرر'], d: 'القرحة القلاعية المتكررة أو رضّية (Recurrent Aphthous/ Traumatic Ulcer)', p: 'فحص حواف القرحة + استبعاد الأسباب الرضية (أسنان حادة/طقم) + وصف مخدر موضعي/كورتيكوستيرويد', a: 'تجنب الأطعمة الحمضية/الحارة، الحفاظ على نظافة الفم، ومراجعة إذا تجاوزت الشفاء 14 يوماً' },
+                { k: ['ابيض', 'يمسح', 'يحمر', 'حرقه', 'جفاف', 'طقم', 'مناعه'], d: 'داء المبيضات الفموي (Oral Candidiasis/Thrush)', p: 'فحص سريري + مسحة إن لزم + وصف مضاد فطري موضعي (نيستاتين/كلوتريمازول) أو جهازي', a: 'تعقيم الطقم ليلاً، تقليل السكريات، مراجعة الأدوية المثبطة للمناعة، والالتزام بالدواء حتى الزوال' },
+                { k: ['لثه', 'نازله', 'جذر', 'ظاهر', 'فرشاه', 'قويه', 'تنظيف'], d: 'انحسار اللثة أو تآكل عنق السن (Gingival Recession/Cervical Abrasion)', p: 'تقييم سبب الانحسار (تقنية تنظيف/إطباق/لثة رقيقة) + حشو زجاجي أو غطاء لثوي إن لزم', a: 'استخدام فرشاة ناعمة وتقنية دائرية لطيفة، معجون منخفض الاحتكاك، وفحص إطباق الأسنان' },
+                { k: ['حشوه', 'واقعه', 'تاج', 'يتحرك', 'طعم', 'سيء', 'تسرب'], d: 'فشل ترميمي أو تسرب تحت الحشوة/التاج (Restorative Failure/Microleakage)', p: 'إزالة الحشوة/التاج + كشف النخر الثانوي + تعقيم التجويف + ترميم جديد أو تاج مخصص', a: 'تنظيف المنطقة بلطف بعد الأكل، تجنب المضغ القاسي عليها، ومراجعة سريعة لمنع وصول التسوس لللب' },
+                { k: ['بزوغ', 'طفل', 'سن', 'يخرج', 'لثه', 'منتفخه', 'حمراء', 'سيلان', 'بكاء'], d: 'ألم بزوغ الأسنان عند الأطفال (Teething Discomfort)', p: 'فحص موضع السن البازغ + استبعاد أسباب أخرى (التهاب أذن/حمى) + توجيه استخدام جل ملطف أو حلقة تبريد', a: 'مسح اللثة بقطعة قماش نظيفة وباردة، تجنب المسكنات القوية دون وصفة، والصبر على المرحلة' },
+                { k: ['رائحه', 'فم', 'جفاف', 'لسان', 'بيض', 'طنسول', 'معد', 'صيام', 'تنظيفلسان'], d: 'رائحة الفم الكريهة غير اللثوية (Halitosis - Non-Periodontal)', p: 'فحص اللسان واللوزتين + تقييم جفاف الفم (Xerostomia) + إحالة طبية إن لزم (جهاز هضمي/جيوب)', a: 'تنظيف اللسان يومياً، ترطيب الفم، مضغ علكة خالية سكر، ومراجعة نظام التغذية والأدوية' },
+                { k: ['الم', 'عام', 'غامض', 'غيرمحدد', 'فحص'], d: 'ألم سني غير نوعي يحتاج تقييماً شاملاً (Non-Specific Dental Pain)', p: 'فحص إكلينيكي دقيق + أشعة سينية أساسية + اختبارات حيوية متسلسلة لعزل السن المسبب', a: 'مراقبة الأعراض، تسجيل المحفزات، ومراجعة عاجلة إذا اشتد الألم أو ظهر تورم' }
+            ];
+
+            // خوارزمية مطابقة ذكية بالأولوية والحد الأدنى
+            let bestMatch = null;
+            let maxScore = 0;
+
+            for (const rule of rules) {
+                let score = 0;
+                for (const kw of rule.k) {
+                    if (clean.includes(kw)) score++;
+                }
+                // قبول المطابقة إذا كانت >= 2 كلمات، أو >= 1 كلمة لحالات محددة جداً
+                if ((score >= 2 || (score === 1 && rule.k.length <= 3)) && score > maxScore) {
+                    maxScore = score;
+                    bestMatch = rule;
+                }
+            }
+            if (bestMatch) {
+                return `<div class="ai-section"><b>📋 التشخيص المرجح:</b> ${bestMatch.d}</div>
+                        <div class="ai-section" style="border-color:#10b981; background:#f0fdf4;"><b>💡 الخطة العلاجية:</b> ${bestMatch.p}</div>
+                        <div class="ai-section" style="border-color:#f59e0b; background:#fffbeb;"><b>⚠️ التوصية السريرية:</b> ${bestMatch.a}</div>`;
+            }
+            
+            return `<div class="ai-section"><b>📋 التقييم المبدئي:</b> أعراض غير نوعية تحتاج فحصاً إكلينيكياً دقيقاً</div>
+                    <div class="ai-section" style="border-color:#3b82f6; background:#eff6ff;"><b>💡 الإجراء المقترح:</b> فحص شامل + أشعة سينية + اختبارات حيوية متدرجة</div>
+                    <div class="ai-section" style="border-color:#64748b; background:#f8fafc;"><b>📝 ملاحظة:</b> يُرجى تحديد موقع الألم بدقة، ومدته، والعوامل المحفزة (بارد/ساخن/مضغ/استلقاء) لتحسين الدقة</div>`;
+        }
+        
         function runAdvancedAI_Live() {
             try {
                 const input = document.getElementById('aiInput')?.value.trim();
@@ -375,32 +425,6 @@
                 showToast("⚠️ عرض تحليل احتياطي", "warning");
             }
         }
-
-        function analyzeDentalSymptoms(text) {
-            const clean = text
-                .replace(/[^\u0600-\u06FF\s0-9]/g, ' ')
-                .replace(/أ|إ|آ|ٱ/g, 'ا').replace(/ة/g, 'ه')
-                .replace(/\s+/g, ' ').trim().toLowerCase();
-            
-            const rules = [
-                { k: ['الم', 'نابض', 'ليل', 'مستمر'], d: 'التهاب لب السن المحتمل (Pulpitis)', p: 'فحص حيوية العصب + أشعة بيريابيكال', a: 'مسكنات مضادة للالتهاب، تجنب المؤثرات الحرارية، ومراجعة عاجلة للعلاج اللبي' },
-                { k: ['تورم', 'انتفاخ', 'وجه', 'فك', 'خراج', 'صديد'], d: 'خراج سني أو التهاب نسيج داعم حاد', p: 'فحص عاجل + أشعة + تقييم الحاجة لشق وتصريف أو مضاد حيوي', a: '⚠️ مراجعة فورية. كمادات باردة خارجية. لا تضغط على المنطقة المتورمة' },
-                { k: ['حساس', 'بارد', 'ساخن', 'حلو'], d: 'حساسية عاجية أو تسوس متوسط/عميق', p: 'كشف تسوس دقيق + اختبار حيوية غير مباشر + أشعة', a: 'معجون خاص للأسنان الحساسة، تجنب المشروبات القاسية حرارياً، حشو وقائي أو تعويضي' },
-                { k: ['لثه', 'نزف', 'فرشاه', 'رائحه', 'فم', 'ترسبات'], d: 'التهاب لثة أو دواعم سن (Gingivitis/Periodontitis)', p: 'تقييم نسيج اللثة (Probe) + تنظيف احترافي (Scaling)', a: 'تحسين العناية المنزلية، غسول مطهر، وجلسات تنظيف دورية كل 6 أشهر' },
-                { k: ['كسر', 'شرخ', 'جزء', 'سقط', 'حشوه', 'تلبيسه'], d: 'كسر سني أو فقدان تعويض سني', p: 'فحص ثبات السن + أشعة + تقييم صلاحية الترميم أو الحاجة لتاج', a: 'تجنب المضغ على الجهة المصابة، حفظ الجزء المكسور في حليب إن وجد، ومراجعة عاجلة' },
-                { k: ['ضرس', 'عقل', 'خلف', 'صعوبه', 'فتح', 'فم'], d: 'انحشار ضرس العقل أو التهاب حوله التاجي (Pericoronitis)', p: 'فحص إطباق + أشعة بانوراما + تقييم القلع الجراحي أو شق اللثة', a: 'غسول كلورهيكسيدين، مسكنات، واستشارة جراح فم وفكين' }
-            ];
-            for(let r of rules) {
-                if(r.k.some(k => clean.includes(k))) {
-                    return `<div class="ai-section"><b>📋 التشخيص المرجح:</b> ${r.d}</div>
-                            <div class="ai-section" style="border-color:#10b981; background:#f0fdf4;"><b>💡 الخطة العلاجية:</b> ${r.p}</div>
-                            <div class="ai-section" style="border-color:#f59e0b; background:#fffbeb;"><b>⚠️ التوصية السريرية:</b> ${r.a}</div>`;
-                }
-            }
-            return `<div class="ai-section"><b>📋 التقييم المبدئي:</b> أعراض غير نوعية تحتاج فحصاً إكلينيكياً دقيقاً</div>
-                    <div class="ai-section" style="border-color:#3b82f6; background:#eff6ff;"><b>💡 الإجراء المقترح:</b> فحص شامل + أشعة سينية</div>
-                    <div class="ai-section" style="border-color:#64748b; background:#f8fafc;"><b>📝 ملاحظة:</b> يُرجى تحديد موقع الألم بدقة، ومدته، والعوامل المحفزة</div>`;
-        }
         
         function clearAI() { document.getElementById('aiInput').value=''; document.getElementById('aiOutputBox').classList.add('d-none'); document.getElementById('aiResult').innerHTML=''; }
         
@@ -415,8 +439,7 @@
         }
         
         function savePatient() {
-            const name = document.getElementById('pName').value.trim(), phone = document.getElementById('pPhone').value.trim(), diag = document.getElementById('pDiag').value.trim();
-            if(!name || !diag) return showToast("أكمل الاسم والشكوى", "error");
+            const name = document.getElementById('pName').value.trim(), phone = document.getElementById('pPhone').value.trim(), diag = document.getElementById('pDiag').value.trim();            if(!name || !diag) return showToast("أكمل الاسم والشكوى", "error");
             const pid = 'local_' + Date.now();
             const data = { id: pid, name, phone, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.id || 'admin', updatedAt: new Date().toISOString(), totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '' };
             addToLocalDB(data);            
@@ -439,7 +462,8 @@
         }
         function submitDoctorSubscription() {            
             const name=document.getElementById('subName').value.trim(), email=document.getElementById('subEmail').value.trim(), pwd=document.getElementById('subPassword').value.trim();
-            if(!name||!email||!pwd) return showToast("أكمل الحقول","error");            if(firebaseReady && db) db.ref('doctor_subscriptions').push({name,email,password:pwd,specialty:document.getElementById('subSpecialty').value.trim(),status:'pending',requestedAt:new Date().toISOString()});
+            if(!name||!email||!pwd) return showToast("أكمل الحقول","error");
+            if(firebaseReady && db) db.ref('doctor_subscriptions').push({name,email,password:pwd,specialty:document.getElementById('subSpecialty').value.trim(),status:'pending',requestedAt:new Date().toISOString()});
             showToast("✅ تم الإرسال! انتظر التفعيل","success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value=''); setTimeout(backToLogin,1500);
         }
         
@@ -464,8 +488,7 @@
             if(!firebaseReady || !db) return; 
             db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap => {
                 const c = document.getElementById('activeDoctors'); if(!c) return; c.innerHTML = '';
-                if(!snap.exists()){ c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء</p>'; return; }
-                snap.forEach(ch => { const v = ch.val(); c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`; });
+                if(!snap.exists()){ c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء</p>'; return; }                snap.forEach(ch => { const v = ch.val(); c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`; });
             });
         }
         function suspendDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>{ showToast("⛔ تم الإيقاف","info"); loadActiveDoctors(); }); }        
@@ -488,7 +511,8 @@
             const c=document.getElementById('patientContainer'); if(!c) return; c.innerHTML='';
             if(!data||data.length===0){document.getElementById('noRecords').classList.remove('d-none');document.getElementById('recordsCount').innerText='0';return;}
             document.getElementById('noRecords').classList.add('d-none'); document.getElementById('recordsCount').innerText=data.length;
-            [...data].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0)).forEach(v=>{                const pid=v.firebaseId||v.id, tooth=v.tooth?`<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">🦷 #${v.tooth}</span>`:'', diag=v.diag?(v.diag.length>60?v.diag.substring(0,60)+'...':v.diag):'بدون ملاحظات';
+            [...data].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0)).forEach(v=>{
+                const pid=v.firebaseId||v.id, tooth=v.tooth?`<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">🦷 #${v.tooth}</span>`:'', diag=v.diag?(v.diag.length>60?v.diag.substring(0,60)+'...':v.diag):'بدون ملاحظات';
                 c.innerHTML+=`<div class="section-card py-3 border-r-4 border-r-blue-500 cursor-pointer hover:shadow-md hover:border-r-cyan-500 transition bg-white" onclick="openPatientEdit('${pid}','${source}')"><div class="flex justify-between items-start"><div class="flex-1"><div class="flex items-center gap-2"><span class="font-bold text-sm text-blue-800">${v.name||'مريض'}</span>${v.phone?`<span class="text-[10px] text-gray-400">📱 ${v.phone}</span>`:''}</div>${tooth?`<div class="mt-1">${tooth}</div>`:''}<p class="text-xs text-gray-600 mt-2 line-clamp-2">${diag}</p></div><div class="text-left flex flex-col items-end gap-1"><span class="text-[10px] bg-gray-100 px-2 py-1 rounded">${v.date||'-'}</span><button onclick="event.stopPropagation();openWhatsApp('${v.phone}','${v.name}')" class="wa-btn-patient mt-1" title="واتساب"><i class="fab fa-whatsapp"></i></button></div></div></div>`;
             });
         }
@@ -513,6 +537,5 @@
         function renderTodayAppts(pts,today) { const con=document.getElementById('todayAppointmentsList'), sec=document.getElementById('todayAppointmentsSection'); con.innerHTML=''; const tm=pts.filter(p=>p.nextAppointment && p.nextAppointment.startsWith(today)).sort((a,b)=>(a.nextAppointment||'').localeCompare(b.nextAppointment||'')); document.getElementById('todayCountBadge').innerText=tm.length; if(tm.length===0){sec.classList.add('d-none');return;} sec.classList.remove('d-none'); tm.forEach(p=>{const t=p.nextAppointment.includes('T')?p.nextAppointment.split('T')[1].substring(0,5):'-'; con.innerHTML+=`<div class="p-2 bg-white rounded-lg border flex justify-between items-center hover:bg-blue-50 cursor-pointer" onclick="openPatientEdit('${p.firebaseId||p.id}','local')"><div><span class="font-bold text-sm">👤 ${p.name}</span><div class="text-[10px] text-gray-500">🕒 ${t}</div></div><button onclick="event.stopPropagation();openWhatsApp('${p.phone}','${p.name}','موعدك اليوم ${t}')" class="wa-btn-patient"><i class="fab fa-whatsapp"></i></button></div>`;}); }
         function updateStats() { const today=new Date().toLocaleDateString('ar-EG'); const l=getLocalDB(); document.getElementById('statPatients').innerText=l.length; document.getElementById('statToday').innerText=l.filter(d=>d.date===today).length; document.getElementById('statDoctors').innerText='0'; }
         document.addEventListener('DOMContentLoaded', () => { console.log("🦷 بَسْمَة AI جاهز ومستقر!"); });
-    </script>
-</body>
+    </script></body>
 </html>
