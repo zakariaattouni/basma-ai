@@ -63,7 +63,6 @@
         .search-box i { color: #64748b; }
         .copyright-footer { background: #f8fafc; color: #64748b; text-align: center; padding: 8px 15px; font-size: 11px; font-weight: 500; border-top: 1px solid #e2e8f0; position: fixed; bottom: 65px; left: 0; right: 0; z-index: 9998; }
         .copyright-footer strong { font-weight: 700; color: #475569; }
-        /* ✅ بطاقة تعليمات التثبيت */
         #installGuide { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: white; padding: 12px 16px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 9997; max-width: 90%; text-align: center; border: 2px solid #3b82f6; display: none; }
         #installGuide.show { display: block; animation: slideUp 0.3s; }
         @keyframes slideUp { from { transform: translateX(-50%) translateY(20px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
@@ -73,8 +72,6 @@
 </head>
 <body class="pb-32">
     <div id="toastContainer"></div>
-    
-    <!-- ✅ بطاقة تعليمات التثبيت البسيطة -->
     <div id="installGuide">
         <span class="close" onclick="this.parentElement.classList.remove('show')">&times;</span>
         <b>📱 لتثبيت التطبيق:</b><br>
@@ -82,8 +79,6 @@
         <span id="iosHint" class="d-none">اضغط 📤 → "إضافة إلى الشاشة الرئيسية"</span>
         <span id="desktopHint" class="d-none">اضغط على أيقونة 🔖 في شريط العنوان</span>
     </div>
-
-    <!-- شاشة الدخول -->
     <div id="loginPage" class="fixed inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 z-[10000] flex items-center justify-center p-6">
         <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm text-center">
             <div class="app-logo mx-auto mb-3"><i class="fas fa-tooth"></i></div>
@@ -96,16 +91,14 @@
             <div id="adminLoginForm">
                 <input type="password" id="adminPassword" placeholder="كلمة مرور المدير" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-blue-500" onkeypress="if(event.key==='Enter') handleAdminLogin()">
                 <button type="button" onclick="handleAdminLogin()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 rounded-xl">دخول</button>
-            </div>            <div id="doctorLoginForm" class="d-none">
+            </div>
+            <div id="doctorLoginForm" class="d-none">
                 <input type="email" id="doctorEmail" placeholder="البريد الإلكتروني" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-3 text-center outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') handleDoctorLogin()">
                 <input type="password" id="doctorPassword" placeholder="كلمة المرور" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') handleDoctorLogin()">
                 <button type="button" onclick="handleDoctorLogin()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">دخول</button>
-                <p class="text-xs text-gray-400 mt-3">ليس لديك حساب؟ <span class="text-amber-600 cursor-pointer font-medium hover:underline" onclick="openSubscribe()">اشترك الآن</span></p>
-            </div>
+                <p class="text-xs text-gray-400 mt-3">ليس لديك حساب؟ <span class="text-amber-600 cursor-pointer font-medium hover:underline" onclick="openSubscribe()">اشترك الآن</span></p>            </div>
         </div>
     </div>
-    
-    <!-- المحتوى الرئيسي -->
     <div id="mainContent" class="d-none">
         <header class="app-header">
             <div class="app-logo"><i class="fas fa-tooth"></i></div>
@@ -117,7 +110,6 @@
             <button type="button" onclick="logout()" class="mr-3 text-red-500 hover:text-red-700"><i class="fas fa-sign-out-alt ml-1"></i>خروج</button>
         </div>        
         <main class="p-4 max-w-md mx-auto">
-            <!-- نفس محتوى الصفحات السابق تماماً (للاختصار لم أكرره هنا) -->
             <div id="page-home" class="space-y-3">
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 rounded-2xl shadow">
                     <h2 class="font-bold mb-1">👋 لوحة التحكم</h2>
@@ -145,15 +137,15 @@
                             <h3 class="font-bold text-sm"><i class="fas fa-user-clock text-amber-500 ml-1"></i> طلبات معلقة</h3>
                             <span class="status-badge status-pending" id="pendingCount">0</span>
                         </div>
-                        <div id="doctorRequests" class="space-y-2 max-h-36 overflow-y-auto text-sm mb-4"></div>                        <hr class="border-gray-200 my-2">
+                        <div id="doctorRequests" class="space-y-2 max-h-36 overflow-y-auto text-sm mb-4"></div>
+                        <hr class="border-gray-200 my-2">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="font-bold text-sm"><i class="fas fa-user-check text-green-500 ml-1"></i> أطباء نشطين</h3>
                         </div>
                         <div id="activeDoctors" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                     </div>
                 </div>
-                <div class="section-card">
-                    <h3 class="font-bold text-sm mb-2"><i class="fas fa-chart-pie text-blue-500 ml-1"></i> إحصائيات</h3>
+                <div class="section-card">                    <h3 class="font-bold text-sm mb-2"><i class="fas fa-chart-pie text-blue-500 ml-1"></i> إحصائيات</h3>
                     <div class="grid grid-cols-3 gap-2 text-center">                        
                         <div class="bg-blue-50 p-2 rounded-lg"><div class="font-bold text-blue-600" id="statPatients">0</div><div class="text-[10px] text-gray-500">مرضى</div></div>
                         <div class="bg-green-50 p-2 rounded-lg"><div class="font-bold text-green-600" id="statToday">0</div><div class="text-[10px] text-gray-500">اليوم</div></div>
@@ -171,8 +163,6 @@
                     </div>
                 </div>
             </div>
-            <!-- باقي الصفحات: page-add, page-register, page-subscribe, page-ai, page-list, page-patient -->
-            <!-- (نفس الكود السابق تماماً - لم أكرره للاختصار) -->
             <div id="page-add" class="d-none space-y-3">
                 <div class="section-card">
                     <h2 class="font-bold text-sm mb-3"><i class="fas fa-plus-circle text-blue-500 ml-1"></i> فحص جديد</h2>
@@ -194,7 +184,8 @@
                     <input type="text" id="regName" placeholder="الاسم الكامل" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
                     <input type="tel" id="regPhone" placeholder="رقم الهاتف" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
                     <input type="date" id="regBirth" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-green-400 text-sm">
-                    <select id="regGender" class="w-full p-2 bg-gray-50 border rounded-lg mb-3 outline-none focus:border-green-400 text-sm"><option value="">الجنس</option><option value="male">ذكر</option><option value="female">أنثى</option></select>                    <button type="button" onclick="registerPatient()" class="w-full bg-green-500 text-white font-bold py-2 rounded-lg">تسجيل</button>
+                    <select id="regGender" class="w-full p-2 bg-gray-50 border rounded-lg mb-3 outline-none focus:border-green-400 text-sm"><option value="">الجنس</option><option value="male">ذكر</option><option value="female">أنثى</option></select>
+                    <button type="button" onclick="registerPatient()" class="w-full bg-green-500 text-white font-bold py-2 rounded-lg">تسجيل</button>
                 </div>
             </div>
             <div id="page-subscribe" class="d-none space-y-3">
@@ -203,8 +194,7 @@
                     <input type="text" id="subName" placeholder="الاسم الكامل" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
                     <input type="email" id="subEmail" placeholder="البريد الإلكتروني" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
                     <input type="password" id="subPassword" placeholder="كلمة مرور" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
-                    <input type="text" id="subSpecialty" placeholder="التخصص (اختياري)" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">
-                    <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
+                    <input type="text" id="subSpecialty" placeholder="التخصص (اختياري)" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">                    <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
                     <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-3 hover:bg-gray-300 transition">← العودة لتسجيل الدخول</button>                
                 </div>
             </div>            
@@ -243,7 +233,8 @@
                     <div class="flex gap-2"><button type="button" onclick="deletePatient()" class="flex-1 bg-red-100 text-red-700 font-bold py-2.5 rounded-lg text-sm hover:bg-red-200 transition flex items-center justify-center gap-1"><i class="fas fa-trash"></i> حذف</button><button type="button" onclick="updatePatient()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-2.5 rounded-lg text-sm hover:opacity-90 transition flex items-center justify-center gap-1"><i class="fas fa-save"></i> حفظ التعديلات</button></div>
                 </div>
                 <div class="section-card border-amber-200 bg-gradient-to-br from-amber-50 to-yellow-50">
-                    <h3 class="font-bold text-sm mb-2"><i class="fas fa-calendar-check text-amber-600 ml-1"></i> الموعد القادم</h3>                    <input type="datetime-local" id="editNextAppt" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
+                    <h3 class="font-bold text-sm mb-2"><i class="fas fa-calendar-check text-amber-600 ml-1"></i> الموعد القادم</h3>
+                    <input type="datetime-local" id="editNextAppt" class="w-full p-2 bg-white border rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
                     <button onclick="saveNextAppointment()" class="w-full bg-amber-500 text-white text-xs font-bold py-2 rounded-lg hover:bg-amber-600 transition">حفظ وتأكيد الموعد</button>
                 </div>
                 <div class="section-card border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
@@ -252,8 +243,7 @@
                     <div class="grid grid-cols-3 gap-2 mb-3 text-center text-xs"><div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">الإجمالي</div><div class="font-bold" id="payTotal">0</div></div><div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">المدفوع</div><div class="font-bold text-green-600" id="payPaid">0</div></div><div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">المتبقي</div><div class="font-bold text-red-600" id="payRemain">0</div></div></div>
                     <div class="flex gap-2 mb-3"><input type="number" id="newPayAmount" placeholder="المبلغ" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm"><input type="text" id="newPayNote" placeholder="ملاحظة (اختياري)" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm"><button onclick="addPayment()" class="bg-green-500 text-white px-3 rounded-lg font-bold text-sm hover:bg-green-600">إضافة</button></div>
                     <div id="paymentHistory" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
-                </div>
-                <div class="section-card"><h3 class="font-bold text-xs mb-2"><i class="fas fa-history text-gray-500 ml-1"></i> آخر تحديث</h3><div id="patientVisits" class="space-y-2 text-sm"><div class="p-2 bg-gray-50 rounded-lg border text-xs"><span class="text-gray-500">سيظهر هنا تاريخ آخر تعديل للبيانات</span></div></div></div>
+                </div>                <div class="section-card"><h3 class="font-bold text-xs mb-2"><i class="fas fa-history text-gray-500 ml-1"></i> آخر تحديث</h3><div id="patientVisits" class="space-y-2 text-sm"><div class="p-2 bg-gray-50 rounded-lg border text-xs"><span class="text-gray-500">سيظهر هنا تاريخ آخر تعديل للبيانات</span></div></div></div>
             </div>        
         </main>
         <div class="copyright-footer">            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
@@ -268,31 +258,20 @@
     <a href="https://wa.me/963939436998?text=مرحباً، أرغب باستفسار حول تطبيق بَسْمَة AI" target="_blank" class="wa-float wa-pulse" title="تواصل عبر واتساب"><i class="fab fa-whatsapp text-2xl"></i></a>
     
     <script>
-        // ✅ كشف نوع الجهاز وعرض تعليمات التثبيت المناسبة
         document.addEventListener('DOMContentLoaded', () => {
             const ua = navigator.userAgent.toLowerCase();
             const guide = document.getElementById('installGuide');
-            
-            if (ua.includes('android')) {
-                document.getElementById('androidHint').classList.remove('d-none');
-                setTimeout(() => guide.classList.add('show'), 3000);
-            } else if (ua.includes('iphone') || ua.includes('ipad')) {
-                document.getElementById('iosHint').classList.remove('d-none');
-                setTimeout(() => guide.classList.add('show'), 3000);
-            } else if (!ua.includes('mobile')) {
-                document.getElementById('desktopHint').classList.remove('d-none');
-            }
+            if (ua.includes('android')) { document.getElementById('androidHint').classList.remove('d-none'); setTimeout(() => guide.classList.add('show'), 3000); } 
+            else if (ua.includes('iphone') || ua.includes('ipad')) { document.getElementById('iosHint').classList.remove('d-none'); setTimeout(() => guide.classList.add('show'), 3000); } 
+            else if (!ua.includes('mobile')) { document.getElementById('desktopHint').classList.remove('d-none'); }
         });
-        
-        // ✅ باقي الكود كما هو تماماً (نفس كود الجافاسكريبت السابق)
-        // ... [نسخ الكود السابق كاملاً هنا] ...
-        
-        // ✅ تهيئة فايربيس
+
         let db = null, firebaseReady = false;
         try {
             if (typeof firebase !== 'undefined') {
                 const config = { databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/" };
-                if (!firebase.apps.length) firebase.initializeApp(config);                db = firebase.database();
+                if (!firebase.apps.length) firebase.initializeApp(config);
+                db = firebase.database();
                 firebaseReady = true;
             }
         } catch (e) { console.error("Firebase:", e); }
@@ -309,23 +288,16 @@
         function getLocalDB() { try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); } catch { return []; } }
         function saveLocalDB(data) { try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); return true; } catch { showToast("❌ فشل الحفظ", "error"); return false; } }
         function addToLocalDB(record) { const l = getLocalDB(); if(!l.some(p => p.id === record.id)) { l.push(record); saveLocalDB(l); } }
-        function updateLocalDB(id, newData) { 
-            const l = getLocalDB(); 
-            const idx = l.findIndex(p => p.id === id || p.firebaseId === id); 
-            if(idx !== -1) { l[idx] = { ...l[idx], ...newData, id: l[idx].id, firebaseId: l[idx].firebaseId || id }; return saveLocalDB(l); } 
-            return false; 
-        }
+        function updateLocalDB(id, newData) { const l = getLocalDB(); const idx = l.findIndex(p => p.id === id || p.firebaseId === id); if(idx !== -1) { l[idx] = { ...l[idx], ...newData, id: l[idx].id, firebaseId: l[idx].firebaseId || id }; return saveLocalDB(l); } return false; }
         function deleteFromLocalDB(id) { saveLocalDB(getLocalDB().filter(p => p.id !== id && p.firebaseId !== id)); }
         
         function switchLogin(type) {
-            const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');
-            const formA = document.getElementById('adminLoginForm'), formD = document.getElementById('doctorLoginForm');
+            const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');            const formA = document.getElementById('adminLoginForm'), formD = document.getElementById('doctorLoginForm');
             if(type === 'admin'){ tabA.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabD.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formA.classList.remove('d-none'); formD.classList.add('d-none'); }
             else { tabD.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabA.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formD.classList.remove('d-none'); formA.classList.add('d-none'); }
         }
         function openSubscribe() { document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); navTo('subscribe'); }
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
-        
         function handleAdminLogin() {            
             const pwd = document.getElementById('adminPassword').value.trim();
             if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400); }            
@@ -341,7 +313,8 @@
                     if(!snap.exists()) return showToast("❌ حساب غير موجود", "error");
                     let found = null; snap.forEach(c => { if(c.val().password === pwd) found = {id: c.key, ...c.val()}; });
                     if(!found) return showToast("❌ كلمة المرور خاطئة", "error");
-                    if(found.status !== 'active') return showToast("⏳ حسابك قيد المراجعة", "warning");                    currentUser = { role: 'doctor', ...found }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400);
+                    if(found.status !== 'active') return showToast("⏳ حسابك قيد المراجعة", "warning");
+                    currentUser = { role: 'doctor', ...found }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400);
                 }).catch(() => showToast("فشل الاتصال", "error"));
             } catch(e) { showToast("❌ خطأ في الدخول", "error"); }
         }
@@ -352,28 +325,15 @@
                 document.getElementById('adminSection').classList.remove('d-none'); 
                 try { startSubscriptionPolling(); loadActiveDoctors(); } catch(e){}
             }
-            else { 
-                document.getElementById('userTypeDisplay').innerText = `د. ${currentUser.name}`; 
-                document.getElementById('adminSection').classList.add('d-none'); 
-            }
+            else { document.getElementById('userTypeDisplay').innerText = `د. ${currentUser.name}`; document.getElementById('adminSection').classList.add('d-none'); }
             initTeeth(); loadData(); updateStats(); checkAppointmentAlerts(); navTo('home');
             if('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
         }
-        function logout() { 
-            currentUser = null; 
-            if(pollingInterval) clearInterval(pollingInterval);
-            backToLogin(); 
-            ['adminPassword','doctorEmail','doctorPassword'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; }); 
-        }
-        
+        function logout() { currentUser = null; if(pollingInterval) clearInterval(pollingInterval); backToLogin(); ['adminPassword','doctorEmail','doctorPassword'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; }); }
         function showToast(msg, type='info') {
             const c = document.getElementById('toastContainer');
-            const t = document.createElement('div'); 
-            t.className = `toast ${type}`; 
-            t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':type==='warning'?'triangle-exclamation':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
-            c.appendChild(t);
-            requestAnimationFrame(() => t.classList.add('show'));
-            setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
+            const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':type==='warning'?'triangle-exclamation':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
+            c.appendChild(t); requestAnimationFrame(() => t.classList.add('show')); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
         }        
         function navTo(page) {
             document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('d-none'));
@@ -381,41 +341,60 @@
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             const btnMap = {home:'home', add:'add', ai:'ai', list:'list', register:'home', subscribe:'home'}, btn = document.getElementById(`btn-${btnMap[page]||'home'}`);
             if(btn) btn.classList.add('active');
-            if(page === 'list') { loadData(); updateStats(); }
-            if(page === 'home') { loadTodayAppointments(); checkAppointmentAlerts(); }
+            if(page === 'list') { loadData(); updateStats(); }            if(page === 'home') { loadTodayAppointments(); checkAppointmentAlerts(); }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
         function initTeeth() {
             const grid = document.getElementById('toothGrid'); if(!grid) return; grid.innerHTML = '';
             [18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38].forEach(n => {
                 const b = document.createElement('button'); b.type = 'button'; b.className = 'tooth-btn'; b.innerText = n;
-                b.onclick = () => { document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); currentTooth = n; document.getElementById('selectedTooth').classList.remove('d-none'); document.getElementById('toothNum').innerText = n; };                grid.appendChild(b);
+                b.onclick = () => { document.querySelectorAll('.tooth-btn').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); currentTooth = n; document.getElementById('selectedTooth').classList.remove('d-none'); document.getElementById('toothNum').innerText = n; };
+                grid.appendChild(b);
             });
         }
         
-        // ✅ محرك الذكاء المحلي المُصحح
+        // ✅ ✅ ✅ محرك الذكاء المحلي المُوسّع (Endo + مخاطية + لسان) ✅ ✅ ✅
         function analyzeDentalSymptoms(text) {
             if (!text || !text.trim()) return `<div class="ai-section"><b>📋 التقييم المبدئي:</b> يُرجى كتابة الأعراض بوضوح</div>`;
             let clean = text.replace(/[\u064B-\u065F\u0670]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/\s+/g, ' ').trim();
+            
             const rules = [
+                // 🔹 طوارئ الـ Endo واللبية
                 { k: ['الم', 'نابض', 'مستمر', 'ليل', 'يزول', 'يمتد'], d: 'التهاب لب السن غير القابل للعكس (Irreversible Pulpitis)', p: 'فحص حيوية العصب كهربائياً وحرارياً + أشعة بيريابيكال + تقييم مدى تأثر العصب', a: 'مسكنات مضادة للالتهاب، تجنب المؤثرات الحرارية، ومراجعة عاجلة للعلاج اللبي أو الاستئصال' },
                 { k: ['حساس', 'بارد', 'حلو', 'يزول', 'سريع', 'ثوان'], d: 'التهاب لب السن القابل للعكس أو حساسية عاجية (Reversible Pulpitis/Dentin Hypersensitivity)', p: 'كشف تسوس سطحي + اختبار حيوية + تقييم انحسار اللثة أو تآكل المينا', a: 'معجون فلورايد/حساسية عاجية، تجنب المشروبات الحمضية، حشو وقائي أو تطبيق مادة عازلة' },
+                { k: ['الم', 'عض', 'مضغ', 'مرتفع', 'ضغط', 'قمة'], d: 'التهاب دواعم السن الذروي الحاد (Acute Apical Periodontitis)', p: 'فحص إطباق + أشعة بيريابيكال + اختبار حيوية سلبي عادةً + تقييم الحاجة لفتح لب أو علاج جذري', a: 'مسكنات NSAIDs، تجنب المضغ على السن، ومراجعة عاجلة لتخفيف الضغط الذروي' },
+                { k: ['ميت', 'لايحس', 'تغير لون', 'اسوداد', 'نخر', 'جوف'], d: 'نخر لب السن مع تغير لوني محتمل (Pulp Necrosis with Discoloration)', p: 'أشعة بيريابيكال + اختبار حيوية سلبي + تقييم الحاجة لعلاج جذري وتبييض داخلي أو تاج', a: 'لا يؤلم غالباً، لكن التغير اللوني والتورم مؤشرات على علاج عاجل لمنع الخراج' },
+                { k: ['كسر', 'شرخ', 'الم', 'عض', 'يزول', 'بارد', 'حراري'], d: 'متلازمة السن المتشقق (Cracked Tooth Syndrome)', p: 'فحص باللدغة (Bite Test) + صبغة كشف الشقوق + أشعة + تقييم عمق الشق (تاج/لب/جذر)', a: 'تجنب الأطعمة القاسية، حماية السن برباط أو تاج مؤقت، ومراجعة عاجلة قبل وصول الشق لللب' },
+                { k: ['علاج', 'عصب', 'الم', 'تورم', 'يعود', 'حشوه', 'جوتا', 'تفاقم'], d: 'تفاقم ما بعد علاج العصب أو فشل علاج سابق (Post-Treatment Flare-up / Failed RCT)', p: 'أشعة بيريابيكال + كشف القنوات المنسية أو التسرب التاجي + تنظيف وتعقيم أو إعادة علاج', a: 'مسكنات مؤقتة، عدم الضغط على السن، ومراجعة لتقييم الحاجة لإعادة العلاج أو الجراحة الذروية' },
+                { k: ['ذوبان', 'اختفاء', 'شفاف', 'وردي', 'تآكل', 'جذر'], d: 'ارتشاف جذري داخلي أو خارجي (Internal/External Root Resorption)', p: 'أشعة بيريابيكال متعددة الزوايا أو CBCT + تقييم سبب الارتصاد (رض، تقويم، التهاب) + علاج جذري أو جراحي', a: 'حالة صامتة غالباً، تتطلب كشفاً شعاعياً دورياً، والتدخل المبكر يمنع فقدان السن' },
+
+                // 🔹 أمراض المخاطية الفموية واللسان
+                { k: ['ليش', 'شبكه', 'خطوط', 'بيضاء', 'حزاز', 'منبسط'], d: 'الحزاز المنبسط الفموي (Oral Lichen Planus)', p: 'فحص سريري دقيق + استبعاد الأسباب الرضية أو الدوائية + خزعة إن لزم + كورتيكوستيرويد موضعي', a: 'تجنب الأطعمة الحارة/الحامضة، الحفاظ على نظافة الفم بلطف، ومتابعة دورية لاستبعاد التحول الخبيث النادر' },
+                { k: ['لسان', 'جغرافي', 'بقع', 'حمراء', 'بيضاء', 'حواف', 'متغيره', 'مهاجره'], d: 'اللسان الجغرافي أو التهاب اللسان المهاجر الحميد (Geographic Tongue / Benign Migratory Glossitis)', p: 'فحص سريري تأكيد + استبعاد الصدفية أو نقص الفيتامينات + طمأنة المريض + غسول ملحي أو مخدر موضعي إن لزم', a: 'حالة حميدة غير معدية، تتغير أشكالها يومياً، وتهدأ ذاتياً. تجنب المهيجات الموضعية' },
+                { k: ['قرحه', 'مؤلمه', 'دائريه', 'بيضاء', 'حمراء', 'تتكرر', 'حافه'], d: 'القلاع الفموي المتكرر أو القرحة القلاعية (Recurrent Aphthous Stomatitis)', p: 'تصنيف حسب الحجم (صغير/كبير/حلئي) + فحص نقص الحديد/فيتامينات + كورتيكوستيرويد موضعي أو غسول مطهر', a: 'تجنب الصدمات الميكانيكية والأطعمة المحفزة، استخدام معجون خالي من SLS، ومراجعة إذا تجاوزت 3 أسابيع' },
+                { k: ['فقاقيع', 'مجموعه', 'شفايف', 'زبد', 'حرقه', 'هلبس', 'هربس'], d: 'الهربس البسيط الفموي أو قروح البرد (Oral Herpes Simplex / Cold Sores)', p: 'تشخيص سريري + مضاد فيروسي موضعي أو فموي (أسيكلوفير) إن كان مبكراً + توجيه لتجنب العدوى', a: 'معدي خلال مرحلة البثور، تجنب التقبيل ومشاركة الأدوات، والبدء بالعلاج خلال 24 ساعة من ظهور الوخز' },
+                { k: ['لويحه', 'بيضاء', 'لايمسح', 'تدخين', 'صلبه', 'خشونه'], d: 'الطلوان الفموي أو اللوكوبلاكيا (Oral Leukoplakia)', p: 'فحص سريري + إزالة المهيجات (تدخين/أسنان حادة) + خزعة إلزامية + متابعة دورية صارمة', a: 'آفة محتملة التسرطن، تتطلب كشفاً نسيجياً، وإقلاع فوري عن التدخين أو المضغ' },
+                { k: ['تورم', 'شبه كره', 'شفاف', 'ازرق', 'شفاه', 'عض', 'غده'], d: 'الكيس المخاطي أو ظاهرة بثق المخاط (Mucocele / Mucous Extravasation)', p: 'فحص سريري + استئصال جراحي بسيط مع الغدة المرتبطة + فحص نسيجي تأكيد', a: 'ناتج غالباً عن عض الشفة أو الرض المتكرر، لا يختفي ذاتياً عادةً، والعلاج جراحي بسيط وفعال' },
+                { k: ['كتله', 'صلبه', 'لون اللحم', 'مزمن', 'احتكاك', 'زائده'], d: 'الورم الليفي المتهيج أو فرط التنسج الليفي (Irritation Fibroma)', p: 'فحص سريري + استئصال جراحي + فحص نسيجي روتيني + إزالة سبب الاحتكاك المزمن', a: 'ورم حميد شائع ناتج عن رض متكرر (حشوة بارزة، سن حاد)، يختفي بعد الإزالة وإزالة المهيج' },
+                { k: ['حرقه', 'لسان', 'طعم', 'معدن', 'جفاف', 'بدون آفه', 'حارق'], d: 'متلازمة حرقان الفم (Burning Mouth Syndrome)', p: 'استبعاد الأسباب الثانوية (فطريات، نقص B12/حديد، جفاف، ارتجاع، أدوية) + طمأنة + علاجات عرضية', a: 'حالة وظيفية غالباً، تتطلب استبعاداً شاملاً، وتتحسن بإدارة التوتر والعلاجات الموضعية أو الجهازية' },
+                { k: ['زاويه', 'فم', 'تشققات', 'احمرار', 'قشور', 'التهاب'], d: 'التهاب زوايا الفم أو الشفة الزاوي (Angular Cheilitis)', p: 'فحص عدوى مختلطة (فطرية/بكتيرية) + تقييم نقص الحديد/فيتامينات + مضاد فطري/مضاد حيوي موضعي', a: 'ترطيب الزوايا، تصحيح إطباق الطقم إن وجد، وعلاج نقص التغذية أو العدوى المرافقة' },
+
+                // 🔹 حالات عامة وأسنان أخرى
                 { k: ['تورم', 'انتفاخ', 'قفزة', 'مضغ', 'مرتفع', 'صديد', 'قيح'], d: 'خراج قمة الجذر أو التهاب دواعم السن الحاد (Periapical/Periodontal Abscess)', p: 'فحص إكلينيكي + أشعة + تقييم الحاجة لشق وتصريف أو مضاد حيوي جهازي + فتح لب إن أمكن', a: '⚠️ مراجعة فورية. كمادات باردة خارجية. لا تضغط على المنطقة المتورمة. التزام بالمضاد إن وُصف' },
                 { k: ['لثه', 'نزف', 'فرشاه', 'رائحه', 'ترسبات', 'جيوب', 'تخلخل'], d: 'التهاب دواعم السن المزمن (Chronic Periodontitis)', p: 'تقييم عمق الجيوب (Probing) + أشعة بانوراما/بيريابيكال + خطة تنظيف عميق (SRP)', a: 'تحسين العناية المنزلية، غسول مطهر مؤقت، جلسات تنظيف دورية، وإقلاع عن التدخين إن وجد' },
-                { k: ['كسر', 'شرخ', 'جزء', 'سقط', 'حشوه', 'تلبيسه'], d: 'كسر سني أو فشل تعويض سابق (Fractured Tooth/Failed Restoration)', p: 'فحص ثبات الأجزاء + أشعة + تقييم إمكانية الترميم المباشر، التاج، أو الاستبدال اللبي', a: 'حفظ الجزء المكسور في وسط رطب (حليب/محلول ملحي)، تجنب المضغ على الجهة، ومراجعة عاجلة' },
+                { k: ['كسر', 'حشوه', 'تلبيسه', 'جزء', 'سقط'], d: 'كسر سني أو فشل تعويض سابق (Fractured Tooth/Failed Restoration)', p: 'فحص ثبات الأجزاء + أشعة + تقييم إمكانية الترميم المباشر، التاج، أو الاستبدال اللبي', a: 'حفظ الجزء المكسور في وسط رطب، تجنب المضغ على الجهة، ومراجعة عاجلة' },
                 { k: ['خلع', 'سنخ', 'رائحه', 'فراغ', 'يومين', 'ثلاثه', 'يتمدد'], d: 'السنخ الجاف بعد القلع (Dry Socket/Alveolar Osteitis)', p: 'غسل السنخ بمحلول ملحي دافئ + وضع ضمادة مسكنة (Alveogyl/Eugenol) + مسكنات فموية', a: 'تجنب المضمضة القوية أو الشفط، الامتناع عن التدخين 72 ساعة، والالتزام بالمسكنات الموصوفة' },
                 { k: ['ضرس', 'عقل', 'خلفي', 'يصعب', 'فتح', 'فم', 'نصف', 'ظاهر'], d: 'انحشار ضرس العقل مع التهاب حوله التاجي (Impacted 3rd Molar with Pericoronitis)', p: 'غسل المنطقة تحت الغطاء اللثوي + أشعة بانوراما/OPG + تقييم القلع الجراحي أو استئصال الغطاء', a: 'غسول كلورهيكسيدين، مسكنات، وأطعمة لينة. تجنب العبث بالمنطقة باللسان أو اليد' },
                 { k: ['طقطقه', 'صدغ', 'صداع', 'تحتك', 'وجع', 'اذن', 'فك', 'قفل'], d: 'اضطراب المفصل الفكي الصدغي أو خلل وظيفي عضلي (TMD/Myofascial Pain)', p: 'فحص إطباق وعضلات المضغ + أشعة مفصلية إن لزم + تقييم الحاجة لواق ليلي أو علاج طبيعي', a: 'أطعمة لينة، كمادات دافئة، تجنب فتح الفم واسعاً، وتقليل التوتر العضلي والصرير الليلي' },
                 { k: ['صرير', 'طحن', 'اجهاد', 'صباح', 'متهالكه', 'تاكل'], d: 'صرير الأسنان الليلي أو النهاري (Bruxism)', p: 'تقييم تآكل المينا + فحص إطباق + تصميم واقي ليلي مخصص (Night Guard) + ترميم استعاضي', a: 'تقليل الكافيين، إدارة التوتر، تمارين استرخاء الفك، ومراجعة دورية لفحص الواقي' },
-                { k: ['قرحه', 'ابيض', 'اصفر', 'احمر', 'حولها', 'مؤلم', 'يتكرر'], d: 'القرحة القلاعية المتكررة أو رضّية (Recurrent Aphthous/ Traumatic Ulcer)', p: 'فحص حواف القرحة + استبعاد الأسباب الرضية (أسنان حادة/طقم) + وصف مخدر موضعي/كورتيكوستيرويد', a: 'تجنب الأطعمة الحمضية/الحارة، الحفاظ على نظافة الفم، ومراجعة إذا تجاوزت الشفاء 14 يوماً' },
+                { k: ['قرحه', 'ابيض', 'اصفر', 'احمر', 'حولها', 'مؤلم', 'يتكرر'], d: 'القرحة الرضية أو الفموية غير النوعية (Traumatic/Non-Specific Ulcer)', p: 'فحص حواف القرحة + استبعاد الأسباب الرضية (أسنان حادة/طقم) + وصف مخدر موضعي/كورتيكوستيرويد', a: 'تجنب الأطعمة الحمضية/الحارة، الحفاظ على نظافة الفم، ومراجعة إذا تجاوزت الشفاء 14 يوماً' },
                 { k: ['ابيض', 'يمسح', 'يحمر', 'حرقه', 'جفاف', 'طقم', 'مناعه'], d: 'داء المبيضات الفموي (Oral Candidiasis/Thrush)', p: 'فحص سريري + مسحة إن لزم + وصف مضاد فطري موضعي (نيستاتين/كلوتريمازول) أو جهازي', a: 'تعقيم الطقم ليلاً، تقليل السكريات، مراجعة الأدوية المثبطة للمناعة، والالتزام بالدواء حتى الزوال' },
                 { k: ['لثه', 'نازله', 'جذر', 'ظاهر', 'فرشاه', 'قويه', 'تنظيف'], d: 'انحسار اللثة أو تآكل عنق السن (Gingival Recession/Cervical Abrasion)', p: 'تقييم سبب الانحسار (تقنية تنظيف/إطباق/لثة رقيقة) + حشو زجاجي أو غطاء لثوي إن لزم', a: 'استخدام فرشاة ناعمة وتقنية دائرية لطيفة، معجون منخفض الاحتكاك، وفحص إطباق الأسنان' },
-                { k: ['حشوه', 'واقعه', 'تاج', 'يتحرك', 'طعم', 'سيء', 'تسرب'], d: 'فشل ترميمي أو تسرب تحت الحشوة/التاج (Restorative Failure/Microleakage)', p: 'إزالة الحشوة/التاج + كشف النخر الثانوي + تعقيم التجويف + ترميم جديد أو تاج مخصص', a: 'تنظيف المنطقة بلطف بعد الأكل، تجنب المضغ القاسي عليها، ومراجعة سريعة لمنع وصول التسوس لللب' },
-                { k: ['بزوغ', 'طفل', 'سن', 'يخرج', 'لثه', 'منتفخه', 'حمراء', 'سيلان', 'بكاء'], d: 'ألم بزوغ الأسنان عند الأطفال (Teething Discomfort)', p: 'فحص موضع السن البازغ + استبعاد أسباب أخرى (التهاب أذن/حمى) + توجيه استخدام جل ملطف أو حلقة تبريد', a: 'مسح اللثة بقطعة قماش نظيفة وباردة، تجنب المسكنات القوية دون وصفة، والصبر على المرحلة' },
+                { k: ['حشوه', 'واقعه', 'تاج', 'يتحرك', 'طعم', 'سيء', 'تسرب'], d: 'فشل ترميمي أو تسرب تحت الحشوة/التاج (Restorative Failure/Microleakage)', p: 'إزالة الحشوة/التاج + كشف النخر الثانوي + تعقيم التجويف + ترميم جديد أو تاج مخصص', a: 'تنظيف المنطقة بلطف بعد الأكل، تجنب المضغ القاسي عليها، ومراجعة سريعة لمنع وصول التسوس لللب' },                { k: ['بزوغ', 'طفل', 'سن', 'يخرج', 'لثه', 'منتفخه', 'حمراء', 'سيلان', 'بكاء'], d: 'ألم بزوغ الأسنان عند الأطفال (Teething Discomfort)', p: 'فحص موضع السن البازغ + استبعاد أسباب أخرى (التهاب أذن/حمى) + توجيه استخدام جل ملطف أو حلقة تبريد', a: 'مسح اللثة بقطعة قماش نظيفة وباردة، تجنب المسكنات القوية دون وصفة، والصبر على المرحلة' },
                 { k: ['رائحه', 'فم', 'جفاف', 'لسان', 'بيض', 'طنسول', 'معد', 'صيام', 'غدد'], d: 'رائحة الفم الكريهة غير اللثوية (Halitosis - Non-Periodontal)', p: 'فحص اللسان واللوزتين + تقييم جفاف الفم (Xerostomia) + إحالة طبية إن لزم (جهاز هضمي/جيوب)', a: 'تنظيف اللسان يومياً، ترطيب الفم، مضغ علكة خالية سكر، ومراجعة نظام التغذية والأدوية' },
                 { k: ['الم', 'عام', 'غامض', 'غير محدد', 'فحص'], d: 'ألم سني غير نوعي يحتاج تقييماً شاملاً (Non-Specific Dental Pain)', p: 'فحص إكلينيكي دقيق + أشعة سينية أساسية + اختبارات حيوية متسلسلة لعزل السن المسبب', a: 'مراقبة الأعراض، تسجيل المحفزات، ومراجعة عاجلة إذا اشتد الألم أو ظهر تورم' }
             ];
+
             let bestMatch = null, maxScore = 0;
             for (const rule of rules) {
                 let score = 0;
@@ -439,7 +418,8 @@
                 const resultDiv = document.getElementById('aiResult');
                 if(!input) return showToast("❌ اكتب الأعراض أولاً", "error");            
                 if(!outputBox || !resultDiv) return showToast("⚠️ خطأ في تحميل الواجهة", "error");
-                outputBox.classList.remove('d-none');                resultDiv.innerHTML = '<div class="text-center py-3"><i class="fas fa-brain fa-pulse text-purple-600 mb-2 block"></i><span class="text-xs text-gray-500">جاري التحليل...</span></div>';
+                outputBox.classList.remove('d-none');
+                resultDiv.innerHTML = '<div class="text-center py-3"><i class="fas fa-brain fa-pulse text-purple-600 mb-2 block"></i><span class="text-xs text-gray-500">جاري التحليل...</span></div>';
                 const analysis = analyzeDentalSymptoms(input);
                 resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed space-y-2">${analysis}</div><div class="text-[10px] text-gray-400 mt-2 text-center">🟢 تحليل محلي آمن (يعمل بدون إنترنت)</div>`;
                 showToast("✅ تم التحليل بنجاح", "success");
@@ -459,8 +439,7 @@
             const data = { id: pid, name, phone, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.id || 'admin', updatedAt: new Date().toISOString(), totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '' };
             addToLocalDB(data);            
             if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync:", err));
-            showToast("✅ تم الحفظ", "success");
-            ['pName','pPhone','pDiag'].forEach(id => document.getElementById(id).value = '');
+            showToast("✅ تم الحفظ", "success");            ['pName','pPhone','pDiag'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('aiBox').classList.add('d-none'); currentTooth = null; document.querySelectorAll('.tooth-btn').forEach(x => x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none');
             updateStats(); loadTodayAppointments(); if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
         }
@@ -488,7 +467,8 @@
         function loadActiveDoctors() { if(!firebaseReady || !db) return; db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap => { const c = document.getElementById('activeDoctors'); if(!c) return; c.innerHTML = ''; if(!snap.exists()){ c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء</p>'; return; } snap.forEach(ch => { const v = ch.val(); c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`; }); }); }
         function suspendDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>{ showToast("⛔ تم الإيقاف","info"); loadActiveDoctors(); }); }        
         function checkAppointmentAlerts() { const pts = getLocalDB(), now=new Date(), el=document.getElementById('alertList'), sec=document.getElementById('alertSection'), cnt=document.getElementById('alertCount'); if(!el||!sec||!cnt) return; el.innerHTML=''; let ac=0, uc=0; pts.forEach(p=>{if(!p.nextAppointment) return; const ad=new Date(p.nextAppointment), dh=(ad-now)/(36e5); if(dh>0&&dh<=24){ac++; const u=dh<=2; if(u) uc++; const ts=ad.toLocaleString('ar-EG',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'}); el.innerHTML+=`<div class="p-2 rounded-lg border flex justify-between items-center ${u?'bg-red-50 border-red-200':'bg-amber-50 border-amber-200'}"><div><span class="font-bold text-sm">${p.name}</span><div class="text-[10px] text-gray-600">🕒 ${ts}</div></div><button onclick="event.stopPropagation();openWhatsApp('${p.phone}','${p.name}','موعدك ${ts}')" class="wa-btn-patient"><i class="fab fa-whatsapp"></i></button></div>`; }}); cnt.innerText=ac; if(ac>0){sec.classList.remove('d-none');cnt.className=uc>0?'status-badge status-urgent ml-auto':'status-badge status-pending ml-auto';} else sec.classList.add('d-none'); }
-        function openWhatsApp(phone,name,custom='') { if(!phone) return showToast("❌ لا يوجد رقم هاتف","error"); let c=phone.replace(/[\s\-\(\)]/g,''); if(c.startsWith('09')) c='963'+c.substring(1); else if(!c.startsWith('+963')) c='963'+c; const m=custom||`مرحباً ${name}،\nمن عيادة بَسْمَة السنية.\nتذكير بموعدك القادم. 🦷✨`; window.open(`https://wa.me/${c}?text=${encodeURIComponent(m)}`,'_blank'); }        function filterPatients(q) { const ql=q.toLowerCase().trim(); let v=0; document.querySelectorAll('#patientContainer > div').forEach(card=>{ const t=card.innerText.toLowerCase(); if(ql===''||t.includes(ql)){card.classList.remove('d-none');v++;} else card.classList.add('d-none'); }); document.getElementById('noRecords').classList.toggle('d-none',v>0); }
+        function openWhatsApp(phone,name,custom='') { if(!phone) return showToast("❌ لا يوجد رقم هاتف","error"); let c=phone.replace(/[\s\-\(\)]/g,''); if(c.startsWith('09')) c='963'+c.substring(1); else if(!c.startsWith('+963')) c='963'+c; const m=custom||`مرحباً ${name}،\nمن عيادة بَسْمَة السنية.\nتذكير بموعدك القادم. 🦷✨`; window.open(`https://wa.me/${c}?text=${encodeURIComponent(m)}`,'_blank'); }
+        function filterPatients(q) { const ql=q.toLowerCase().trim(); let v=0; document.querySelectorAll('#patientContainer > div').forEach(card=>{ const t=card.innerText.toLowerCase(); if(ql===''||t.includes(ql)){card.classList.remove('d-none');v++;} else card.classList.add('d-none'); }); document.getElementById('noRecords').classList.toggle('d-none',v>0); }
         function loadData() { renderPatients(getLocalDB(),'local'); if(firebaseReady && db) { db.ref('patients').orderByChild('timestamp').off('value'); db.ref('patients').orderByChild('timestamp').on('value', snap=>{}); } }
         function renderPatients(data, source) { const c=document.getElementById('patientContainer'); if(!c) return; c.innerHTML=''; if(!data||data.length===0){document.getElementById('noRecords').classList.remove('d-none');document.getElementById('recordsCount').innerText='0';return;} document.getElementById('noRecords').classList.add('d-none'); document.getElementById('recordsCount').innerText=data.length; [...data].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0)).forEach(v=>{ const pid=v.firebaseId||v.id, tooth=v.tooth?`<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">🦷 #${v.tooth}</span>`:'', diag=v.diag?(v.diag.length>60?v.diag.substring(0,60)+'...':v.diag):'بدون ملاحظات'; c.innerHTML+=`<div class="section-card py-3 border-r-4 border-r-blue-500 cursor-pointer hover:shadow-md hover:border-r-cyan-500 transition bg-white" onclick="openPatientEdit('${pid}','${source}')"><div class="flex justify-between items-start"><div class="flex-1"><div class="flex items-center gap-2"><span class="font-bold text-sm text-blue-800">${v.name||'مريض'}</span>${v.phone?`<span class="text-[10px] text-gray-400">📱 ${v.phone}</span>`:''}</div>${tooth?`<div class="mt-1">${tooth}</div>`:''}<p class="text-xs text-gray-600 mt-2 line-clamp-2">${diag}</p></div><div class="text-left flex flex-col items-end gap-1"><span class="text-[10px] bg-gray-100 px-2 py-1 rounded">${v.date||'-'}</span><button onclick="event.stopPropagation();openWhatsApp('${v.phone}','${v.name}')" class="wa-btn-patient mt-1" title="واتساب"><i class="fab fa-whatsapp"></i></button></div></div></div>`; }); }
         function openPatientEdit(pid, source) { const p=getLocalDB().find(x=>x.id===pid||x.firebaseId===pid); if(p) loadPatientToForm(p,'local'); else showToast("❌ غير موجود","error"); }
