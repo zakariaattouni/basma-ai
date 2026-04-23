@@ -27,7 +27,8 @@
         .quick-action { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; border: none; border-radius: 12px; padding: 10px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.2s; width: 100%; margin-bottom: 8px; font-size: 13px; }
         .quick-action:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(59,130,246,0.3); }
         .quick-action.register { background: linear-gradient(135deg, #10b981, #34d399); }
-        #aiBox { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 2px solid #7dd3fc; border-radius: 12px; padding: 12px; font-size: 12px; line-height: 1.5; color: #0c4a6e; margin-top: 10px; transition: all 0.3s ease; }
+        .ai-section { border-right: 4px solid #8b5cf6; background: #faf5ff; padding: 10px; border-radius: 8px; margin-bottom: 8px; }
+        #aiOutputBox { transition: height 0.3s ease, opacity 0.3s ease; }
         #toastContainer { position: fixed; top: 0; left: 0; width: 100%; pointer-events: none; z-index: 99999; }
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-10px); background: white; padding: 10px 16px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px; opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); max-width: 90%; pointer-events: none; z-index: 99999; }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -46,8 +47,8 @@
         .wa-float:hover { background: #128C7E; transform: scale(1.1); }
         .wa-pulse { animation: pulse-wa 2s infinite; }        .wa-pulse:hover { animation: none; }
         @keyframes pulse-wa { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
-        .conn-indicator { font-size: 9px; padding: 2px 6px; border-radius: 10px; }
-        .conn-online { background: #dcfce7; color: #166534; }        .conn-offline { background: #fee2e2; color: #991b1b; }        .cursor-pointer { cursor: pointer; }
+        .conn-indicator { font-size: 9px; padding: 2px 6px; border-radius: 10px; }        .conn-online { background: #dcfce7; color: #166534; }        .conn-offline { background: #fee2e2; color: #991b1b; }
+        .cursor-pointer { cursor: pointer; }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .wa-btn-patient { background: #25D366; color: white; border: none; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: 0.2s; }
         .wa-btn-patient:hover { background: #128C7E; transform: scale(1.1); }
@@ -56,9 +57,6 @@
         .search-box i { color: #64748b; }
         .copyright-footer { background: #f8fafc; color: #64748b; text-align: center; padding: 8px 15px; font-size: 11px; font-weight: 500; border-top: 1px solid #e2e8f0; position: fixed; bottom: 65px; left: 0; right: 0; z-index: 9998; }
         .copyright-footer strong { font-weight: 700; color: #475569; }
-        .typing-dots::after { content: '...'; animation: typing 1.5s infinite; }
-        @keyframes typing { 0% { content: '.'; } 33% { content: '..'; } 66% { content: '...'; } }
-        #aiOutputBox { transition: height 0.3s ease, opacity 0.3s ease; }
     </style>
 </head>
 <body class="pb-32">
@@ -92,12 +90,13 @@
             <h1 class="font-bold text-blue-900">بَسْمَة AI</h1>
             <span id="connBadge" class="conn-indicator">...</span>
         </header>
-        <div id="userBar" class="bg-blue-50 px-4 py-2 text-center text-xs text-blue-700 d-none">            <i class="fas fa-user-circle ml-1"></i> <span id="userTypeDisplay">مدير النظام</span>
+        <div id="userBar" class="bg-blue-50 px-4 py-2 text-center text-xs text-blue-700 d-none">            
+            <i class="fas fa-user-circle ml-1"></i> <span id="userTypeDisplay">مدير النظام</span>
             <button type="button" onclick="logout()" class="mr-3 text-red-500 hover:text-red-700"><i class="fas fa-sign-out-alt ml-1"></i>خروج</button>
         </div>        
         <main class="p-4 max-w-md mx-auto">
-            <div id="page-home" class="space-y-3">                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 rounded-2xl shadow">
-                    <h2 class="font-bold mb-1">👋 لوحة التحكم</h2>
+            <div id="page-home" class="space-y-3">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 rounded-2xl shadow">                    <h2 class="font-bold mb-1">👋 لوحة التحكم</h2>
                     <p class="text-blue-100 text-xs">اختر القسم للبدء</p>
                 </div>
                 <div id="todayAppointmentsSection" class="section-card border-indigo-200 bg-gradient-to-br from-indigo-50 to-blue-50 d-none">
@@ -128,31 +127,25 @@
                             <h3 class="font-bold text-sm"><i class="fas fa-user-check text-green-500 ml-1"></i> أطباء نشطين</h3>
                         </div>
                         <div id="activeDoctors" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
-                        <hr class="border-gray-200 my-3">
-                        <h3 class="font-bold text-sm mb-2"><i class="fas fa-key text-purple-500 ml-1"></i> مفتاح الذكاء الاصطناعي (اختياري)</h3>
-                        <div class="flex gap-2 mb-2">
-                            <input type="text" id="aiApiKey" placeholder="الصق مفتاح Pollinations هنا" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm">
-                            <button onclick="saveApiKey()" class="bg-purple-500 text-white px-3 rounded-lg font-bold text-sm hover:bg-purple-600">حفظ</button>
-                            <button onclick="testApiKey()" class="bg-gray-200 text-gray-700 px-3 rounded-lg font-bold text-sm hover:bg-gray-300">فحص</button>
-                        </div>
-                        <p class="text-[10px] text-gray-500">💡 اتركه فارغاً للاستخدام المحلي المضمون (بدون إنترنت)</p>
                     </div>
                 </div>
                 <div class="section-card">
                     <h3 class="font-bold text-sm mb-2"><i class="fas fa-chart-pie text-blue-500 ml-1"></i> إحصائيات</h3>
-                    <div class="grid grid-cols-3 gap-2 text-center">                        <div class="bg-blue-50 p-2 rounded-lg"><div class="font-bold text-blue-600" id="statPatients">0</div><div class="text-[10px] text-gray-500">مرضى</div></div>
+                    <div class="grid grid-cols-3 gap-2 text-center">                        
+                        <div class="bg-blue-50 p-2 rounded-lg"><div class="font-bold text-blue-600" id="statPatients">0</div><div class="text-[10px] text-gray-500">مرضى</div></div>
                         <div class="bg-green-50 p-2 rounded-lg"><div class="font-bold text-green-600" id="statToday">0</div><div class="text-[10px] text-gray-500">اليوم</div></div>
-                        <div class="bg-amber-50 p-2 rounded-lg"><div class="font-bold text-amber-600" id="statDoctors">0</div><div class="text-[10px] text-gray-500">أطباء</div></div>                    </div>
+                        <div class="bg-amber-50 p-2 rounded-lg"><div class="font-bold text-amber-600" id="statDoctors">0</div><div class="text-[10px] text-gray-500">أطباء</div></div>                    
+                    </div>
                 </div>
                 <div id="alertSection" class="d-none">
-                    <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">                        <div class="flex items-center gap-2 mb-2">
+                    <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">
+                        <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-bell text-amber-600"></i>
                             <h3 class="font-bold text-sm">تنبيهات المواعيد</h3>
                             <span class="status-badge status-urgent ml-auto" id="alertCount">0</span>
                         </div>
                         <div id="alertList" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
-                    </div>
-                </div>
+                    </div>                </div>
             </div>
             <div id="page-add" class="d-none space-y-3">
                 <div class="section-card">
@@ -187,20 +180,21 @@
                     <input type="password" id="subPassword" placeholder="كلمة مرور" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
                     <input type="text" id="subSpecialty" placeholder="التخصص (اختياري)" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">
                     <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
-                    <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-3 hover:bg-gray-300 transition">← العودة لتسجيل الدخول</button>                </div>
+                    <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-3 hover:bg-gray-300 transition">← العودة لتسجيل الدخول</button>                
+                </div>
             </div>            
             <div id="page-ai" class="d-none space-y-3">
                 <div class="section-card border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
                     <div class="flex items-center gap-2 mb-3"><div class="bg-purple-100 p-2 rounded-lg"><i class="fas fa-robot text-purple-600"></i></div><h2 class="font-bold text-sm">🧠 المساعد الذكي السريري</h2></div>
                     <div class="bg-white p-3 rounded-xl border border-purple-200 mb-3 shadow-sm">
                         <label class="text-xs text-gray-600 font-medium block mb-1">📝 الأعراض والعلامات السريرية</label>
-                        <textarea id="aiInput" placeholder="مثال: ألم نابض في السن 36 يزداد ليلاً، حساسية للبارد..." class="w-full p-2 bg-gray-50 border rounded-lg outline-none focus:border-purple-400 resize-none text-sm" rows="4"></textarea>                        <button onclick="runAdvancedAI_Live()" class="mt-2 w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-2 rounded-lg text-sm hover:opacity-90 transition"><i class="fas fa-magic ml-1"></i> تحليل ذكي (بدون إنترنت)</button>
+                        <textarea id="aiInput" placeholder="مثال: ألم نابض في السن 36 يزداد ليلاً، حساسية للبارد..." class="w-full p-2 bg-gray-50 border rounded-lg outline-none focus:border-purple-400 resize-none text-sm" rows="4"></textarea>
+                        <button onclick="runAdvancedAI_Live()" class="mt-2 w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-2 rounded-lg text-sm hover:opacity-90 transition"><i class="fas fa-magic ml-1"></i> تحليل ذكي (بدون إنترنت)</button>
                     </div>
                     <div id="aiOutputBox" class="d-none bg-white p-3 rounded-xl border-2 border-purple-300 shadow-inner">
                         <div class="flex justify-between items-center mb-2 border-b border-gray-100 pb-2"><span class="text-xs font-bold text-purple-700">🤖 نتيجة التحليل</span><button onclick="clearAI()" class="text-[10px] text-gray-500 hover:text-red-500 flex items-center gap-1">مسح <i class="fas fa-times"></i></button></div>
-                        <div id="aiResult" class="text-sm text-gray-700 leading-relaxed space-y-2"></div>
-                    </div>
-                </div>
+                        <div id="aiResult" class="text-sm text-gray-700 leading-relaxed"></div>
+                    </div>                </div>
             </div>
             <div id="page-list" class="d-none space-y-3 pb-16">
                 <div class="flex justify-between items-center mb-2 px-1"><h2 class="font-bold text-sm"><i class="fas fa-clipboard-list text-blue-500 ml-1"></i> سجلات المرضى</h2><span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full" id="recordsCount">0</span></div>
@@ -235,7 +229,8 @@
                     <div id="paymentHistory" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                 </div>
                 <div class="section-card"><h3 class="font-bold text-xs mb-2"><i class="fas fa-history text-gray-500 ml-1"></i> آخر تحديث</h3><div id="patientVisits" class="space-y-2 text-sm"><div class="p-2 bg-gray-50 rounded-lg border text-xs"><span class="text-gray-500">سيظهر هنا تاريخ آخر تعديل للبيانات</span></div></div></div>
-            </div>        </main>
+            </div>        
+        </main>
         <div class="copyright-footer">            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
         </div>
         <footer class="main-footer">
@@ -243,33 +238,39 @@
             <button type="button" onclick="navTo('add')" id="btn-add" class="nav-btn"><i class="fas fa-plus-circle"></i><span>فحص</span></button>
             <button type="button" onclick="navTo('ai')" id="btn-ai" class="nav-btn"><i class="fas fa-robot"></i><span>AI</span></button>
             <button type="button" onclick="navTo('list')" id="btn-list" class="nav-btn"><i class="fas fa-users"></i><span>المرضى</span></button>
-        </footer>    </div>
+        </footer>
+    </div>
     <a href="https://wa.me/963939436998?text=مرحباً، أرغب باستفسار حول تطبيق بَسْمَة AI" target="_blank" class="wa-float wa-pulse" title="تواصل عبر واتساب"><i class="fab fa-whatsapp text-2xl"></i></a>
     <script>
-        // ✅ تهيئة فايربيس
-        let db = null, firebaseReady = false;
-        try {
+        // ✅ تهيئة فايربيس (يعمل كخيار إضافي فقط، ولا يعطل التطبيق إذا فشل)
+        let db = null, firebaseReady = false;        try {
             if (typeof firebase !== 'undefined') {
                 const config = { databaseURL: "https://basma-clinic-default-rtdb.firebaseio.com/" };
                 if (!firebase.apps.length) firebase.initializeApp(config);
                 db = firebase.database();
                 firebaseReady = true;
             }
-        } catch (e) { console.error("Firebase init:", e); }
+        } catch (e) { console.error("Firebase:", e); }
         
         const connBadge = document.getElementById('connBadge');
         if(firebaseReady) { connBadge.className = 'conn-indicator conn-online'; connBadge.innerText = '🟢 متصل'; }
         else { connBadge.className = 'conn-indicator conn-offline'; connBadge.innerText = '🔴 وضع محلي'; }
         
-        let currentTooth = null, currentUser = null, aiApiKey = '';
+        let currentTooth = null, currentUser = null;
         let lastPendingIds = [];
         let pollingInterval = null;
         const LOCAL_KEY = 'basma_patients';
         
+        // ✅ دوال التخزين المحلي المضمونة
         function getLocalDB() { try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); } catch { return []; } }
         function saveLocalDB(data) { try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); return true; } catch { showToast("❌ فشل الحفظ", "error"); return false; } }
         function addToLocalDB(record) { const l = getLocalDB(); if(!l.some(p => p.id === record.id)) { l.push(record); saveLocalDB(l); } }
-        function updateLocalDB(id, newData) { const l = getLocalDB(); const idx = l.findIndex(p => p.id === id || p.firebaseId === id); if(idx !== -1) { l[idx] = { ...l[idx], ...newData, id: l[idx].id, firebaseId: l[idx].firebaseId || id }; return saveLocalDB(l); } return false; }
+        function updateLocalDB(id, newData) { 
+            const l = getLocalDB(); 
+            const idx = l.findIndex(p => p.id === id || p.firebaseId === id); 
+            if(idx !== -1) { l[idx] = { ...l[idx], ...newData, id: l[idx].id, firebaseId: l[idx].firebaseId || id }; return saveLocalDB(l); } 
+            return false; 
+        }
         function deleteFromLocalDB(id) { saveLocalDB(getLocalDB().filter(p => p.id !== id && p.firebaseId !== id)); }
         
         function switchLogin(type) {
@@ -283,16 +284,17 @@
         
         function handleAdminLogin() {            
             const pwd = document.getElementById('adminPassword').value.trim();
-            if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400); }            else showToast("❌ كلمة المرور غير صحيحة", "error");
+            if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400); }            
+            else showToast("❌ كلمة المرور غير صحيحة", "error");
         }
         function handleDoctorLogin() {
             try {
                 const email = document.getElementById('doctorEmail').value.trim(), pwd = document.getElementById('doctorPassword').value.trim();
                 if(!email || !pwd) return showToast("أدخل البريد وكلمة المرور", "error");
                 if(!firebaseReady) return showToast("⚠️ دخول الأطباء يتطلب اتصالاً بـ Firebase", "info");
-                showToast("🔄 جاري التحقق...", "info");
-                db.ref('doctor_subscriptions').orderByChild('email').equalTo(email).once('value').then(snap => {
-                    if(!snap.exists()) return showToast("❌ حساب غير موجود", "error");                    let found = null; snap.forEach(c => { if(c.val().password === pwd) found = {id: c.key, ...c.val()}; });
+                showToast("🔄 جاري التحقق...", "info");                db.ref('doctor_subscriptions').orderByChild('email').equalTo(email).once('value').then(snap => {
+                    if(!snap.exists()) return showToast("❌ حساب غير موجود", "error");
+                    let found = null; snap.forEach(c => { if(c.val().password === pwd) found = {id: c.key, ...c.val()}; });
                     if(!found) return showToast("❌ كلمة المرور خاطئة", "error");
                     if(found.status !== 'active') return showToast("⏳ حسابك قيد المراجعة", "warning");
                     currentUser = { role: 'doctor', ...found }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 400);
@@ -304,9 +306,7 @@
             if(currentUser.role === 'admin') { 
                 document.getElementById('userTypeDisplay').innerText = 'مدير النظام'; 
                 document.getElementById('adminSection').classList.remove('d-none'); 
-                startSubscriptionPolling(); loadActiveDoctors();
-                aiApiKey = localStorage.getItem('pollinations_key') || '';
-                document.getElementById('aiApiKey').value = aiApiKey;
+                try { startSubscriptionPolling(); loadActiveDoctors(); } catch(e){}
             }
             else { 
                 document.getElementById('userTypeDisplay').innerText = `د. ${currentUser.name}`; 
@@ -335,7 +335,7 @@
             document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('d-none'));
             const target = document.getElementById(`page-${page}`); if(target) target.classList.remove('d-none');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            const btnMap = {home:'home', add:'add', ai:'ai', list:'list'}, btn = document.getElementById(`btn-${btnMap[page]||'home'}`);
+            const btnMap = {home:'home', add:'add', ai:'ai', list:'list', register:'home', subscribe:'home'}, btn = document.getElementById(`btn-${btnMap[page]||'home'}`);
             if(btn) btn.classList.add('active');
             if(page === 'list') { loadData(); updateStats(); }
             if(page === 'home') { loadTodayAppointments(); checkAppointmentAlerts(); }
@@ -350,47 +350,7 @@
             });
         }
         
-        // ✅ ✅ ✅ الدوال المُصلحة للذكاء الاصطناعي ✅ ✅ ✅
-        
-        function saveApiKey() {
-            const key = document.getElementById('aiApiKey').value.trim();
-            if(key) {
-                localStorage.setItem('pollinations_key', key); aiApiKey = key;
-                showToast("✅ تم حفظ المفتاح", "success");
-            } else {
-                localStorage.removeItem('pollinations_key'); aiApiKey = '';
-                showToast("ℹ️ تم المسح (يعمل محلياً)", "info");
-            }
-        }
-        
-        // ✅ فحص مفتاح Pollinations (مُصحح تماماً)
-        async function testApiKey() {
-            const key = document.getElementById('aiApiKey').value.trim();
-            if(!key) return showToast("❌ أدخل المفتاح أولاً", "error");
-            showToast("🔄 جاري الفحص...", "info");
-            try {
-                // ✅ الرابط الصحيح لـ Pollinations AI
-                const testPrompt = "اختبار";
-                const url = `https://text.pollinations.ai/${encodeURIComponent(testPrompt)}?model=openai-fast&seed=${Math.random()}`;
-                const res = await fetch(url, { 
-                    headers: key ? { "Authorization": `Bearer ${key}` } : {},
-                    mode: 'cors'
-                });
-                if(!res.ok) throw new Error(`خطأ: ${res.status}`);
-                const text = await res.text();
-                if(text && text.length > 10) {
-                    localStorage.setItem('pollinations_key', key); 
-                    aiApiKey = key;
-                    showToast("✅ المفتاح صالح ويعمل", "success");
-                } else {
-                    throw new Error("استجابة غير صحيحة");
-                }
-            } catch(e) { 
-                console.error("API Test Error:", e);
-                showToast("❌ " + (e.message || "فشل الفحص"), "error"); 
-            }
-        }
-                // ✅ تشغيل الذكاء المحلي (مُحصّن ضد الأخطاء)
+        // ✅ ✅ ✅ الذكاء المحلي المُثبت والمُحسَّن ✅ ✅ ✅
         function runAdvancedAI_Live() {
             try {
                 const input = document.getElementById('aiInput')?.value.trim();
@@ -398,14 +358,13 @@
                 const resultDiv = document.getElementById('aiResult');
                 
                 if(!input) return showToast("❌ اكتب الأعراض أولاً", "error");            
-                if(!outputBox || !resultDiv) return showToast("⚠️ خطأ في الواجهة", "error");
+                if(!outputBox || !resultDiv) return showToast("⚠️ خطأ في تحميل الواجهة", "error");
                 
                 outputBox.classList.remove('d-none');
                 resultDiv.innerHTML = '<div class="text-center py-3"><i class="fas fa-brain fa-pulse text-purple-600 mb-2 block"></i><span class="text-xs text-gray-500">جاري التحليل...</span></div>';
                 
-                // ✅ تنفيذ فوري للتحليل المحلي
-                const localAnalysis = generateLocalAnalysis(input);
-                resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed">${localAnalysis}</div><div class="text-[10px] text-gray-400 mt-2 text-center">🟢 تحليل محلي آمن (يعمل بدون إنترنت)</div>`;
+                const analysis = analyzeDentalSymptoms(input);
+                resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed space-y-2">${analysis}</div><div class="text-[10px] text-gray-400 mt-2 text-center">🟢 تحليل محلي آمن (يعمل بدون إنترنت)</div>`;
                 showToast("✅ تم التحليل بنجاح", "success");
             } catch(err) {
                 console.error("AI Error:", err);
@@ -416,44 +375,31 @@
                 showToast("⚠️ عرض تحليل احتياطي", "warning");
             }
         }
-        
-        // ✅ تحليل محلي مُوسّع (أكثر دقة)
-        function generateLocalAnalysis(symptoms) {
-            const s = symptoms.toLowerCase();
-            let diagnosis = "حالة عامة تحتاج فحصاً سريرياً", plan = "فحص سريري + أشعة سينية", advice = "زيارة العيادة خلال 24-48 ساعة";
+
+        function analyzeDentalSymptoms(text) {
+            const clean = text
+                .replace(/[^\u0600-\u06FF\s0-9]/g, ' ')
+                .replace(/أ|إ|آ|ٱ/g, 'ا').replace(/ة/g, 'ه')
+                .replace(/\s+/g, ' ').trim().toLowerCase();
             
-            // 🔍 كلمات مفتاحية موسعة للتشخيص
-            if(s.includes("ألم") && (s.includes("ليل") || s.includes("مستمر") || s.includes("نبض"))) {
-                diagnosis = "احتمال التهاب لب السن (Pulpitis)"; 
-                plan = "اختبار حيوية العصب + أشعة بيريابيكال"; 
-                advice = "مسكن مؤقت (إيبوبروفين) + تجنب الأكل على الجهة المصابة";
-            } 
-            else if(s.includes("تورم") || s.includes("انتفاخ") || s.includes("وجه")) {
-                diagnosis = "احتمال خراج أو التهاب حاد"; 
-                plan = "فحص اللثة + أشعة + تقييم الحاجة لمضاد حيوي"; 
-                advice = "⚠️ راجع العيادة فوراً إذا زاد التورم أو ارتفعت الحرارة";
-            } 
-            else if(s.includes("حساس") && (s.includes("بارد") || s.includes("ساخن") || s.includes("حلو"))) {
-                diagnosis = "حساسية عاجية أو تسوس سطحي"; 
-                plan = "فحص التسوس + اختبار البرودة/الحرارة"; 
-                advice = "استخدم معجوناً للأسنان الحساسة وتجنب المشروبات شديدة الحرارة";
-            } 
-            else if(s.includes("نزف") || s.includes("لثة") || s.includes("دم")) {
-                diagnosis = "التهاب لثة محتمل";                 plan = "فحص اللثة + إزالة الجير إن وجد"; 
-                advice = "استخدم فرشاة ناعمة + غسول فم مطهر + زيارة دورية للتنظيف";
-            } 
-            else if(s.includes("كسر") || s.includes("شرخ") || s.includes("جزء")) {
-                diagnosis = "احتمال كسر في السن"; 
-                plan = "أشعة سينية + فحص ثبات السن"; 
-                advice = "تجنب المضغ على الجهة المصابة حتى الفحص";
+            const rules = [
+                { k: ['الم', 'نابض', 'ليل', 'مستمر'], d: 'التهاب لب السن المحتمل (Pulpitis)', p: 'فحص حيوية العصب + أشعة بيريابيكال', a: 'مسكنات مضادة للالتهاب، تجنب المؤثرات الحرارية، ومراجعة عاجلة للعلاج اللبي' },
+                { k: ['تورم', 'انتفاخ', 'وجه', 'فك', 'خراج', 'صديد'], d: 'خراج سني أو التهاب نسيج داعم حاد', p: 'فحص عاجل + أشعة + تقييم الحاجة لشق وتصريف أو مضاد حيوي', a: '⚠️ مراجعة فورية. كمادات باردة خارجية. لا تضغط على المنطقة المتورمة' },
+                { k: ['حساس', 'بارد', 'ساخن', 'حلو'], d: 'حساسية عاجية أو تسوس متوسط/عميق', p: 'كشف تسوس دقيق + اختبار حيوية غير مباشر + أشعة', a: 'معجون خاص للأسنان الحساسة، تجنب المشروبات القاسية حرارياً، حشو وقائي أو تعويضي' },
+                { k: ['لثه', 'نزف', 'فرشاه', 'رائحه', 'فم', 'ترسبات'], d: 'التهاب لثة أو دواعم سن (Gingivitis/Periodontitis)', p: 'تقييم نسيج اللثة (Probe) + تنظيف احترافي (Scaling)', a: 'تحسين العناية المنزلية، غسول مطهر، وجلسات تنظيف دورية كل 6 أشهر' },
+                { k: ['كسر', 'شرخ', 'جزء', 'سقط', 'حشوه', 'تلبيسه'], d: 'كسر سني أو فقدان تعويض سني', p: 'فحص ثبات السن + أشعة + تقييم صلاحية الترميم أو الحاجة لتاج', a: 'تجنب المضغ على الجهة المصابة، حفظ الجزء المكسور في حليب إن وجد، ومراجعة عاجلة' },
+                { k: ['ضرس', 'عقل', 'خلف', 'صعوبه', 'فتح', 'فم'], d: 'انحشار ضرس العقل أو التهاب حوله التاجي (Pericoronitis)', p: 'فحص إطباق + أشعة بانوراما + تقييم القلع الجراحي أو شق اللثة', a: 'غسول كلورهيكسيدين، مسكنات، واستشارة جراح فم وفكين' }
+            ];
+            for(let r of rules) {
+                if(r.k.some(k => clean.includes(k))) {
+                    return `<div class="ai-section"><b>📋 التشخيص المرجح:</b> ${r.d}</div>
+                            <div class="ai-section" style="border-color:#10b981; background:#f0fdf4;"><b>💡 الخطة العلاجية:</b> ${r.p}</div>
+                            <div class="ai-section" style="border-color:#f59e0b; background:#fffbeb;"><b>⚠️ التوصية السريرية:</b> ${r.a}</div>`;
+                }
             }
-            else if(s.includes("رائحة") || s.includes("فم")) {
-                diagnosis = "احتمال سوء نظافة فموية أو التهاب"; 
-                plan = "فحص اللثة والأسنان + تنظيف احترافي"; 
-                advice = "تنظيف الأسنان 3 مرات يومياً + استخدام خيط الأسنان";
-            }
-            
-            return `<b>📋 التشخيص المبدئي:</b> ${diagnosis}<br><b>💡 الخطة المقترحة:</b> ${plan}<br><b>⚠️ النصيحة:</b> ${advice}<br><small class="text-gray-500 mt-2 block">* هذا تحليل مبدئي لا يغني عن التشخيص السريري المباشر</small>`;
+            return `<div class="ai-section"><b>📋 التقييم المبدئي:</b> أعراض غير نوعية تحتاج فحصاً إكلينيكياً دقيقاً</div>
+                    <div class="ai-section" style="border-color:#3b82f6; background:#eff6ff;"><b>💡 الإجراء المقترح:</b> فحص شامل + أشعة سينية</div>
+                    <div class="ai-section" style="border-color:#64748b; background:#f8fafc;"><b>📝 ملاحظة:</b> يُرجى تحديد موقع الألم بدقة، ومدته، والعوامل المحفزة</div>`;
         }
         
         function clearAI() { document.getElementById('aiInput').value=''; document.getElementById('aiOutputBox').classList.add('d-none'); document.getElementById('aiResult').innerHTML=''; }
@@ -461,8 +407,11 @@
         function runMagicAI() {
             const diag = document.getElementById('pDiag').value.trim(), b=document.getElementById('aiBox');
             if(!diag) return showToast("اكتب الشكوى أولاً","error");
-            b.classList.remove('d-none'); b.innerHTML='<div class="text-center"><i class="fas fa-spinner fa-spin text-indigo-600"></i> جاري...</div>';
-            setTimeout(()=>b.innerHTML=`<b>💡 توصية:</b> السن #${currentTooth||'؟'} يحتاج فحصاً.<br><small class="text-gray-500">⚠️ لا يغني عن التشخيص</small>`,600);
+            b.classList.remove('d-none'); b.innerHTML='<div class="text-center"><i class="fas fa-spinner fa-spin text-indigo-600"></i> جاري التحليل...</div>';
+            setTimeout(()=>{
+                const analysis = analyzeDentalSymptoms(diag);
+                b.innerHTML = `<b>💡 توصية:</b> السن #${currentTooth||'؟'} يحتاج فحصاً.<br><div class="mt-2">${analysis}</div><small class="text-gray-500">⚠️ لا يغني عن التشخيص</small>`;
+            },300);
         }
         
         function savePatient() {
@@ -470,7 +419,8 @@
             if(!name || !diag) return showToast("أكمل الاسم والشكوى", "error");
             const pid = 'local_' + Date.now();
             const data = { id: pid, name, phone, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.id || 'admin', updatedAt: new Date().toISOString(), totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '' };
-            addToLocalDB(data);            if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync:", err));
+            addToLocalDB(data);            
+            if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync:", err));
             showToast("✅ تم الحفظ", "success");
             ['pName','pPhone','pDiag'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('aiBox').classList.add('d-none'); currentTooth = null; document.querySelectorAll('.tooth-btn').forEach(x => x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none');
@@ -488,8 +438,8 @@
             updateStats(); if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
         }
         function submitDoctorSubscription() {            
-            const name=document.getElementById('subName').value.trim(), email=document.getElementById('subEmail').value.trim(), pwd=document.getElementById('subPassword').value.trim();            if(!name||!email||!pwd) return showToast("أكمل الحقول","error");
-            if(firebaseReady && db) db.ref('doctor_subscriptions').push({name,email,password:pwd,specialty:document.getElementById('subSpecialty').value.trim(),status:'pending',requestedAt:new Date().toISOString()});
+            const name=document.getElementById('subName').value.trim(), email=document.getElementById('subEmail').value.trim(), pwd=document.getElementById('subPassword').value.trim();
+            if(!name||!email||!pwd) return showToast("أكمل الحقول","error");            if(firebaseReady && db) db.ref('doctor_subscriptions').push({name,email,password:pwd,specialty:document.getElementById('subSpecialty').value.trim(),status:'pending',requestedAt:new Date().toISOString()});
             showToast("✅ تم الإرسال! انتظر التفعيل","success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value=''); setTimeout(backToLogin,1500);
         }
         
@@ -537,8 +487,8 @@
         function renderPatients(data, source) {
             const c=document.getElementById('patientContainer'); if(!c) return; c.innerHTML='';
             if(!data||data.length===0){document.getElementById('noRecords').classList.remove('d-none');document.getElementById('recordsCount').innerText='0';return;}
-            document.getElementById('noRecords').classList.add('d-none'); document.getElementById('recordsCount').innerText=data.length;            [...data].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0)).forEach(v=>{
-                const pid=v.firebaseId||v.id, tooth=v.tooth?`<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">🦷 #${v.tooth}</span>`:'', diag=v.diag?(v.diag.length>60?v.diag.substring(0,60)+'...':v.diag):'بدون ملاحظات';
+            document.getElementById('noRecords').classList.add('d-none'); document.getElementById('recordsCount').innerText=data.length;
+            [...data].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0)).forEach(v=>{                const pid=v.firebaseId||v.id, tooth=v.tooth?`<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">🦷 #${v.tooth}</span>`:'', diag=v.diag?(v.diag.length>60?v.diag.substring(0,60)+'...':v.diag):'بدون ملاحظات';
                 c.innerHTML+=`<div class="section-card py-3 border-r-4 border-r-blue-500 cursor-pointer hover:shadow-md hover:border-r-cyan-500 transition bg-white" onclick="openPatientEdit('${pid}','${source}')"><div class="flex justify-between items-start"><div class="flex-1"><div class="flex items-center gap-2"><span class="font-bold text-sm text-blue-800">${v.name||'مريض'}</span>${v.phone?`<span class="text-[10px] text-gray-400">📱 ${v.phone}</span>`:''}</div>${tooth?`<div class="mt-1">${tooth}</div>`:''}<p class="text-xs text-gray-600 mt-2 line-clamp-2">${diag}</p></div><div class="text-left flex flex-col items-end gap-1"><span class="text-[10px] bg-gray-100 px-2 py-1 rounded">${v.date||'-'}</span><button onclick="event.stopPropagation();openWhatsApp('${v.phone}','${v.name}')" class="wa-btn-patient mt-1" title="واتساب"><i class="fab fa-whatsapp"></i></button></div></div></div>`;
             });
         }
