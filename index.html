@@ -299,8 +299,8 @@
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
         function handleAdminLogin() {            
             const pwd = document.getElementById('adminPassword')?.value?.trim();
-            // ✅ تم تحديث كلمة المرور إلى salem959
-            if(pwd === "salem959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 300); }            
+            // ✅ تم تحديث كلمة المرور إلى salem1959
+            if(pwd === "salem1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 300); }            
             else showToast("❌ كلمة المرور غير صحيحة", "error");
         }
         function handleDoctorLogin() {
@@ -355,7 +355,6 @@
         
         // ✅ ✅ ✅ محرك الذكاء المحلي من بَسْمَة AI (70+ حالة) ✅ ✅ ✅
         const BASMA_RULES = [
-            // 🔹 طب اللب والجذور (الاندو)
             { k: ['الم','وجع','نابض','خافق','مستمر','دايم','ليل','يزيد','لايروح','حساس','بارد','ساخن'], d: 'التهاب لب السن غير القابل للعكس (Irreversible Pulpitis)', p: 'فحص حيوية العصب كهربائياً وحرارياً + أشعة بيريابيكال + تقييم مدى تأثر العصب', a: 'مسكنات مضادة للالتهاب، تجنب المؤثرات الحرارية، ومراجعة عاجلة للعلاج اللبي أو الاستئصال', ctx: 'الألم نابض، يزداد ليلاً، ذاتي دون مثير.', signs: 'استجابة مفرطة ومتأخرة للحرارة. السن حساس للطرق.', xray: 'غالباً طبيعي، أو اتساع بسيط بالرباط الذروي.', treat: 'علاج لبّي كامل (RCT) أو خلع. مسكنات قوية (NSAIDs).', diff: 'الفرق عن التسوس: الألم ذاتي، نابض، يستمر بعد المثير، ويزداد ليلاً.' },
             { k: ['حساس','بارد','حلو','حامض','سريع','ثواني','يروح','بختفي'], d: 'التهاب لب السن القابل للعكس (Reversible Pulpitis)', p: 'كشف تسوس سطحي + اختبار حيوية + تقييم انحسار اللثة أو تآكل المينا', a: 'معجون فلورايد/حساسية عاجية، تجنب المشروبات الحمضية، حشو وقائي أو تطبيق مادة عازلة', ctx: 'الألم يزول فوراً بزوال المثير، قصير وحاد.', signs: 'تجويف نخرى أو بقعة معتمة. اختبار حيوية إيجابي.', xray: 'منطقة شفافة في المينا أو العاج.', treat: 'إزالة النخر + حشوة ترميمية. حماية لب وقائية إذا كان عميقاً.', diff: 'يتميز بكون الألم مؤقتاً ومثيراً فقط، عكس اللبّي المستمر.' },
             { k: ['الم','عض','مضغ','مرتفع','ضغط','قمة','بيوجع لما بضغط'], d: 'التهاب دواعم السن الذروي الحاد (Acute Apical Periodontitis)', p: 'فحص إطباق + أشعة بيريابيكال + اختبار حيوية سلبي عادةً + تقييم الحاجة لفتح لب أو علاج جذري', a: 'مسكنات NSAIDs، تجنب المضغ على السن، ومراجعة عاجلة لتخفيف الضغط الذروي', ctx: 'ألم عند المضغ أو الطرق، السن مرتفع.', signs: 'السن حساس للطرق، قد يكون مرتفعاً.', xray: 'اتساع بسيط في الرباط الذروي.', treat: 'فتح لب فوري للتصريف، ضبط الإطباق، مسكنات.', diff: 'يختلف عن اللبّي بأن الألم عند المضغ وليس ذاتياً.' },
@@ -368,8 +367,6 @@
             { k: ['الم','حاد','مفاجئ','بعد حشو','بعد عصب','انتفاخ','حمى'], d: 'تفاقم حاد بعد العلاج اللبي (Acute Exacerbation)', p: 'إعادة فتح السن للتصريف + تنظيف القنوات + مضاد حيوي إن لزم + مسكنات قوية', a: 'مراجعة عاجلة خلال 24 ساعة، عدم المضغ على السن، والالتزام بالمسكنات والمضاد إن وُصف', ctx: 'ألم وتورم مفاجئ بعد العلاج.', signs: 'تورم، حمى، حساسية.', xray: 'قد تظهر آفة ذروية.', treat: 'تصريف فوري، مضاد حيوي.', diff: 'يحدث بعد العلاج، وليس حالة أولية.' },
             { k: ['الم','عند الضغط','حشوه','عالية','مرتفع','ما بتمضغ'], d: 'ارتفاع في الإطباق بعد الترميم (High Occlusion)', p: 'فحص الإطباق بورق كربوني + ضبط ارتفاع الحشوة أو التاج', a: 'مراجعة سريعة لضبط الارتفاع، تجنب المضغ على الجهة حتى التعديل', ctx: 'ألم عند المضغ بعد الحشو.', signs: 'السن مرتفع عند فحص الإطباق.', xray: 'طبيعي.', treat: 'ضبط ارتفاع الترميم.', diff: 'ألم ميكانيكي، ليس التهابياً.' },
             { k: ['الم','مباشر','كهرباء','حرارة','لايستجيب','ميت'], d: 'نخر لب كامل مع عدم استجابة للحيوية (Total Pulp Necrosis)', p: 'أشعة بيريابيكال + تأكيد عدم الاستجابة للحيوية + بدء علاج جذري أو قلع', a: 'السن غير حي، يتطلب علاجاً جذرياً لإنقاذه أو قلعه إذا كان غير قابل للترميم', ctx: 'السن لا يستجيب لأي اختبار حيوية.', signs: 'عدم استجابة للحرارة أو الكهرباء.', xray: 'قد تظهر آفة ذروية.', treat: 'علاج جذري أو قلع.', diff: 'تشخيص بالاختبارات السلبية.' },
-
-            // 🔹 اللثة ودواعم السن
             { k: ['لثه','نزف','فرشاه','رائحه','ترسبات','جيوب','تخلخل','بتدمي'], d: 'التهاب دواعم السن المزمن (Chronic Periodontitis)', p: 'تقييم عمق الجيوب (Probing) + أشعة بانوراما/بيريابيكال + خطة تنظيف عميق (SRP)', a: 'تحسين العناية المنزلية، غسول مطهر مؤقت، جلسات تنظيف دورية، وإقلاع عن التدخين إن وجد', ctx: 'نزيف لثوي، جيوب عميقة، تخلخل أسنان.', signs: 'جيوب >4مم، نزيف، حركة أسنان.', xray: 'ارتشاف عظمي.', treat: 'كشط جذري (SRP) + صيانة دورية.', diff: 'غير قابل للشفاء التام (فقدان العظم دائم).' },
             { k: ['لثه','حمراء','منتفخه','نزف','سهل','بدون تخلخل'], d: 'التهاب اللثة البسيط (Gingivitis)', p: 'تنظيف مهني + تعليمات نظافة فموية + غسول مطهر مؤقت', a: 'تحسين تقنية التنظيف، استخدام فرشاة ناعمة، ومراجعة دورية كل 6 أشهر', ctx: 'نزيف عند التفريش، لا يوجد حركة أسنان.', signs: 'لثة حمراء، متورمة، نازفة.', xray: 'مستوى عظم طبيعي.', treat: 'تنظيف احترافي + تعليمات نظافة.', diff: 'قابل للشفاء. لا يوجد فقدان عظمي.' },
             { k: ['لثه','نازله','جذر','ظاهر','فرشاه','قويه','تنظيف','جذر ظاهر'], d: 'انحسار اللثة (Gingival Recession)', p: 'تقييم سبب الانحسار (تقنية تنظيف/إطباق/لثة رقيقة) + حشو زجاجي أو غطاء لثوي إن لزم', a: 'استخدام فرشاة ناعمة وتقنية دائرية لطيفة، معجون منخفض الاحتكاك، وفحص إطباق الأسنان', ctx: 'جذر السن ظاهر، حساسية.', signs: 'جذر مكشوف، قد يكون هناك حساسية.', xray: 'طبيعي.', treat: 'حشو زجاجي أو غطاء لثوي.', diff: 'فقدان نسيج لثوي، ليس التهاباً.' },
@@ -380,8 +377,6 @@
             { k: ['لثه','بقع','بيضاء','لايمسح','صلبه','تدخين'], d: 'اللوكوبلاكيا اللثوية (Leukoplakia)', p: 'فحص سريري + إزالة المهيجات (تدخين) + خزعة إن لزم + متابعة دورية', a: 'آفة محتملة التسرطن، تتطلب كشفاً نسيجياً، وإقلاع فوري عن التدخين', ctx: 'بقعة بيضاء ثابتة لا تمسح.', signs: 'بقعة بيضاء ملتصقة، صلبة.', xray: 'غير مطلوب.', treat: 'خزعة + متابعة + إقلاع عن التدخين.', diff: 'آفة محتملة التسرطن، تتطلب خزعة.' },
             { k: ['لثه','بقع','حمراء','مخملية','نازفه'], d: 'الأريثروبلاكيا (Erythroplakia)', p: 'خزعة إلزامية + إحالة لجراحة الفم + متابعة مكثفة', a: '⚠️ آفة عالية الخطورة للتسرطن، تتطلب تدخلاً عاجلاً وخزعة فورية', ctx: 'بقعة حمراء مخملية.', signs: 'بقعة حمراء، نزف سهل.', xray: 'غير مطلوب.', treat: 'خزعة فورية + إحالة.', diff: 'أعلى خطورة من اللوكوبلاكيا.' },
             { k: ['لثه','تورم','أزرق','لين','نزف','سهل','حمل'], d: 'ورم الحمل اللثوي (Pregnancy Epulis)', p: 'تنظيف لطيف + تحسين النظافة + استئصال جراحي بعد الولادة إن استمر', a: 'مرتبط بالتغيرات الهرمونية، غالباً يتحسن بعد الولادة، التنظيف اللطيف أساسي', ctx: 'تورم لثوي أثناء الحمل.', signs: 'كتلة لثوية زرقاء/حمراء، نازفة.', xray: 'طبيعي.', treat: 'مراقبة + تنظيف، جراحة بعد الولادة.', diff: 'مرتبط بالحمل، يتحسن بعده.' },
-
-            // 🔹 جراحة الفم
             { k: ['خلع','سنخ','رائحه','فراغ','يومين','ثلاثه','يتمدد','ما انقفل'], d: 'السنخ الجاف بعد القلع (Dry Socket)', p: 'غسل السنخ بمحلول ملحي دافئ + وضع ضمادة مسكنة (Alveogyl/Eugenol) + مسكنات فموية', a: 'تجنب المضمضة القوية أو الشفط، الامتناع عن التدخين 72 ساعة، والالتزام بالمسكنات الموصوفة', ctx: 'ألم شديد بعد 2-3 أيام من القلع.', signs: 'فراغ سنخي فارغ، رائحة كريهة.', xray: 'طبيعي.', treat: 'غسل + ضمادة مسكنة + مسكنات.', diff: 'يحدث بعد القلع، ألم متأخر.' },
             { k: ['تورم','وجه','فك','صعب','فتح','فم','حمى','بعد خلع'], d: 'عدوى ما بعد القلع (Post-Extraction Infection)', p: 'مضاد حيوي جهازي + مسكنات + كمادات دافئة + مراجعة لفتح الخراج إن وجد', a: '⚠️ مراجعة عاجلة، عدم الضغط على المنطقة، والالتزام الكامل بالمضاد والمراجعة', ctx: 'تورم وحمى بعد القلع.', signs: 'تورم، حمى، صعوبة فتح الفم.', xray: 'قد يظهر ارتشاف.', treat: 'مضاد حيوي + مسكنات + تصريف.', diff: 'عدوى جهازية بعد القلع.' },
             { k: ['نزف','ما بوقف','بعد خلع','دم','كثير','ضغط'], d: 'نزف ما بعد القلع (Post-Extraction Bleeding)', p: 'ضغط بقطعة شاش معقمة 30 دقيقة + حمض الترانيكساميك موضعي + مراجعة إن استمر', a: 'الضغط المستمر هو الحل الأول، تجنب البصق أو الشفط، ومراجعة إذا استمر النزف >1 ساعة', ctx: 'نزف مستمر بعد القلع.', signs: 'نزف نشط من السنخ.', xray: 'غير مطلوب.', treat: 'ضغط + حمض ترانيكساميك.', diff: 'نزف ميكانيكي، ليس التهاباً.' },
@@ -390,14 +385,12 @@
             { k: ['ورم','صلب','عظمي','ما بيوجع','بطئ','نمو'], d: 'ورم عظمي حميد (Benign Bone Tumor)', p: 'أشعة بانوراما/CT + خزعة + إحالة لجراحة الفم', a: 'يتطلب تقييماً شعاعياً ونسيجياً، العلاج جراحي غالباً، والمتابعة ضرورية', ctx: 'كتلة عظمية بطيئة النمو.', signs: 'تورم صلب، غير مؤلم.', xray: 'آفة عظمية محددة.', treat: 'استئصال جراحي.', diff: 'ورم حميد، ليس التهاباً.' },
             { k: ['تقرح','ما بيلتئم','3 اسابيع','صلب','حافه','مرفوعه'], d: 'قرحة مشبوهة للتسرطن (Suspicious Ulcer)', p: 'خزعة إلزامية + إحالة فورية لجراحة الفم + تصوير مقطعي إن لزم', a: '⚠️ أي قرحة لا تلتئم خلال 3 أسابيع تتطلب خزعة فورية، لا تؤجل المراجعة', ctx: 'قرحة لا تلتئم.', signs: 'قرحة صلبة الحواف.', xray: 'قد يظهر تآكل عظمي.', treat: 'خزعة فورية.', diff: 'آفة مشبوهة، تتطلب استبعاد السرطان.' },
             { k: ['الم','مفصل','فك','صوت','طقطقه','صعوبه','فتح'], d: 'اضطراب المفصل الفكي الصدغي (TMD)', p: 'فحص إطباق وعضلات المضغ + أشعة مفصلية إن لزم + واق ليلي أو علاج طبيعي', a: 'أطعمة لينة، كمادات دافئة، تجنب فتح الفم واسعاً، وتقليل التوتر العضلي والصرير الليلي', ctx: 'ألم مفصلي، أصوات، صعوبة فتح.', signs: 'طقطقة، ألم عند الجس.', xray: 'قد يظهر تغيرات مفصلية.', treat: 'واق ليلي + علاج طبيعي.', diff: 'اضطراب وظيفي، ليس التهاباً.' },
-            // 🔹 طب الفم والأنسجة الرخوة (موجز لأهم الحالات)
             { k: ['ليش','شبكه','خطوط','بيضاء','حزاز','منبسط'], d: 'الحزاز المنبسط الفموي (Oral Lichen Planus)', p: 'فحص سريري دقيق + استبعاد الأسباب الرضية أو الدوائية + خزعة إن لزم + كورتيكوستيرويد موضعي', a: 'تجنب الأطعمة الحارة/الحامضة، الحفاظ على نظافة الفم بلطف، ومتابعة دورية لاستبعاد التحول الخبيث النادر', ctx: 'خطوط بيضاء متشابكة، غالباً ثنائية الجانب.', signs: 'خطوط بيضاء (Wickham Striae).', xray: 'غير مطلوب.', treat: 'كورتيزون موضعي للأشكال المؤلمة.', diff: 'يتميز بـ: خطوط بيضاء متشابكة + ثنائية الجانب.' },
             { k: ['لسان','جغرافي','بقع','حمراء','بيضاء','حواف','متغيره','مهاجره'], d: 'اللسان الجغرافي (Geographic Tongue)', p: 'فحص سريري تأكيد + استبعاد الصدفية أو نقص الفيتامينات + طمأنة المريض + غسول ملحي إن لزم', a: 'حالة حميدة غير معدية، تتغير أشكالها يومياً، وتهدأ ذاتياً. تجنب المهيجات الموضعية', ctx: 'بقع حمراء ملساء بحواف بيضاء، تتغير أماكنها.', signs: 'مناطق حمراء ملساء بحواف بيضاء.', xray: 'غير مطلوب.', treat: 'لا يحتاج علاج. تجنب المهيجات.', diff: 'يتميز بـ: حواف بيضاء مرتفعة + تغيير المكان والشكل.' },
             { k: ['قرحه','مؤلمه','دائريه','بيضاء','حمراء','تتكرر','حافه'], d: 'القلاع الفموي المتكرر (Recurrent Aphthous Stomatitis)', p: 'تصنيف حسب الحجم + فحص نقص الحديد/فيتامينات + كورتيكوستيرويد موضعي أو غسول مطهر', a: 'تجنب الصدمات الميكانيكية والأطعمة المحفزة، استخدام معجون خالي من SLS، ومراجعة إذا تجاوزت 3 أسابيع', ctx: 'قرح مؤلمة متكررة داخل الفم.', signs: 'قرح دائرية بيضاء بحواف حمراء.', xray: 'غير مطلوب.', treat: 'كورتيزون موضعي + غسول مطهر.', diff: 'قرح فردية داخل الفم فقط، تختلف عن الهربس.' },
             { k: ['فقاقيع','مجموعه','شفايف','زبد','حرقه','هلبس','هربس','بثور'], d: 'الهربس البسيط الفموي (Oral Herpes Simplex)', p: 'تشخيص سريري + مضاد فيروسي موضعي أو فموي (أسيكلوفير) إن كان مبكراً + توجيه لتجنب العدوى', a: 'معدي خلال مرحلة البثور، تجنب التقبيل ومشاركة الأدوات، والبدء بالعلاج خلال 24 ساعة من ظهور الوخز', ctx: 'بثور متجمعة ثم قرح.', signs: 'تجمعات حويصلية على قاعدة حمراء.', xray: 'غير مطلوب.', treat: 'مضاد فيروسي مبكر + علاج عرضي.', diff: 'يتميز بـ: حويصلات سابقة للقرحة + تجمعات.' },
             { k: ['لويحه','بيضاء','لايمسح','تدخين','صلبه','خشونه','بقعه بيضا ثابته'], d: 'الطلوان الفموي (Oral Leukoplakia)', p: 'فحص سريري + إزالة المهيجات (تدخين/أسنان حادة) + خزعة إلزامية + متابعة دورية صارمة', a: 'آفة محتملة التسرطن، تتطلب كشفاً نسيجياً، وإقلاع فوري عن التدخين أو المضغ', ctx: 'بقعة بيضاء ثابتة لا تمسح.', signs: 'بقعة بيضاء ملتصقة، صلبة.', xray: 'غير مطلوب.', treat: 'خزعة + متابعة + إقلاع عن التدخين.', diff: 'يتميز بكونه غير قابل للكشط.' },
-            { k: ['تورم','شبه كره','شفاف','ازرق','شفاه','عض','غده','حبة ميه'], d: 'الكيس المخاطي (Mucocele)', p: 'فحص سريري + استئصال جراحي بسيط مع الغدة المرتبطة + فحص نسيجي تأكيد', a: 'ناتج غالباً عن عض الشفة أو الرض المتكرر، لا يختفي ذاتياً عادةً، والعلاج جراحي بسيط وفعال', ctx: 'تورم شفاف/أزرق في الشفة.', signs: 'كتلة لينة شفافة.', xray: 'غير مطلوب.', treat: 'استئصال جراحي بسيط.', diff: 'ناتج عن رض، كتلة لينة.' },
-            { k: ['كتله','صلبه','لون اللحم','مزمن','احتكاك','زائده','حمة','ورم صغير'], d: 'الورم الليفي المتهيج (Irritation Fibroma)', p: 'فحص سريري + استئصال جراحي + فحص نسيجي روتيني + إزالة سبب الاحتكاك المزمن', a: 'ورم حميد شائع ناتج عن رض متكرر (حشوة بارزة، سن حاد)، يختفي بعد الإزالة وإزالة المهيج', ctx: 'كتلة صلبة لون اللحم.', signs: 'عقدة صلبة، لون اللحم.', xray: 'غير مطلوب.', treat: 'استئصال جراحي.', diff: 'ورم حميد مرتبط برض ميكانيكي.' },
+            { k: ['تورم','شبه كره','شفاف','ازرق','شفاه','عض','غده','حبة ميه'], d: 'الكيس المخاطي (Mucocele)', p: 'فحص سريري + استئصال جراحي بسيط مع الغدة المرتبطة + فحص نسيجي تأكيد', a: 'ناتج غالباً عن عض الشفة أو الرض المتكرر، لا يختفي ذاتياً عادةً، والعلاج جراحي بسيط وفعال', ctx: 'تورم شفاف/أزرق في الشفة.', signs: 'كتلة لينة شفافة.', xray: 'غير مطلوب.', treat: 'استئصال جراحي بسيط.', diff: 'ناتج عن رض، كتلة لينة.' },            { k: ['كتله','صلبه','لون اللحم','مزمن','احتكاك','زائده','حمة','ورم صغير'], d: 'الورم الليفي المتهيج (Irritation Fibroma)', p: 'فحص سريري + استئصال جراحي + فحص نسيجي روتيني + إزالة سبب الاحتكاك المزمن', a: 'ورم حميد شائع ناتج عن رض متكرر (حشوة بارزة، سن حاد)، يختفي بعد الإزالة وإزالة المهيج', ctx: 'كتلة صلبة لون اللحم.', signs: 'عقدة صلبة، لون اللحم.', xray: 'غير مطلوب.', treat: 'استئصال جراحي.', diff: 'ورم حميد مرتبط برض ميكانيكي.' },
             { k: ['حرقه','لسان','طعم','معدن','جفاف','بدون آفه','حارق','فمي بيحرق'], d: 'متلازمة حرقان الفم (Burning Mouth Syndrome)', p: 'استبعاد الأسباب الثانوية (فطريات، نقص B12/حديد، جفاف، ارتجاع، أدوية) + طمأنة + علاجات عرضية', a: 'حالة وظيفية غالباً، تتطلب استبعاداً شاملاً، وتتحسن بإدارة التوتر والعلاجات الموضعية أو الجهازية', ctx: 'حرقان بدون آفة مرئية.', signs: 'لا توجد آفات مرئية.', xray: 'غير مطلوب.', treat: 'علاج عرضي + استبعاد الأسباب.', diff: 'تشخيص بالإقصاء، بدون آفات.' },
             { k: ['زاويه','فم','تشققات','احمرار','قشور','التهاب','شققات زوايا الفم'], d: 'التهاب زوايا الفم (Angular Cheilitis)', p: 'فحص عدوى مختلطة (فطرية/بكتيرية) + تقييم نقص الحديد/فيتامينات + مضاد فطري/مضاد حيوي موضعي', a: 'ترطيب الزوايا، تصحيح إطباق الطقم إن وجد، وعلاج نقص التغذية أو العدوى المرافقة', ctx: 'تشققات مؤلمة في زوايا الفم.', signs: 'احمرار، تشققات، قشور.', xray: 'غير مطلوب.', treat: 'مضاد فطري/بكتيري + ترطيب.', diff: 'موضع محدد في الزوايا.' },
             { k: ['ابيض','يمسح','يحمر','حرقه','جفاف','طقم','مناعه','فطريات'], d: 'داء المبيضات الفموي (Oral Candidiasis)', p: 'فحص سريري + مسحة إن لزم + وصف مضاد فطري موضعي (نيستاتين/كلوتريمازول) أو جهازي', a: 'تعقيم الطقم ليلاً، تقليل السكريات، مراجعة الأدوية المثبطة للمناعة، والالتزام بالدواء حتى الزوال', ctx: 'بقع بيضاء قابلة للكشط.', signs: 'بقع بيضاء كريمية قابلة للإزالة.', xray: 'غير مطلوب.', treat: 'مضاد فطري موضعي أو فموي.', diff: 'يتميز بكونه قابل للكشط.' },
@@ -406,8 +399,6 @@
             { k: ['تقرح','أبيض','يمسح','حرقه','بعد','مضاد','حيوي'], d: 'التهاب الفم بالمضادات الحيوية (Antibiotic-Associated Stomatitis)', p: 'إيقاف المضاد إن أمكن + مضاد فطري موضعي + غسول ملحي + بروبيوتيك', a: 'تحسين النظافة الفموية، تجنب السكريات، واستشارة الطبيب حول تغيير المضاد', ctx: 'يظهر بعد المضادات الحيوية.', signs: 'بقع بيضاء قابلة للكشط.', xray: 'غير مطلوب.', treat: 'مضاد فطري + بروبيوتيك.', diff: 'مرتبط باستخدام المضادات.' },
             { k: ['تورم','شفاه','وجه','مفاجئ','حساسيه','دواء','طعام'], d: 'وذمة وعائية (Angioedema)', p: 'مضاد هستامين + كورتيكوستيرويد جهازي + مراقبة مجرى الهواء + إحالة طوارئ إن اشتد', a: '⚠️ حالة طارئة إذا أثرت على التنفس، تجنب المسبب، ومراجعة فورية إذا زاد التورم', ctx: 'تورم مفاجئ في الوجه/الشفاه.', signs: 'تورم سريع، قد يؤثر على التنفس.', xray: 'غير مطلوب.', treat: 'مضاد هستامين + كورتيزون.', diff: 'رد فعل تحسسي، طارئ.' },
             { k: ['بقع','بنيه','لثه','لسان','ثابته','ما بتغير'], d: 'تصبغات فموية حميدة (Oral Melanotic Macules)', p: 'فحص سريري + استبعاد الأدوية أو المتلازمات + خزعة إن كانت غير نمطية + متابعة', a: 'غالباً حميدة، لكن أي تغير في الحجم أو اللون يتطلب خزعة فورية', ctx: 'بقع بنية ثابتة.', signs: 'بقع مصبوغة، ثابتة.', xray: 'غير مطلوب.', treat: 'مراقبة.', diff: 'حميدة، لكن تتطلب مراقبة.' },
-
-            // 🔹 حالات عامة توجيهية
             { k: ['الم','عام','غامض','غير محدد','فحص','ما بعرف','وين'], d: 'ألم سني غير نوعي (Non-Specific Dental Pain)', p: 'فحص إكلينيكي دقيق + أشعة سينية أساسية + اختبارات حيوية متسلسلة لعزل السن المسبب', a: 'مراقبة الأعراض، تسجيل المحفزات، ومراجعة عاجلة إذا اشتد الألم أو ظهر تورم', ctx: 'ألم غير محدد المصدر.', signs: 'غير محدد.', xray: 'مطلوبة للتشخيص.', treat: 'فحص شامل.', diff: 'يتطلب تشخيصاً تفريقياً.' },
             { k: ['حساس','عام','كل','الاسنان','بارد','ساخن','حلو'], d: 'حساسية سنية عامة (Generalized Dentin Hypersensitivity)', p: 'تقييم سبب الحساسية (انحسار، تآكل، تبييض) + معجون حساسية + فلورايد موضعي', a: 'استخدام فرشاة ناعمة، تجنب المشروبات الحمضية، ومعجون حساسية لمدة 4 أسابيع', ctx: 'حساسية في عدة أسنان.', signs: 'استجابة للمؤثرات.', xray: 'طبيعي.', treat: 'معجون حساسية + فلورايد.', diff: 'حساسية عامة، ليست في سن واحد.' },
             { k: ['لون','اسنان','تغير','اصفر','بني','بقع','تدخين','قهوه'], d: 'تصبغات سنية خارجية (Extrinsic Stains)', p: 'تنظيف مهني + تبييض إن لزم + توعية بتجنب المسببات (تدخين، قهوة، شاي)', a: 'تنظيف دوري كل 6 أشهر، تقليل المشروبات المصبغة، واستخدام قشة للشرب', ctx: 'تغير لون سطحي.', signs: 'بقع خارجية قابلة للإزالة.', xray: 'طبيعي.', treat: 'تنظيف مهني + تبييض.', diff: 'تصبغات سطحية، ليست داخلية.' },
@@ -418,7 +409,6 @@
             { k: ['ورم','لين','متحرك','ما بيوجع','لثه','خده','لسان'], d: 'كتلة رخوة حميدة (Benign Soft Tissue Mass)', p: 'فحص سريري + أشعة إن لزم + خزعة تأكيدية + استئصال إن كبر أو أثر وظيفياً', a: 'معظم الكتل الرخوة حميدة، لكن أي نمو سريع أو تغير يتطلب خزعة فورية', ctx: 'كتلة لينة غير مؤلمة.', signs: 'كتلة متحركة، لينة.', xray: 'غير مطلوب.', treat: 'مراقبة أو استئصال.', diff: 'حميدة، لكن تتطلب مراقبة.' }
         ];
 
-        // ✅ قاموس المرادفات الموسع من بَسْمَة (يشمل اللهجة المحلية)
         const SYNONYMS = {
             'يوجعني':'ألم','وجع':'ألم','موجع':'ألم','بيوجع':'ألم','الم':'ألم',
             'ضرس':'سن','اضراس':'أسنان','سنان':'أسنان','سني':'أسنان',
@@ -439,7 +429,7 @@
             'كتله':'ورم','نتوء':'ورم','مطاطي':'صلب',
             'خدر':'تنميل','أذن':'ألم أذن',
             'يزداد':'يزيد','الرحى':'ضرس',
-            // إضافات جديدة من بَسْمَة            'بوجعني':'ألم','بوجع':'ألم','دايم':'مستمر','يروح':'يزول',
+            'بوجعني':'ألم','بوجع':'ألم','دايم':'مستمر','يروح':'يزول',
             'بختفي':'يزول','ثواني':'سريع','حامض':'حلو',
             'بيوجع لما بضغط':'ضغط','سن مسود':'اسوداد','شقايق':'تشقق',
             'بعد الحشو':'تفاقم','الجذر بيقل':'تآكل',
@@ -449,50 +439,32 @@
             'ريحه سيئه':'تسرب','طاح':'سقط','واقع':'واقعه',
             'حبة ميه':'كيس','حمة':'ورم','فمي بيحرق':'حارق',
             'شققات زوايا الفم':'تشققات','طنسول':'لسان',
-            'ما بعرف':'غامض','وين':'غير محدد'
-        };
+            'ما بعرف':'غامض','وين':'غير محدد'        };
 
-        // ✅ دالة المعالجة النصية الذكية من بَسْمَة
         function norm(t){ 
             return t.normalize('NFKD')
-                .replace(/[\u064B-\u065F]/g, '') // إزالة التشكيل
-                .replace(/[أإآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي') // توحيد الحروف
-                .replace(/ؤ/g, 'و').replace(/ئ/g, 'ي') // توحيد الهمزات
-                .replace(/\s+/g, ' ') // توحيد الفراغات
+                .replace(/[\u064B-\u065F]/g, '')
+                .replace(/[أإآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي')
+                .replace(/ؤ/g, 'و').replace(/ئ/g, 'ي')
+                .replace(/\s+/g, ' ')
                 .toLowerCase().trim(); 
         }
 
-        // ✅ دالة التحليل الرئيسية
         function analyzeDentalSymptoms(text) {
             try {
                 if (!text || !text.trim()) return `<div class="ai-section"><b>📋 التقييم المبدئي:</b> يُرجى كتابة الأعراض بوضوح</div>`;
-                
                 let clean = norm(text);
                 let bestMatch = null, maxScore = 0, matchedTerms = [];
-
-                // 🔍 خوارزمية المطابقة الذكية
                 for (const rule of BASMA_RULES) {
                     let score = 0, currentMatches = [];
-                    
                     for (const kw of rule.k) {
-                        if (clean.includes(kw)) {
-                            score += kw.includes(' ') ? 2 : 1;
-                            currentMatches.push(kw);
-                        }
+                        if (clean.includes(kw)) { score += kw.includes(' ') ? 2 : 1; currentMatches.push(kw); }
                         for (const [syn, orig] of Object.entries(SYNONYMS)) {
-                            if (clean.includes(syn) && orig === kw) {
-                                score += 1;
-                                currentMatches.push(`${syn}→${kw}`);
-                            }
+                            if (clean.includes(syn) && orig === kw) { score += 1; currentMatches.push(`${syn}→${kw}`); }
                         }
                     }
-                    
-                    if (score >= 2 && score > maxScore) {
-                        maxScore = score;                        bestMatch = rule;
-                        matchedTerms = [...new Set(currentMatches)];
-                    }
+                    if (score >= 2 && score > maxScore) { maxScore = score; bestMatch = rule; matchedTerms = [...new Set(currentMatches)]; }
                 }
-
                 if (bestMatch) {
                     const confidence = maxScore >= 4 ? '🟢 دقة عالية' : '🟡 مبدئي';
                     return `<div class="ai-section"><b>📋 التشخيص المرجح:</b> ${bestMatch.d}</div>
@@ -500,14 +472,10 @@
                             <div class="ai-section" style="border-color:#f59e0b; background:#fffbeb;"><b>⚠️ التوصية السريرية:</b> ${bestMatch.a}</div>
                             <div class="text-[10px] text-gray-500 mt-1 text-left">${confidence} | المفردات المطابقة: ${matchedTerms.join('، ')}</div>`;
                 }
-                
                 return `<div class="ai-section"><b>📋 التقييم المبدئي:</b> الأعراض غير كافية لتشخيص دقيق</div>
                         <div class="ai-section" style="border-color:#3b82f6; background:#eff6ff;"><b>💡 يرجى تحديد:</b> الموقع الدقيق، نوع الألم (نابض/حاد/خفيف)، المحفزات (بارد/ساخن/مضغ/ليل)، والمدة</div>
                         <div class="text-[10px] text-gray-400 mt-2">📝 مثال: "ألم نابض في السن 36 يزداد ليلاً مع حساسية للبارد"</div>`;
-            } catch(e) {
-                console.error("AI Analysis Error:", e);
-                return `<div class="ai-section"><b>⚠️ خطأ في التحليل:</b> يرجى إعادة صياغة الأعراض بشكل أوضح</div>`;
-            }
+            } catch(e) { return `<div class="ai-section"><b>⚠️ خطأ في التحليل:</b> يرجى إعادة صياغة الأعراض بشكل أوضح</div>`; }
         }
         
         function runAdvancedAI_Live() {
@@ -520,8 +488,7 @@
                 outputBox.classList.remove('d-none');
                 resultDiv.innerHTML = '<div class="text-center py-3"><i class="fas fa-brain fa-pulse text-purple-600 mb-2 block"></i><span class="text-xs text-gray-500">جاري التحليل...</span></div>';
                 const analysis = analyzeDentalSymptoms(input);
-                resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed space-y-2">${analysis}</div><div class="text-[10px] text-gray-400 mt-2 text-center">🟢 تحليل محلي آمن (يعمل بدون إنترنت)</div>`;
-                showToast("✅ تم التحليل بنجاح", "success");
+                resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed space-y-2">${analysis}</div><div class="text-[10px] text-gray-400 mt-2 text-center">🟢 تحليل محلي آمن (يعمل بدون إنترنت)</div>`;                showToast("✅ تم التحليل بنجاح", "success");
             } catch(err) { console.error("AI Error:", err); showToast("⚠️ حدث خطأ أثناء التحليل", "error"); }
         }
         function clearAI() { document.getElementById('aiInput').value=''; document.getElementById('aiOutputBox').classList.add('d-none'); document.getElementById('aiResult').innerHTML=''; }
@@ -537,7 +504,8 @@
             const pid = 'local_' + Date.now();
             const data = { id: pid, name, phone, diag, tooth: currentTooth, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), addedBy: currentUser?.id || 'admin', updatedAt: new Date().toISOString(), totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '' };
             addToLocalDB(data);            
-            if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync:", err));            showToast("✅ تم الحفظ", "success");
+            if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync:", err));
+            showToast("✅ تم الحفظ", "success");
             ['pName','pPhone','pDiag'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
             document.getElementById('aiBox').classList.add('d-none'); currentTooth = null; document.querySelectorAll('.tooth-btn').forEach(x => x.classList.remove('selected')); document.getElementById('selectedTooth').classList.add('d-none');
             updateStats(); loadTodayAppointments(); if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
@@ -569,8 +537,7 @@
         function openWhatsApp(phone,name,custom='') { if(!phone) return showToast("❌ لا يوجد رقم هاتف","error"); let c=phone.replace(/[\s\-\(\)]/g,''); if(c.startsWith('09')) c='963'+c.substring(1); else if(!c.startsWith('+963')) c='963'+c; const m=custom||`مرحباً ${name}،\nمن عيادة بَسْمَة السنية.\nتذكير بموعدك القادم. 🦷✨`; window.open(`https://wa.me/${c}?text=${encodeURIComponent(m)}`,'_blank'); }
         function filterPatients(q) { const ql=q.toLowerCase().trim(); let v=0; document.querySelectorAll('#patientContainer > div').forEach(card=>{ const t=card.innerText.toLowerCase(); if(ql===''||t.includes(ql)){card.classList.remove('d-none');v++;} else card.classList.add('d-none'); }); document.getElementById('noRecords').classList.toggle('d-none',v>0); }
         function loadData() { renderPatients(getLocalDB(),'local'); if(firebaseReady && db) { db.ref('patients').orderByChild('timestamp').off('value'); db.ref('patients').orderByChild('timestamp').on('value', snap=>{}); } }
-        function renderPatients(data, source) { const c=document.getElementById('patientContainer'); if(!c) return; c.innerHTML=''; if(!data||data.length===0){document.getElementById('noRecords').classList.remove('d-none');document.getElementById('recordsCount').innerText='0';return;} document.getElementById('noRecords').classList.add('d-none'); document.getElementById('recordsCount').innerText=data.length; [...data].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0)).forEach(v=>{ const pid=v.firebaseId||v.id, tooth=v.tooth?`<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">🦷 #${v.tooth}</span>`:'', diag=v.diag?(v.diag.length>60?v.diag.substring(0,60)+'...':v.diag):'بدون ملاحظات'; c.innerHTML+=`<div class="section-card py-3 border-r-4 border-r-blue-500 cursor-pointer hover:shadow-md hover:border-r-cyan-500 transition bg-white" onclick="openPatientEdit('${pid}','${source}')"><div class="flex justify-between items-start"><div class="flex-1"><div class="flex items-center gap-2"><span class="font-bold text-sm text-blue-800">${v.name||'مريض'}</span>${v.phone?`<span class="text-[10px] text-gray-400">📱 ${v.phone}</span>`:''}</div>${tooth?`<div class="mt-1">${tooth}</div>`:''}<p class="text-xs text-gray-600 mt-2 line-clamp-2">${diag}</p></div><div class="text-left flex flex-col items-end gap-1"><span class="text-[10px] bg-gray-100 px-2 py-1 rounded">${v.date||'-'}</span><button onclick="event.stopPropagation();openWhatsApp('${v.phone}','${v.name}')" class="wa-btn-patient mt-1" title="واتساب"><i class="fab fa-whatsapp"></i></button></div></div></div>`; }); }
-        function openPatientEdit(pid, source) { const p=getLocalDB().find(x=>x.id===pid||x.firebaseId===pid); if(p) loadPatientToForm(p,'local'); else showToast("❌ غير موجود","error"); }
+        function renderPatients(data, source) { const c=document.getElementById('patientContainer'); if(!c) return; c.innerHTML=''; if(!data||data.length===0){document.getElementById('noRecords').classList.remove('d-none');document.getElementById('recordsCount').innerText='0';return;} document.getElementById('noRecords').classList.add('d-none'); document.getElementById('recordsCount').innerText=data.length; [...data].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0)).forEach(v=>{ const pid=v.firebaseId||v.id, tooth=v.tooth?`<span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full inline-flex items-center gap-1">🦷 #${v.tooth}</span>`:'', diag=v.diag?(v.diag.length>60?v.diag.substring(0,60)+'...':v.diag):'بدون ملاحظات'; c.innerHTML+=`<div class="section-card py-3 border-r-4 border-r-blue-500 cursor-pointer hover:shadow-md hover:border-r-cyan-500 transition bg-white" onclick="openPatientEdit('${pid}','${source}')"><div class="flex justify-between items-start"><div class="flex-1"><div class="flex items-center gap-2"><span class="font-bold text-sm text-blue-800">${v.name||'مريض'}</span>${v.phone?`<span class="text-[10px] text-gray-400">📱 ${v.phone}</span>`:''}</div>${tooth?`<div class="mt-1">${tooth}</div>`:''}<p class="text-xs text-gray-600 mt-2 line-clamp-2">${diag}</p></div><div class="text-left flex flex-col items-end gap-1"><span class="text-[10px] bg-gray-100 px-2 py-1 rounded">${v.date||'-'}</span><button onclick="event.stopPropagation();openWhatsApp('${v.phone}','${v.name}')" class="wa-btn-patient mt-1" title="واتساب"><i class="fab fa-whatsapp"></i></button></div></div></div>`; }); }        function openPatientEdit(pid, source) { const p=getLocalDB().find(x=>x.id===pid||x.firebaseId===pid); if(p) loadPatientToForm(p,'local'); else showToast("❌ غير موجود","error"); }
         function loadPatientToForm(p, src) { document.getElementById('editPatientId').value=p.firebaseId||p.id||''; document.getElementById('editPatientSource').value=src; document.getElementById('editName').value=p.name||''; document.getElementById('editPhone').value=p.phone||''; document.getElementById('editBirth').value=p.birth||''; document.getElementById('editGender').value=p.gender||''; document.getElementById('editDiag').value=p.diag||''; document.getElementById('editTooth').value=p.tooth||''; document.getElementById('editNextAppt').value=p.nextAppointment||''; document.getElementById('editTotalCost').value=p.totalCost||''; document.getElementById('payTotal').innerText=p.totalCost||0; document.getElementById('payPaid').innerText=p.paidAmount||0; document.getElementById('payRemain').innerText=(p.totalCost||0)-(p.paidAmount||0); renderPayments(p.payments||[]); const dt=p.updatedAt||p.timestamp?new Date(p.updatedAt||p.timestamp).toLocaleString('ar-EG'):'-'; document.getElementById('patientVisits').innerHTML=`<div class="p-2 bg-cyan-50 rounded-lg border text-xs"><span class="text-gray-500">📅 آخر تحديث: ${dt}</span></div>`; navTo('patient'); }
         function updatePatient() { const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value.trim(); if(!id||!name) return showToast("الاسم مطلوب","error"); const data={name,phone:document.getElementById('editPhone').value.trim(),birth:document.getElementById('editBirth').value,gender:document.getElementById('editGender').value,diag:document.getElementById('editDiag').value.trim(),tooth:document.getElementById('editTooth').value||null,updatedAt:new Date().toISOString(),updatedBy:currentUser?.id||'admin'}; if(updateLocalDB(id,data)){ showToast("✅ تم التحديث","success"); navTo('list'); } else { showToast("❌ فشل التحديث","error"); } }
         function deletePatient() { const id=document.getElementById('editPatientId').value, name=document.getElementById('editName').value||'المريض'; if(!id||!confirm(`حذف "${name}"؟`)) return; deleteFromLocalDB(id); showToast("🗑️ تم الحذف","success"); navTo('list'); }
