@@ -68,8 +68,6 @@
         @keyframes slideUp { from { transform: translateX(-50%) translateY(20px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
         #installGuide i { color: #3b82f6; margin-left: 4px; }
         #installGuide .close { position: absolute; top: 4px; left: 8px; font-size: 16px; color: #64748b; cursor: pointer; }
-        
-        /* 🔹 تحسينات: خاصية الطي + أزرار الإدارة + JSON */
         .collapsible-panel { overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease; }
         .collapsible-panel.collapsed { max-height: 50px !important; padding-top: 0 !important; padding-bottom: 0 !important; }
         .collapsible-header { cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; }
@@ -96,9 +94,9 @@
         <span id="desktopHint" class="d-none">اضغط على أيقونة 🔖 في شريط العنوان</span>
     </div>
     <div id="loginPage" class="fixed inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 z-[10000] flex items-center justify-center p-6">
-        <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm text-center">            <div class="app-logo mx-auto mb-3"><i class="fas fa-tooth"></i></div>
-            <h1 class="text-xl font-bold text-gray-800 mb-1">بَسْمَة AI</h1>
-            <p class="text-gray-500 text-xs mb-4">نظام إدارة العيادة السنية</p>
+        <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm text-center">
+            <div class="app-logo mx-auto mb-3"><i class="fas fa-tooth"></i></div>
+            <h1 class="text-xl font-bold text-gray-800 mb-1">بَسْمَة AI</h1>            <p class="text-gray-500 text-xs mb-4">نظام إدارة العيادة السنية</p>
             <div class="flex gap-2 mb-4">
                 <button type="button" onclick="switchLogin('admin')" id="tabAdmin" class="flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium">مدير</button>
                 <button type="button" onclick="switchLogin('doctor')" id="tabDoctor" class="flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium">طبيب</button>
@@ -145,7 +143,9 @@
                     <button type="button" onclick="navTo('list')" class="quick-action"><i class="fas fa-clipboard-list"></i> السجلات</button>
                     <button type="button" onclick="navTo('list')" class="quick-action" style="background: linear-gradient(135deg, #06b6d4, #22d3ee); grid-column: span 2;">
                         <i class="fas fa-users"></i> 👥 قائمة المرضى (اضغط للتعديل)
-                    </button>                </div>
+                    </button>
+                </div>
+                                <!-- 🔹 لوحة الإدارة (تظهر فقط للمدير) -->
                 <div id="adminSection" class="d-none">
                     <div class="section-card border-2 border-indigo-200">
                         <div class="flex justify-between items-center mb-2">
@@ -159,7 +159,7 @@
                         </div>
                         <div id="activeDoctors" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                         
-                        <!-- 🔹 نافذة استيراد الحالات (مبسط ومضمن) -->
+                        <!-- ✅ زر استيراد JSON (موجود وجاهز) -->
                         <button type="button" onclick="toggleJsonImport()" class="quick-action" style="background: linear-gradient(135deg, #7c3aed, #a78bfa); margin-top: 10px;">
                             <i class="fas fa-file-import"></i> 📦 استيراد حالات (JSON)
                         </button>
@@ -181,6 +181,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="section-card">                    
                     <h3 class="font-bold text-sm mb-2"><i class="fas fa-chart-pie text-blue-500 ml-1"></i> إحصائيات</h3>
                     <div class="grid grid-cols-3 gap-2 text-center">                        
@@ -193,8 +194,8 @@
                     <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">
                         <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-bell text-amber-600"></i>
-                            <h3 class="font-bold text-sm">تنبيهات المواعيد</h3>
-                            <span class="status-badge status-urgent ml-auto" id="alertCount">0</span>                        </div>
+                            <h3 class="font-bold text-sm">تنبيهات المواعيد</h3>                            <span class="status-badge status-urgent ml-auto" id="alertCount">0</span>
+                        </div>
                         <div id="alertList" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                     </div>
                 </div>
@@ -242,8 +243,8 @@
                         <label class="text-xs text-gray-600 font-medium block mb-1">📝 الأعراض والعلامات السريرية</label>
                         <textarea id="aiInput" placeholder="مثال: ألم نابض في السن 36 يزداد ليلاً، حساسية للبارد..." class="w-full p-2 bg-gray-50 border rounded-lg outline-none focus:border-purple-400 resize-none text-sm" rows="4"></textarea>
                         <button onclick="runAdvancedAI_Live()" class="mt-2 w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-2 rounded-lg text-sm hover:opacity-90 transition"><i class="fas fa-magic ml-1"></i> تحليل ذكي (بدون إنترنت)</button>
-                    </div>
-                    <div id="aiOutputBox" class="d-none bg-white p-3 rounded-xl border-2 border-purple-300 shadow-inner">                        <div class="flex justify-between items-center mb-2 border-b border-gray-100 pb-2"><span class="text-xs font-bold text-purple-700">🤖 نتيجة التحليل</span><button onclick="clearAI()" class="text-[10px] text-gray-500 hover:text-red-500 flex items-center gap-1">مسح <i class="fas fa-times"></i></button></div>
+                    </div>                    <div id="aiOutputBox" class="d-none bg-white p-3 rounded-xl border-2 border-purple-300 shadow-inner">
+                        <div class="flex justify-between items-center mb-2 border-b border-gray-100 pb-2"><span class="text-xs font-bold text-purple-700">🤖 نتيجة التحليل</span><button onclick="clearAI()" class="text-[10px] text-gray-500 hover:text-red-500 flex items-center gap-1">مسح <i class="fas fa-times"></i></button></div>
                         <div id="aiResult" class="text-sm text-gray-700 leading-relaxed"></div>
                     </div>
                     <div class="ai-professional-box d-none" id="aiProfessionalBox">
@@ -291,8 +292,8 @@
                     <div id="paymentHistory" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                 </div>                
                 <div class="section-card"><h3 class="font-bold text-xs mb-2"><i class="fas fa-history text-gray-500 ml-1"></i> آخر تحديث</h3><div id="patientVisits" class="space-y-2 text-sm"><div class="p-2 bg-gray-50 rounded-lg border text-xs"><span class="text-gray-500">سيظهر هنا تاريخ آخر تعديل للبيانات</span></div></div></div>
-            </div>        
-        </main>        <div class="copyright-footer">            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
+            </div>                </main>
+        <div class="copyright-footer">            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
         </div>
         <footer class="main-footer">
             <button type="button" onclick="navTo('home')" id="btn-home" class="nav-btn active"><i class="fas fa-home"></i><span>الرئيسية</span></button>
@@ -340,48 +341,39 @@
             const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');
             const formA = document.getElementById('adminLoginForm'), formD = document.getElementById('doctorLoginForm');            
             if(type === 'admin'){ tabA.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabD.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formA.classList.remove('d-none'); formD.classList.add('d-none'); }
-            else { tabD.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabA.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formD.classList.remove('d-none'); formA.classList.add('d-none'); }
-        }        function openSubscribe() { document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); navTo('subscribe'); }
+            else { tabD.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabA.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formD.classList.remove('d-none'); formA.classList.add('d-none'); }        }
+        function openSubscribe() { document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); navTo('subscribe'); }
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
         function handleAdminLogin() {            
             const pwd = document.getElementById('adminPassword')?.value?.trim();
             if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 300); }            
             else showToast("❌ كلمة المرور غير صحيحة", "error");
         }
-        
-        // 🔹 ✅ دالة دخول الطبيب المحسنة والجذرية
         function handleDoctorLogin() {
             const emailEl = document.getElementById('doctorEmail');
             const passEl = document.getElementById('doctorPassword');
             if(!emailEl || !passEl) return;
-            
             const cleanEmail = emailEl.value.trim().toLowerCase();
             const cleanPass = passEl.value.trim();
             if(!cleanEmail || !cleanPass) return showToast("أدخل البريد وكلمة المرور", "error");
             if(!firebaseReady || !db) return showToast("⚠️ دخول الأطباء يتطلب اتصالاً بـ Firebase", "info");
-            
             showToast("🔄 جاري التحقق...", "info");
             db.ref('doctor_subscriptions').once('value').then(snap => {
                 if(!snap.exists()) return showToast("❌ لا توجد حسابات مسجلة", "error");
                 let found = null;
                 snap.forEach(c => {
                     const v = c.val();
-                    if((v.email||"").toLowerCase().trim() === cleanEmail && v.password === cleanPass) {
-                        found = {id: c.key, ...v};
-                    }
+                    if((v.email||"").toLowerCase().trim() === cleanEmail && v.password === cleanPass) found = {id: c.key, ...v};
                 });
                 if(!found) return showToast("❌ البريد أو كلمة المرور غير صحيحة", "error");
-                
                 const status = (found.status || "").toLowerCase().trim();
                 if(status === 'pending') return showToast("⏳ الحساب قيد المراجعة", "warning");
                 if(status === 'archived') return showToast("📦 الحساب مؤرشف", "info");
                 if(status === 'rejected') return showToast("🚫 تم رفض الطلب", "error");
                 if(status === 'suspended') return showToast("⛔ الحساب موقوف", "warning");
                 if(status !== 'active') return showToast(`⚠️ حالة الحساب غير صالحة (${found.status})`, "error");
-                
                 currentUser = { role: 'doctor', id: found.id, name: found.name, email: found.email };
                 showToast(`✅ مرحباً د. ${found.name}`, "success");
-                localStorage.setItem('basma_doctor_session', JSON.stringify({id: found.id, email: found.email}));
                 setTimeout(afterLogin, 300);
             }).catch(() => showToast("🔌 فشل الاتصال بالخادم", "error"));
         }
@@ -390,15 +382,15 @@
             if(currentUser.role === 'admin') { 
                 document.getElementById('userTypeDisplay').innerText = 'مدير النظام'; 
                 document.getElementById('adminSection').classList.remove('d-none'); 
-                try { startSubscriptionPolling(); loadActiveDoctors(); } catch(e){}            }
+                try { startSubscriptionPolling(); loadActiveDoctors(); } catch(e){}
+            }
             else { document.getElementById('userTypeDisplay').innerText = `د. ${currentUser.name}`; document.getElementById('adminSection').classList.add('d-none'); }
             initTeeth(); loadData(); updateStats(); checkAppointmentAlerts(); navTo('home');
             if('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
         }
         function logout() { currentUser = null; if(pollingInterval) clearInterval(pollingInterval); backToLogin(); ['adminPassword','doctorEmail','doctorPassword'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; }); }
         function showToast(msg, type='info') {
-            const c = document.getElementById('toastContainer');
-            const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':type==='warning'?'triangle-exclamation':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
+            const c = document.getElementById('toastContainer');            const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':type==='warning'?'triangle-exclamation':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
             c.appendChild(t); requestAnimationFrame(() => t.classList.add('show')); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
         }        
         function navTo(page) {
@@ -419,8 +411,6 @@
                 grid.appendChild(b);
             });
         }
-        
-        // ✅ ✅ ✅ محرك الذكاء المحلي المُوسّع ✅ ✅ ✅
         function analyzeDentalSymptoms(text) {
             try {
                 if (!text || !text.trim()) return `<div class="ai-section"><b>📋 التقييم المبدئي:</b> يُرجى كتابة الأعراض بوضوح</div>`;
@@ -439,7 +429,8 @@
                     { k: ['الم','حاد','مفاجئ','بعد حشو','بعد عصب','انتفاخ','حمى'], d: 'تفاقم حاد بعد العلاج اللبي (Acute Exacerbation)', p: 'إعادة فتح السن للتصريف + تنظيف القنوات + مضاد حيوي إن لزم + مسكنات قوية', a: 'مراجعة عاجلة خلال 24 ساعة، عدم المضغ على السن، والالتزام بالمسكنات والمضاد إن وُصف' },
                     { k: ['الم','عند الضغط','حشوه','عالية','مرتفع','ما بتمضغ'], d: 'ارتفاع في الإطباق بعد الترميم (High Occlusion)', p: 'فحص الإطباق بورق كربوني + ضبط ارتفاع الحشوة أو التاج', a: 'مراجعة سريعة لضبط الارتفاع، تجنب المضغ على الجهة حتى التعديل' },
                     { k: ['الم','مباشر','كهرباء','حرارة','لايستجيب','ميت'], d: 'نخر لب كامل مع عدم استجابة للحيوية (Total Pulp Necrosis)', p: 'أشعة بيريابيكال + تأكيد عدم الاستجابة للحيوية + بدء علاج جذري أو قلع', a: 'السن غير حي، يتطلب علاجاً جذرياً لإنقاذه أو قلعه إذا كان غير قابل للترميم' },
-                    { k: ['لثه','نزف','فرشاه','رائحه','ترسبات','جيوب','تخلخل','بتدمي'], d: 'التهاب دواعم السن المزمن (Chronic Periodontitis)', p: 'تقييم عمق الجيوب (Probing) + أشعة بانوراما/بيريابيكال + خطة تنظيف عميق (SRP)', a: 'تحسين العناية المنزلية، غسول مطهر مؤقت، جلسات تنظيف دورية، وإقلاع عن التدخين إن وجد' },                    { k: ['لثه','حمراء','منتفخه','نزف','سهل','بدون تخلخل'], d: 'التهاب اللثة البسيط (Gingivitis)', p: 'تنظيف مهني + تعليمات نظافة فموية + غسول مطهر مؤقت', a: 'تحسين تقنية التنظيف، استخدام فرشاة ناعمة، ومراجعة دورية كل 6 أشهر' },
+                    { k: ['لثه','نزف','فرشاه','رائحه','ترسبات','جيوب','تخلخل','بتدمي'], d: 'التهاب دواعم السن المزمن (Chronic Periodontitis)', p: 'تقييم عمق الجيوب (Probing) + أشعة بانوراما/بيريابيكال + خطة تنظيف عميق (SRP)', a: 'تحسين العناية المنزلية، غسول مطهر مؤقت، جلسات تنظيف دورية، وإقلاع عن التدخين إن وجد' },
+                    { k: ['لثه','حمراء','منتفخه','نزف','سهل','بدون تخلخل'], d: 'التهاب اللثة البسيط (Gingivitis)', p: 'تنظيف مهني + تعليمات نظافة فموية + غسول مطهر مؤقت', a: 'تحسين تقنية التنظيف، استخدام فرشاة ناعمة، ومراجعة دورية كل 6 أشهر' },
                     { k: ['لثه','نازله','جذر','ظاهر','فرشاه','قويه','تنظيف','جذر ظاهر'], d: 'انحسار اللثة (Gingival Recession)', p: 'تقييم سبب الانحسار (تقنية تنظيف/إطباق/لثة رقيقة) + حشو زجاجي أو غطاء لثوي إن لزم', a: 'استخدام فرشاة ناعمة وتقنية دائرية لطيفة، معجون منخفض الاحتكاك، وفحص إطباق الأسنان' },
                     { k: ['لثه','ورم','أحمر','مؤلم','صديد','بين الاسنان'], d: 'خراج لثوي حاد (Periodontal Abscess)', p: 'تصريف الخراج + تنظيف الجيب اللثوي + مضاد حيوي موضعي أو جهازي + مسكنات', a: 'مراجعة عاجلة لتصريف الخراج، تنظيف المنطقة بلطف، والالتزام بالمضاد إن وُصف' },
                     { k: ['لثه','تورم','عام','نزف','سهل','حامل','بلوغ','دواء'], d: 'التهاب لثة مرتبط بعامل جهازي (Systemic-Associated Gingivitis)', p: 'تنظيف مهني لطيف + تحسين النظافة + مراجعة الطبيب المعالج للعامل الجهازي', a: 'العلاج يعتمد على السبب الجهازي (حمل، بلوغ، أدوية)، والتنظيف اللطيف أساسي' },
@@ -448,8 +439,7 @@
                     { k: ['لثه','بقع','بيضاء','لايمسح','صلبه','تدخين'], d: 'اللوكوبلاكيا اللثوية (Leukoplakia)', p: 'فحص سريري + إزالة المهيجات (تدخين) + خزعة إن لزم + متابعة دورية', a: 'آفة محتملة التسرطن، تتطلب كشفاً نسيجياً، وإقلاع فوري عن التدخين' },
                     { k: ['لثه','بقع','حمراء','مخملية','نازفه'], d: 'الأريثروبلاكيا (Erythroplakia)', p: 'خزعة إلزامية + إحالة لجراحة الفم + متابعة مكثفة', a: '⚠️ آفة عالية الخطورة للتسرطن، تتطلب تدخلاً عاجلاً وخزعة فورية' },
                     { k: ['لثه','تورم','أزرق','لين','نزف','سهل','حمل'], d: 'ورم الحمل اللثوي (Pregnancy Epulis)', p: 'تنظيف لطيف + تحسين النظافة + استئصال جراحي بعد الولادة إن استمر', a: 'مرتبط بالتغيرات الهرمونية، غالباً يتحسن بعد الولادة، التنظيف اللطيف أساسي' },
-                    { k: ['خلع','سنخ','رائحه','فراغ','يومين','ثلاثه','يتمدد','ما انقفل'], d: 'السنخ الجاف بعد القلع (Dry Socket)', p: 'غسل السنخ بمحلول ملحي دافئ + وضع ضمادة مسكنة (Alveogyl/Eugenol) + مسكنات فموية', a: 'تجنب المضمضة القوية أو الشفط، الامتناع عن التدخين 72 ساعة، والالتزام بالمسكنات الموصوفة' },
-                    { k: ['تورم','وجه','فك','صعب','فتح','فم','حمى','بعد خلع'], d: 'عدوى ما بعد القلع (Post-Extraction Infection)', p: 'مضاد حيوي جهازي + مسكنات + كمادات دافئة + مراجعة لفتح الخراج إن وجد', a: '⚠️ مراجعة عاجلة، عدم الضغط على المنطقة، والالتزام الكامل بالمضاد والمراجعة' },
+                    { k: ['خلع','سنخ','رائحه','فراغ','يومين','ثلاثه','يتمدد','ما انقفل'], d: 'السنخ الجاف بعد القلع (Dry Socket)', p: 'غسل السنخ بمحلول ملحي دافئ + وضع ضمادة مسكنة (Alveogyl/Eugenol) + مسكنات فموية', a: 'تجنب المضمضة القوية أو الشفط، الامتناع عن التدخين 72 ساعة، والالتزام بالمسكنات الموصوفة' },                    { k: ['تورم','وجه','فك','صعب','فتح','فم','حمى','بعد خلع'], d: 'عدوى ما بعد القلع (Post-Extraction Infection)', p: 'مضاد حيوي جهازي + مسكنات + كمادات دافئة + مراجعة لفتح الخراج إن وجد', a: '⚠️ مراجعة عاجلة، عدم الضغط على المنطقة، والالتزام الكامل بالمضاد والمراجعة' },
                     { k: ['نزف','ما بوقف','بعد خلع','دم','كثير','ضغط'], d: 'نزف ما بعد القلع (Post-Extraction Bleeding)', p: 'ضغط بقطعة شاش معقمة 30 دقيقة + حمض الترانيكساميك موضعي + مراجعة إن استمر', a: 'الضغط المستمر هو الحل الأول، تجنب البصق أو الشفط، ومراجعة إذا استمر النزف >1 ساعة' },
                     { k: ['تنميل','شفه','ذقن','لسان','بعد خلع','بعد حشو'], d: 'إصابة عصبية مؤقتة (Transient Nerve Injury)', p: 'تقييم مدى الإصابة + فيتامينات ب + متابعة دورية + إحالة إن استمر >3 أشهر', a: 'غالباً يتحسن خلال أسابيع، تجنب المهيجات، ومتابعة الوظيفة الحسية دورياً' },
                     { k: ['كسر','فك','الم','صعب','مضغ','تغير','عَضه','رض'], d: 'كسر في الفك (Mandibular/Maxillary Fracture)', p: 'أشعة بانوراما/CT + تثبيت الفك + إحالة لجراحة الفم والوجه والفكين', a: '⚠️ حالة طارئة، تجنب المضغ، تثبيت الفك برباط مؤقت، ومراجعة جراح فوراً' },
@@ -488,7 +478,8 @@
                     { k: ['زرعه','الم','تورم','لثه','حولها','نزف','ريحه'], d: 'التهاب حول الزرعة (Peri-Implantitis)', p: 'تنظيف مهني حول الزرعة + مضاد حيوي موضعي + تقييم ثبات الزرعة + جراحة إن لزم', a: 'تحسين العناية حول الزرعة بفرشاة خاصة، ومراجعة دورية كل 3-6 أشهر للكشف المبكر' },
                     { k: ['جسر','يتحرك','سن','داعم','ألم','لثه','تحت','الجسر'], d: 'فشل جسر سني (Failed Dental Bridge)', p: 'فحص الأسنان الداعمة + أشعة + تقييم إمكانية الإصلاح أو الاستبدال', a: 'تنظيف تحت الجسر بخيط خاص، تجنب الأطعمة القاسية، ومراجعة سريعة إذا تحرك الجسر' },
                     { k: ['تاج','لون','تغير','غامق','حافه','سوداء','لثه'], d: 'تغير لون تاج أو ظهور حافة معدنية (Crown Discoloration/Metal Margin)', p: 'فحص التاج + تقييم الحاجة لاستبداله بتاج كامل الخزف أو الزيركون', a: 'حالة جمالية غالباً، لا تؤثر على الوظيفة، لكن الاستبدال يحسن المظهر إذا كان مزعجاً' },
-                    { k: ['الم','عام','غامض','غير محدد','فحص','ما بعرف','وين'], d: 'ألم سني غير نوعي (Non-Specific Dental Pain)', p: 'فحص إكلينيكي دقيق + أشعة سينية أساسية + اختبارات حيوية متسلسلة لعزل السن المسبب', a: 'مراقبة الأعراض، تسجيل المحفزات، ومراجعة عاجلة إذا اشتد الألم أو ظهر تورم' },                    { k: ['حساس','عام','كل','الاسنان','بارد','ساخن','حلو'], d: 'حساسية سنية عامة (Generalized Dentin Hypersensitivity)', p: 'تقييم سبب الحساسية (انحسار، تآكل، تبييض) + معجون حساسية + فلورايد موضعي', a: 'استخدام فرشاة ناعمة، تجنب المشروبات الحمضية، ومعجون حساسية لمدة 4 أسابيع' },
+                    { k: ['الم','عام','غامض','غير محدد','فحص','ما بعرف','وين'], d: 'ألم سني غير نوعي (Non-Specific Dental Pain)', p: 'فحص إكلينيكي دقيق + أشعة سينية أساسية + اختبارات حيوية متسلسلة لعزل السن المسبب', a: 'مراقبة الأعراض، تسجيل المحفزات، ومراجعة عاجلة إذا اشتد الألم أو ظهر تورم' },
+                    { k: ['حساس','عام','كل','الاسنان','بارد','ساخن','حلو'], d: 'حساسية سنية عامة (Generalized Dentin Hypersensitivity)', p: 'تقييم سبب الحساسية (انحسار، تآكل، تبييض) + معجون حساسية + فلورايد موضعي', a: 'استخدام فرشاة ناعمة، تجنب المشروبات الحمضية، ومعجون حساسية لمدة 4 أسابيع' },
                     { k: ['لون','اسنان','تغير','اصفر','بني','بقع','تدخين','قهوه'], d: 'تصبغات سنية خارجية (Extrinsic Stains)', p: 'تنظيف مهني + تبييض إن لزم + توعية بتجنب المسببات (تدخين، قهوة، شاي)', a: 'تنظيف دوري كل 6 أشهر، تقليل المشروبات المصبغة، واستخدام قشة للشرب' },
                     { k: ['لون','اسنان','تغير','من','داخل','دواء','تتراسايكلين','فلوروز'], d: 'تصبغات سنية داخلية (Intrinsic Stains)', p: 'تقييم نوع التصبغ + خيارات تجميلية (تبييض داخلي، فينير، تاج)', a: 'العلاج تجميلي، يعتمد على شدة التصبغ وتوقعات المريض، والاستشارة المسبقة ضرورية' },
                     { k: ['رائحه','فم','مستمره','ما بتروح','فرشاه','غسول'], d: 'رائحة فم كريهة مستعصية (Persistent Halitosis)', p: 'فحص شامل للفم + تقييم جهازي (جهاز هضمي، جيوب، كبد) + إحالة إن لزم', a: 'تحسين النظافة الفموية الشاملة، ترطيب الفم، ومراجعة طبية إذا استمرت رغم العناية' },
@@ -497,8 +488,7 @@
                     { k: ['ورم','لين','متحرك','ما بيوجع','لثه','خده','لسان'], d: 'كتلة رخوة حميدة (Benign Soft Tissue Mass)', p: 'فحص سريري + أشعة إن لزم + خزعة تأكيدية + استئصال إن كبر أو أثر وظيفياً', a: 'معظم الكتل الرخوة حميدة، لكن أي نمو سريع أو تغير يتطلب خزعة فورية' }
                 ];
                 for (const rule of rules) {
-                    let score = 0, currentMatches = [];
-                    for (const kw of rule.k) {
+                    let score = 0, currentMatches = [];                    for (const kw of rule.k) {
                         if (clean.includes(kw)) { score += kw.includes(' ') ? 2 : 1; currentMatches.push(kw); }
                     }
                     if (score >= 2 && score > maxScore) { maxScore = score; bestMatch = rule; matchedTerms = currentMatches; }
@@ -513,21 +503,10 @@
                         confidence: confidence, diagnosis: bestMatch.d, plan: bestMatch.p, advice: bestMatch.a, matchedTerms: matchedTerms
                     };
                 }
-                return {
-                    html: `<div class="ai-section"><b>📋 يحتاج لمزيد من الدقة:</b> يرجى تحديد الآتي للحصول على تشخيص دقيق:</div>
+                return { html: `<div class="ai-section"><b>📋 يحتاج لمزيد من الدقة:</b> يرجى تحديد الآتي للحصول على تشخيص دقيق:</div>
                             <div class="ai-section" style="border-color:#3b82f6; background:#eff6ff;">
-                            <b>💡 حدد بدقة:</b><br>
-                            • <b>الموقع:</b> أي سن أو منطقة؟<br>
-                            • <b>النوع:</b> نابض / حاد / خفيف / عند المضغ فقط؟<br>
-                            • <b>المحفز:</b> بارد / ساخن / حلو / ليل / مستمر؟<br>
-                            • <b>المظهر:</b> تورم / نزف / بقعة بيضاء أو حمراء؟
-                            </div>`,
-                    confidence: 'low', needsMoreInfo: true
-                };
-            } catch(e) {
-                console.error("AI Analysis Error:", e);
-                return { html: `<div class="ai-section"><b>⚠️ خطأ في التحليل:</b> يرجى إعادة صياغة الأعراض بشكل أوضح</div>`, confidence: 'low', error: true };
-            }
+                            <b>💡 حدد بدقة:</b><br>• <b>الموقع:</b> أي سن أو منطقة؟<br>• <b>النوع:</b> نابض / حاد / خفيف / عند المضغ فقط؟<br>• <b>المحفز:</b> بارد / ساخن / حلو / ليل / مستمر؟<br>• <b>المظهر:</b> تورم / نزف / بقعة بيضاء أو حمراء?</div>`, confidence: 'low', needsMoreInfo: true };
+            } catch(e) { return { html: `<div class="ai-section"><b>⚠️ خطأ في التحليل:</b> يرجى إعادة صياغة الأعراض بشكل أوضح</div>`, confidence: 'low', error: true }; }
         }
         
         function runAdvancedAI_Live() {
@@ -537,7 +516,8 @@
                 const resultDiv = document.getElementById('aiResult');
                 const profBox = document.getElementById('aiProfessionalBox');
                 const profResult = document.getElementById('aiProfessionalResult');
-                const confBadge = document.getElementById('aiConfidenceBadge');                if(!input) return showToast("❌ اكتب الأعراض أولاً", "error");            
+                const confBadge = document.getElementById('aiConfidenceBadge');
+                if(!input) return showToast("❌ اكتب الأعراض أولاً", "error");            
                 if(!outputBox || !resultDiv) return showToast("⚠️ خطأ في تحميل الواجهة", "error");
                 outputBox.classList.remove('d-none'); profBox.classList.add('d-none');
                 resultDiv.innerHTML = '<div class="text-center py-3"><i class="fas fa-brain fa-pulse text-purple-600 mb-2 block"></i><span class="text-xs text-gray-500">جاري التحليل...</span></div>';
@@ -557,8 +537,7 @@
             if(!diag) return showToast("اكتب الشكوى أولاً","error");
             b.classList.remove('d-none'); b.innerHTML='<div class="text-center"><i class="fas fa-spinner fa-spin text-indigo-600"></i> جاري التحليل...</div>';
             setTimeout(()=>{ const analysis = analyzeDentalSymptoms(diag); b.innerHTML = `<b>💡 توصية:</b> السن #${currentTooth||'؟'} يحتاج فحصاً.<br><div class="mt-2">${analysis.html}</div><small class="text-gray-500">⚠️ لا يغني عن التشخيص</small>`; },300);
-        }
-        function savePatient() {
+        }        function savePatient() {
             const name = document.getElementById('pName')?.value?.trim(), phone = document.getElementById('pPhone')?.value?.trim(), diag = document.getElementById('pDiag')?.value?.trim();
             if(!name || !diag) return showToast("أكمل الاسم والشكوى", "error");
             const pid = 'local_' + Date.now();
@@ -586,9 +565,8 @@
             if(!name||!email||!pwd) return showToast("أكمل الحقول","error");
             if(firebaseReady && db) db.ref('doctor_subscriptions').push({name,email:email.toLowerCase(),password:pwd,specialty:document.getElementById('subSpecialty').value.trim(),status:'pending',requestedAt:new Date().toISOString()});
             showToast("✅ تم الإرسال! انتظر التفعيل","success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value=''); setTimeout(backToLogin,1500);
-        }        function startSubscriptionPolling() { if (pollingInterval) clearInterval(pollingInterval); if (!firebaseReady || !db) return; fetchPendingRequests(); pollingInterval = setInterval(() => fetchPendingRequests(true), 10000); }
-        
-        // 🔹 ✅ دالة عرض الطلبات المعلقة مع أزرار التفعيل/الأرشفة/الحذف
+        }
+        function startSubscriptionPolling() { if (pollingInterval) clearInterval(pollingInterval); if (!firebaseReady || !db) return; fetchPendingRequests(); pollingInterval = setInterval(() => fetchPendingRequests(true), 10000); }
         function fetchPendingRequests(isMonitoring = false) {
             if (!firebaseReady || !db) return;
             db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').once('value').then(snap => {
@@ -596,8 +574,7 @@
                 if(!c) return; c.innerHTML = ''; let n = 0;
                 snap.forEach(ch => {
                     n++; const v = ch.val();
-                    c.innerHTML += `
-                    <div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between items-center">
+                    c.innerHTML += `<div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between items-center">
                         <div><b>${v.name}</b><br><span class="text-gray-500">${v.email}</span></div>
                         <div class="flex gap-1">
                             <button onclick="activateDoc('${ch.key}')" class="px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200">تفعيل</button>
@@ -607,44 +584,13 @@
                     </div>`;
                 });
                 document.getElementById('pendingCount').innerText = n || 'لا توجد طلبات';
-                if(isMonitoring && n > lastPendingIds.length) { showToast("🔔 وارد طلب اشتراك جديد!", "info"); }
+                if(isMonitoring && n > lastPendingIds.length) showToast("🔔 وارد طلب اشتراك جديد!", "info");
                 lastPendingIds = Array.from({length: n}, (_, i) => i);
-            }).catch(err => console.warn("Polling error:", err));
-        }
-        
-        // 🔹 ✅ دوال الإدارة الجديدة
-        function activateDoc(id) {
-            if(!db) return showToast("❌ لا يوجد اتصال", "error");
-            db.ref('doctor_subscriptions/'+id).update({status:'active', activatedAt: new Date().toISOString()})
-            .then(()=>{ showToast("✅ تم التفعيل بنجاح", "success"); fetchPendingRequests(); loadActiveDoctors(); })
-            .catch(err => showToast("❌ فشل التفعيل", "error"));
-        }
-        function archiveDoc(id, name) {
-            if(!confirm(`هل تريد أرشفة طلب "${name}"؟ سيتم حفظ البيانات ولكن لن يظهر في المعلقة.`)) return;
-            if(!db) return;
-            db.ref('doctor_subscriptions/'+id).update({status:'archived', archivedAt: new Date().toISOString()})
-            .then(()=>{ showToast("📦 تم الأرشفة", "info"); fetchPendingRequests(); loadActiveDoctors(); })
-            .catch(err => showToast("❌ فشل الأرشفة", "error"));
-        }
-        function deleteDoc(id, name) {
-            if(!confirm(`⚠️ هل أنت متأكد من حذف طلب "${name}" نهائياً؟ لا يمكن التراجع.`)) return;
-            if(!db) return;
-            db.ref('doctor_subscriptions/'+id).remove()
-            .then(()=>{ showToast("🗑️ تم الحذف نهائياً", "info"); fetchPendingRequests(); loadActiveDoctors(); })
-            .catch(err => showToast("❌ فشل الحذف", "error"));
-        }
-        function loadActiveDoctors() {
-            if(!firebaseReady || !db) return;
-            const c = document.getElementById('activeDoctors');            if(!c) return; c.innerHTML = '<div class="text-center text-xs text-gray-400">جاري التحميل...</div>';
-            db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap => {
-                c.innerHTML = '';
-                if(!snap.exists()){ c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء نشطين</p>'; return; }
-                snap.forEach(ch => {
-                    const v = ch.val();
-                    c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`;
-                });
-            });
-        }
+            }).catch(err => console.warn("Polling error:", err));        }
+        function activateDoc(id) { if(!db) return showToast("❌ لا يوجد اتصال", "error"); db.ref('doctor_subscriptions/'+id).update({status:'active', activatedAt: new Date().toISOString()}).then(()=>{ showToast("✅ تم التفعيل بنجاح", "success"); fetchPendingRequests(); loadActiveDoctors(); }).catch(err => showToast("❌ فشل التفعيل", "error")); }
+        function archiveDoc(id, name) { if(!confirm(`هل تريد أرشفة طلب "${name}"؟ سيتم حفظ البيانات ولكن لن يظهر في المعلقة.`)) return; if(!db) return; db.ref('doctor_subscriptions/'+id).update({status:'archived', archivedAt: new Date().toISOString()}).then(()=>{ showToast("📦 تم الأرشفة", "info"); fetchPendingRequests(); loadActiveDoctors(); }).catch(err => showToast("❌ فشل الأرشفة", "error")); }
+        function deleteDoc(id, name) { if(!confirm(`⚠️ هل أنت متأكد من حذف طلب "${name}" نهائياً؟ لا يمكن التراجع.`)) return; if(!db) return; db.ref('doctor_subscriptions/'+id).remove().then(()=>{ showToast("🗑️ تم الحذف نهائياً", "info"); fetchPendingRequests(); loadActiveDoctors(); }).catch(err => showToast("❌ فشل الحذف", "error")); }
+        function loadActiveDoctors() { if(!firebaseReady || !db) return; const c = document.getElementById('activeDoctors'); if(!c) return; c.innerHTML = '<div class="text-center text-xs text-gray-400">جاري التحميل...</div>'; db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap => { c.innerHTML = ''; if(!snap.exists()){ c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء نشطين</p>'; return; } snap.forEach(ch => { const v = ch.val(); c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`; }); }); }
         function suspendDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>{ showToast("⛔ تم الإيقاف","info"); fetchPendingRequests(); loadActiveDoctors(); }); }        
         function checkAppointmentAlerts() { const pts = getLocalDB(), now=new Date(), el=document.getElementById('alertList'), sec=document.getElementById('alertSection'), cnt=document.getElementById('alertCount'); if(!el||!sec||!cnt) return; el.innerHTML=''; let ac=0, uc=0; pts.forEach(p=>{if(!p.nextAppointment) return; const ad=new Date(p.nextAppointment), dh=(ad-now)/(36e5); if(dh>0&&dh<=24){ac++; const u=dh<=2; if(u) uc++; const ts=ad.toLocaleString('ar-EG',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'}); el.innerHTML+=`<div class="p-2 rounded-lg border flex justify-between items-center ${u?'bg-red-50 border-red-200':'bg-amber-50 border-amber-200'}"><div><span class="font-bold text-sm">${p.name}</span><div class="text-[10px] text-gray-600">🕒 ${ts}</div></div><button onclick="event.stopPropagation();openWhatsApp('${p.phone}','${p.name}','موعدك ${ts}')" class="wa-btn-patient"><i class="fab fa-whatsapp"></i></button></div>`; }}); cnt.innerText=ac; if(ac>0){sec.classList.remove('d-none');cnt.className=uc>0?'status-badge status-urgent ml-auto':'status-badge status-pending ml-auto';} else sec.classList.add('d-none'); }
         function openWhatsApp(phone,name,custom='') { if(!phone) return showToast("❌ لا يوجد رقم هاتف","error"); let c=phone.replace(/[\s\-\(\)]/g,''); if(c.startsWith('09')) c='963'+c.substring(1); else if(!c.startsWith('+963')) c='963'+c; const m=custom||`مرحباً ${name}،\nمن عيادة بَسْمَة السنية.\nتذكير بموعدك القادم. 🦷✨`; window.open(`https://wa.me/${c}?text=${encodeURIComponent(m)}`,'_blank'); }
@@ -676,15 +622,22 @@
                 header.onclick = (e) => { e.preventDefault(); const isExpanded = header.getAttribute('aria-expanded') === 'true'; header.setAttribute('aria-expanded', !isExpanded); card.classList.toggle('collapsed'); localStorage.setItem(panelId, !isExpanded ? 'collapsed' : 'expanded'); };
             });
         }
-        function toggleJsonImport() { const panel = document.getElementById('jsonImportPanel'); panel.classList.toggle('d-none'); if(!panel.classList.contains('d-none')) { document.getElementById('jsonImportInput').focus(); } }
+        
+        // ✅ ✅ ✅ دوال استيراد JSON ✅ ✅ ✅
+        function toggleJsonImport() { 
+            const panel = document.getElementById('jsonImportPanel'); 
+            if(!panel) return; 
+            panel.classList.toggle('d-none'); 
+            if(!panel.classList.contains('d-none')) document.getElementById('jsonImportInput').focus(); 
+        }
         function validateJSONImport() {
             const input = document.getElementById('jsonImportInput').value.trim();
             const statusEl = document.getElementById('jsonImportStatus');
             const previewEl = document.getElementById('jsonImportPreview');
             const previewList = document.getElementById('jsonPreviewList');
-            try {
-                const cases = JSON.parse(input);
-                if(!Array.isArray(cases)) throw new Error('يجب أن تكون البيانات مصفوفة [] تحتوي على حالات متعددة');                if(cases.length === 0) throw new Error('المصفوفة فارغة');
+            try {                const cases = JSON.parse(input);
+                if(!Array.isArray(cases)) throw new Error('يجب أن تكون البيانات مصفوفة [] تحتوي على حالات متعددة');
+                if(cases.length === 0) throw new Error('المصفوفة فارغة');
                 cases.forEach((c, i) => {
                     if(!c.name?.trim()) throw new Error(`الحالة #${i+1}: الاسم مطلوب`);
                     if(!c.phone?.trim()) throw new Error(`الحالة #${i+1}: الهاتف مطلوب`);
