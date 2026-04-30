@@ -145,8 +145,7 @@
                         <i class="fas fa-users"></i> 👥 قائمة المرضى (اضغط للتعديل)
                     </button>
                 </div>
-                                <!-- 🔹 لوحة الإدارة (تظهر فقط للمدير) -->
-                <div id="adminSection" class="d-none">
+                                <div id="adminSection" class="d-none">
                     <div class="section-card border-2 border-indigo-200">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="font-bold text-sm"><i class="fas fa-user-clock text-amber-500 ml-1"></i> طلبات معلقة</h3>
@@ -159,25 +158,18 @@
                         </div>
                         <div id="activeDoctors" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                         
-                        <!-- ✅ زر استيراد JSON (موجود وجاهز) -->
+                        <!-- ✅ زر استيراد JSON (موجود ومؤكد) -->
                         <button type="button" onclick="toggleJsonImport()" class="quick-action" style="background: linear-gradient(135deg, #7c3aed, #a78bfa); margin-top: 10px;">
                             <i class="fas fa-file-import"></i> 📦 استيراد حالات (JSON)
                         </button>
                         <div id="jsonImportPanel" class="d-none mt-3 pt-3 border-t border-indigo-200">
                             <p class="text-[10px] text-gray-500 mb-2">📋 الصيغة: مصفوفة حالات <code>[{...}, {...}]</code></p>
-                            <textarea id="jsonImportInput" class="json-editor w-full p-2 bg-gray-900 text-gray-100 border border-gray-700 rounded-lg outline-none focus:border-purple-400 resize-none text-[10px]" rows="5" placeholder='[
-  {"name":"أحمد محمد","phone":"0912345678","diag":"ألم في السن 16","tooth":16},
-  {"name":"سارة خالد","phone":"0987654321","diag":"حساسية للبارد","birth":"1990-05-20"}
-]'></textarea>
+                            <textarea id="jsonImportInput" class="json-editor w-full p-2 bg-gray-900 text-gray-100 border border-gray-700 rounded-lg outline-none focus:border-purple-400 resize-none text-[10px]" rows="4" placeholder='[{"name":"أحمد","phone":"0912345678","diag":"ألم","tooth":16}]'></textarea>
                             <div class="flex gap-1 mt-2">
                                 <button type="button" onclick="validateJSONImport()" class="flex-1 bg-gray-200 text-gray-800 font-bold py-1.5 rounded text-[10px] hover:bg-gray-300">✅ تحقق</button>
                                 <button type="button" onclick="importCasesFromJSON()" class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-1.5 rounded text-[10px] hover:opacity-90">📤 استيراد</button>
                             </div>
                             <div id="jsonImportStatus" class="json-status d-none"></div>
-                            <div id="jsonImportPreview" class="d-none mt-2">
-                                <p class="text-[10px] font-bold text-gray-600 mb-1">📊 سيتم استيراد:</p>
-                                <div id="jsonPreviewList" class="space-y-1 max-h-24 overflow-y-auto text-[10px]"></div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -194,15 +186,15 @@
                     <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">
                         <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-bell text-amber-600"></i>
-                            <h3 class="font-bold text-sm">تنبيهات المواعيد</h3>                            <span class="status-badge status-urgent ml-auto" id="alertCount">0</span>
+                            <h3 class="font-bold text-sm">تنبيهات المواعيد</h3>
+                            <span class="status-badge status-urgent ml-auto" id="alertCount">0</span>
                         </div>
                         <div id="alertList" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                     </div>
                 </div>
             </div>
             <div id="page-add" class="d-none space-y-3">
-                <div class="section-card">
-                    <h2 class="font-bold text-sm mb-3"><i class="fas fa-plus-circle text-blue-500 ml-1"></i> فحص جديد</h2>
+                <div class="section-card">                    <h2 class="font-bold text-sm mb-3"><i class="fas fa-plus-circle text-blue-500 ml-1"></i> فحص جديد</h2>
                     <div class="tooth-grid mb-3" id="toothGrid"></div>
                     <p id="selectedTooth" class="text-center text-xs text-blue-600 font-semibold mb-2 d-none">✅ السن: <span id="toothNum"></span></p>
                     <input type="text" id="pName" placeholder="اسم المريض" class="w-full p-2 bg-gray-50 border rounded-lg mb-2 outline-none focus:border-blue-400 text-sm">
@@ -243,15 +235,15 @@
                         <label class="text-xs text-gray-600 font-medium block mb-1">📝 الأعراض والعلامات السريرية</label>
                         <textarea id="aiInput" placeholder="مثال: ألم نابض في السن 36 يزداد ليلاً، حساسية للبارد..." class="w-full p-2 bg-gray-50 border rounded-lg outline-none focus:border-purple-400 resize-none text-sm" rows="4"></textarea>
                         <button onclick="runAdvancedAI_Live()" class="mt-2 w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-2 rounded-lg text-sm hover:opacity-90 transition"><i class="fas fa-magic ml-1"></i> تحليل ذكي (بدون إنترنت)</button>
-                    </div>                    <div id="aiOutputBox" class="d-none bg-white p-3 rounded-xl border-2 border-purple-300 shadow-inner">
+                    </div>
+                    <div id="aiOutputBox" class="d-none bg-white p-3 rounded-xl border-2 border-purple-300 shadow-inner">
                         <div class="flex justify-between items-center mb-2 border-b border-gray-100 pb-2"><span class="text-xs font-bold text-purple-700">🤖 نتيجة التحليل</span><button onclick="clearAI()" class="text-[10px] text-gray-500 hover:text-red-500 flex items-center gap-1">مسح <i class="fas fa-times"></i></button></div>
                         <div id="aiResult" class="text-sm text-gray-700 leading-relaxed"></div>
                     </div>
                     <div class="ai-professional-box d-none" id="aiProfessionalBox">
                         <div class="flex justify-between items-start mb-2">
                             <span class="font-bold text-sm">🔬 تحليل احترافي متقدم</span>
-                            <span class="ai-confidence high" id="aiConfidenceBadge">دقة عالية</span>
-                        </div>
+                            <span class="ai-confidence high" id="aiConfidenceBadge">دقة عالية</span>                        </div>
                         <div id="aiProfessionalResult" class="text-xs space-y-1"></div>
                         <div class="mt-2 pt-2 border-t border-purple-400/30 text-[10px] opacity-90">
                             <i class="fas fa-shield-alt ml-1"></i> معالجة محلية آمنة • لا تُرسل بيانات المريض
@@ -292,15 +284,15 @@
                     <div id="paymentHistory" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                 </div>                
                 <div class="section-card"><h3 class="font-bold text-xs mb-2"><i class="fas fa-history text-gray-500 ml-1"></i> آخر تحديث</h3><div id="patientVisits" class="space-y-2 text-sm"><div class="p-2 bg-gray-50 rounded-lg border text-xs"><span class="text-gray-500">سيظهر هنا تاريخ آخر تعديل للبيانات</span></div></div></div>
-            </div>                </main>
+            </div>        
+        </main>
         <div class="copyright-footer">            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
         </div>
         <footer class="main-footer">
             <button type="button" onclick="navTo('home')" id="btn-home" class="nav-btn active"><i class="fas fa-home"></i><span>الرئيسية</span></button>
             <button type="button" onclick="navTo('add')" id="btn-add" class="nav-btn"><i class="fas fa-plus-circle"></i><span>فحص</span></button>
             <button type="button" onclick="navTo('ai')" id="btn-ai" class="nav-btn"><i class="fas fa-robot"></i><span>AI</span></button>
-            <button type="button" onclick="navTo('list')" id="btn-list" class="nav-btn"><i class="fas fa-users"></i><span>المرضى</span></button>
-        </footer>
+            <button type="button" onclick="navTo('list')" id="btn-list" class="nav-btn"><i class="fas fa-users"></i><span>المرضى</span></button>        </footer>
     </div>
     <a href="https://wa.me/963939436998?text=مرحباً، أرغب باستفسار حول تطبيق بَسْمَة AI" target="_blank" class="wa-float wa-pulse" title="تواصل عبر واتساب"><i class="fab fa-whatsapp text-2xl"></i></a>
     
@@ -341,15 +333,15 @@
             const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');
             const formA = document.getElementById('adminLoginForm'), formD = document.getElementById('doctorLoginForm');            
             if(type === 'admin'){ tabA.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabD.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formA.classList.remove('d-none'); formD.classList.add('d-none'); }
-            else { tabD.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabA.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formD.classList.remove('d-none'); formA.classList.add('d-none'); }        }
+            else { tabD.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabA.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formD.classList.remove('d-none'); formA.classList.add('d-none'); }
+        }
         function openSubscribe() { document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); navTo('subscribe'); }
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
         function handleAdminLogin() {            
             const pwd = document.getElementById('adminPassword')?.value?.trim();
             if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 300); }            
             else showToast("❌ كلمة المرور غير صحيحة", "error");
-        }
-        function handleDoctorLogin() {
+        }        function handleDoctorLogin() {
             const emailEl = document.getElementById('doctorEmail');
             const passEl = document.getElementById('doctorPassword');
             if(!emailEl || !passEl) return;
@@ -390,15 +382,15 @@
         }
         function logout() { currentUser = null; if(pollingInterval) clearInterval(pollingInterval); backToLogin(); ['adminPassword','doctorEmail','doctorPassword'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; }); }
         function showToast(msg, type='info') {
-            const c = document.getElementById('toastContainer');            const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':type==='warning'?'triangle-exclamation':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':type==='warning'?'triangle-exclamation':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
             c.appendChild(t); requestAnimationFrame(() => t.classList.add('show')); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
         }        
         function navTo(page) {
             document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('d-none'));
             const target = document.getElementById(`page-${page}`); if(target) target.classList.remove('d-none');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            const btnMap = {home:'home', add:'add', ai:'ai', list:'list', register:'home', subscribe:'home'}, btn = document.getElementById(`btn-${btnMap[page]||'home'}`);
-            if(btn) btn.classList.add('active');
+            const btnMap = {home:'home', add:'add', ai:'ai', list:'list', register:'home', subscribe:'home'}, btn = document.getElementById(`btn-${btnMap[page]||'home'}`);            if(btn) btn.classList.add('active');
             if(page === 'list') { loadData(); updateStats(); }
             if(page === 'home') { loadTodayAppointments(); checkAppointmentAlerts(); }
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -439,15 +431,15 @@
                     { k: ['لثه','بقع','بيضاء','لايمسح','صلبه','تدخين'], d: 'اللوكوبلاكيا اللثوية (Leukoplakia)', p: 'فحص سريري + إزالة المهيجات (تدخين) + خزعة إن لزم + متابعة دورية', a: 'آفة محتملة التسرطن، تتطلب كشفاً نسيجياً، وإقلاع فوري عن التدخين' },
                     { k: ['لثه','بقع','حمراء','مخملية','نازفه'], d: 'الأريثروبلاكيا (Erythroplakia)', p: 'خزعة إلزامية + إحالة لجراحة الفم + متابعة مكثفة', a: '⚠️ آفة عالية الخطورة للتسرطن، تتطلب تدخلاً عاجلاً وخزعة فورية' },
                     { k: ['لثه','تورم','أزرق','لين','نزف','سهل','حمل'], d: 'ورم الحمل اللثوي (Pregnancy Epulis)', p: 'تنظيف لطيف + تحسين النظافة + استئصال جراحي بعد الولادة إن استمر', a: 'مرتبط بالتغيرات الهرمونية، غالباً يتحسن بعد الولادة، التنظيف اللطيف أساسي' },
-                    { k: ['خلع','سنخ','رائحه','فراغ','يومين','ثلاثه','يتمدد','ما انقفل'], d: 'السنخ الجاف بعد القلع (Dry Socket)', p: 'غسل السنخ بمحلول ملحي دافئ + وضع ضمادة مسكنة (Alveogyl/Eugenol) + مسكنات فموية', a: 'تجنب المضمضة القوية أو الشفط، الامتناع عن التدخين 72 ساعة، والالتزام بالمسكنات الموصوفة' },                    { k: ['تورم','وجه','فك','صعب','فتح','فم','حمى','بعد خلع'], d: 'عدوى ما بعد القلع (Post-Extraction Infection)', p: 'مضاد حيوي جهازي + مسكنات + كمادات دافئة + مراجعة لفتح الخراج إن وجد', a: '⚠️ مراجعة عاجلة، عدم الضغط على المنطقة، والالتزام الكامل بالمضاد والمراجعة' },
+                    { k: ['خلع','سنخ','رائحه','فراغ','يومين','ثلاثه','يتمدد','ما انقفل'], d: 'السنخ الجاف بعد القلع (Dry Socket)', p: 'غسل السنخ بمحلول ملحي دافئ + وضع ضمادة مسكنة (Alveogyl/Eugenol) + مسكنات فموية', a: 'تجنب المضمضة القوية أو الشفط، الامتناع عن التدخين 72 ساعة، والالتزام بالمسكنات الموصوفة' },
+                    { k: ['تورم','وجه','فك','صعب','فتح','فم','حمى','بعد خلع'], d: 'عدوى ما بعد القلع (Post-Extraction Infection)', p: 'مضاد حيوي جهازي + مسكنات + كمادات دافئة + مراجعة لفتح الخراج إن وجد', a: '⚠️ مراجعة عاجلة، عدم الضغط على المنطقة، والالتزام الكامل بالمضاد والمراجعة' },
                     { k: ['نزف','ما بوقف','بعد خلع','دم','كثير','ضغط'], d: 'نزف ما بعد القلع (Post-Extraction Bleeding)', p: 'ضغط بقطعة شاش معقمة 30 دقيقة + حمض الترانيكساميك موضعي + مراجعة إن استمر', a: 'الضغط المستمر هو الحل الأول، تجنب البصق أو الشفط، ومراجعة إذا استمر النزف >1 ساعة' },
                     { k: ['تنميل','شفه','ذقن','لسان','بعد خلع','بعد حشو'], d: 'إصابة عصبية مؤقتة (Transient Nerve Injury)', p: 'تقييم مدى الإصابة + فيتامينات ب + متابعة دورية + إحالة إن استمر >3 أشهر', a: 'غالباً يتحسن خلال أسابيع، تجنب المهيجات، ومتابعة الوظيفة الحسية دورياً' },
                     { k: ['كسر','فك','الم','صعب','مضغ','تغير','عَضه','رض'], d: 'كسر في الفك (Mandibular/Maxillary Fracture)', p: 'أشعة بانوراما/CT + تثبيت الفك + إحالة لجراحة الفم والوجه والفكين', a: '⚠️ حالة طارئة، تجنب المضغ، تثبيت الفك برباط مؤقت، ومراجعة جراح فوراً' },
                     { k: ['ورم','صلب','عظمي','ما بيوجع','بطئ','نمو'], d: 'ورم عظمي حميد (Benign Bone Tumor)', p: 'أشعة بانوراما/CT + خزعة + إحالة لجراحة الفم', a: 'يتطلب تقييماً شعاعياً ونسيجياً، العلاج جراحي غالباً، والمتابعة ضرورية' },
                     { k: ['تقرح','ما بيلتئم','3 اسابيع','صلب','حافه','مرفوعه'], d: 'قرحة مشبوهة للتسرطن (Suspicious Ulcer)', p: 'خزعة إلزامية + إحالة فورية لجراحة الفم + تصوير مقطعي إن لزم', a: '⚠️ أي قرحة لا تلتئم خلال 3 أسابيع تتطلب خزعة فورية، لا تؤجل المراجعة' },
                     { k: ['الم','مفصل','فك','صوت','طقطقه','صعوبه','فتح'], d: 'اضطراب المفصل الفكي الصدغي (TMD)', p: 'فحص إطباق وعضلات المضغ + أشعة مفصلية إن لزم + واق ليلي أو علاج طبيعي', a: 'أطعمة لينة، كمادات دافئة، تجنب فتح الفم واسعاً، وتقليل التوتر العضلي والصرير الليلي' },
-                    { k: ['ليش','شبكه','خطوط','بيضاء','حزاز','منبسط'], d: 'الحزاز المنبسط الفموي (Oral Lichen Planus)', p: 'فحص سريري دقيق + استبعاد الأسباب الرضية أو الدوائية + خزعة إن لزم + كورتيكوستيرويد موضعي', a: 'تجنب الأطعمة الحارة/الحامضة، الحفاظ على نظافة الفم بلطف، ومتابعة دورية لاستبعاد التحول الخبيث النادر' },
-                    { k: ['لسان','جغرافي','بقع','حمراء','بيضاء','حواف','متغيره','مهاجره'], d: 'اللسان الجغرافي (Geographic Tongue)', p: 'فحص سريري تأكيد + استبعاد الصدفية أو نقص الفيتامينات + طمأنة المريض + غسول ملحي إن لزم', a: 'حالة حميدة غير معدية، تتغير أشكالها يومياً، وتهدأ ذاتياً. تجنب المهيجات الموضعية' },
+                    { k: ['ليش','شبكه','خطوط','بيضاء','حزاز','منبسط'], d: 'الحزاز المنبسط الفموي (Oral Lichen Planus)', p: 'فحص سريري دقيق + استبعاد الأسباب الرضية أو الدوائية + خزعة إن لزم + كورتيكوستيرويد موضعي', a: 'تجنب الأطعمة الحارة/الحامضة، الحفاظ على نظافة الفم بلطف، ومتابعة دورية لاستبعاد التحول الخبيث النادر' },                    { k: ['لسان','جغرافي','بقع','حمراء','بيضاء','حواف','متغيره','مهاجره'], d: 'اللسان الجغرافي (Geographic Tongue)', p: 'فحص سريري تأكيد + استبعاد الصدفية أو نقص الفيتامينات + طمأنة المريض + غسول ملحي إن لزم', a: 'حالة حميدة غير معدية، تتغير أشكالها يومياً، وتهدأ ذاتياً. تجنب المهيجات الموضعية' },
                     { k: ['قرحه','مؤلمه','دائريه','بيضاء','حمراء','تتكرر','حافه'], d: 'القلاع الفموي المتكرر (Recurrent Aphthous Stomatitis)', p: 'تصنيف حسب الحجم + فحص نقص الحديد/فيتامينات + كورتيكوستيرويد موضعي أو غسول مطهر', a: 'تجنب الصدمات الميكانيكية والأطعمة المحفزة، استخدام معجون خالي من SLS، ومراجعة إذا تجاوزت 3 أسابيع' },
                     { k: ['فقاقيع','مجموعه','شفايف','زبد','حرقه','هلبس','هربس','بثور'], d: 'الهربس البسيط الفموي (Oral Herpes Simplex)', p: 'تشخيص سريري + مضاد فيروسي موضعي أو فموي (أسيكلوفير) إن كان مبكراً + توجيه لتجنب العدوى', a: 'معدي خلال مرحلة البثور، تجنب التقبيل ومشاركة الأدوات، والبدء بالعلاج خلال 24 ساعة من ظهور الوخز' },
                     { k: ['لويحه','بيضاء','لايمسح','تدخين','صلبه','خشونه','بقعه بيضا ثابته'], d: 'الطلوان الفموي (Oral Leukoplakia)', p: 'فحص سريري + إزالة المهيجات (تدخين/أسنان حادة) + خزعة إلزامية + متابعة دورية صارمة', a: 'آفة محتملة التسرطن، تتطلب كشفاً نسيجياً، وإقلاع فوري عن التدخين أو المضغ' },
@@ -488,27 +480,16 @@
                     { k: ['ورم','لين','متحرك','ما بيوجع','لثه','خده','لسان'], d: 'كتلة رخوة حميدة (Benign Soft Tissue Mass)', p: 'فحص سريري + أشعة إن لزم + خزعة تأكيدية + استئصال إن كبر أو أثر وظيفياً', a: 'معظم الكتل الرخوة حميدة، لكن أي نمو سريع أو تغير يتطلب خزعة فورية' }
                 ];
                 for (const rule of rules) {
-                    let score = 0, currentMatches = [];                    for (const kw of rule.k) {
-                        if (clean.includes(kw)) { score += kw.includes(' ') ? 2 : 1; currentMatches.push(kw); }
-                    }
+                    let score = 0, currentMatches = [];
+                    for (const kw of rule.k) { if (clean.includes(kw)) { score += kw.includes(' ') ? 2 : 1; currentMatches.push(kw); } }
                     if (score >= 2 && score > maxScore) { maxScore = score; bestMatch = rule; matchedTerms = currentMatches; }
                 }
                 if (bestMatch) {
                     const confidence = maxScore >= 4 ? 'high' : 'medium';
-                    return {
-                        html: `<div class="ai-section"><b>📋 التشخيص المرجح:</b> ${bestMatch.d}</div>
-                                <div class="ai-section" style="border-color:#10b981; background:#f0fdf4;"><b>💡 الخطة العلاجية:</b> ${bestMatch.p}</div>
-                                <div class="ai-section" style="border-color:#f59e0b; background:#fffbeb;"><b>⚠️ التوصية السريرية:</b> ${bestMatch.a}</div>
-                                <div class="text-[10px] text-gray-500 mt-1 text-left">${confidence==='high'?'🟢 دقة عالية':'🟡 مبدئي'} | المفردات المطابقة: ${matchedTerms.join('، ')}</div>`,
-                        confidence: confidence, diagnosis: bestMatch.d, plan: bestMatch.p, advice: bestMatch.a, matchedTerms: matchedTerms
-                    };
+                    return { html: `<div class="ai-section"><b>📋 التشخيص المرجح:</b> ${bestMatch.d}</div><div class="ai-section" style="border-color:#10b981; background:#f0fdf4;"><b>💡 الخطة العلاجية:</b> ${bestMatch.p}</div><div class="ai-section" style="border-color:#f59e0b; background:#fffbeb;"><b>⚠️ التوصية السريرية:</b> ${bestMatch.a}</div><div class="text-[10px] text-gray-500 mt-1 text-left">${confidence==='high'?'🟢 دقة عالية':'🟡 مبدئي'} | المفردات المطابقة: ${matchedTerms.join('، ')}</div>`, confidence, diagnosis: bestMatch.d, plan: bestMatch.p, advice: bestMatch.a, matchedTerms };
                 }
-                return { html: `<div class="ai-section"><b>📋 يحتاج لمزيد من الدقة:</b> يرجى تحديد الآتي للحصول على تشخيص دقيق:</div>
-                            <div class="ai-section" style="border-color:#3b82f6; background:#eff6ff;">
-                            <b>💡 حدد بدقة:</b><br>• <b>الموقع:</b> أي سن أو منطقة؟<br>• <b>النوع:</b> نابض / حاد / خفيف / عند المضغ فقط؟<br>• <b>المحفز:</b> بارد / ساخن / حلو / ليل / مستمر؟<br>• <b>المظهر:</b> تورم / نزف / بقعة بيضاء أو حمراء?</div>`, confidence: 'low', needsMoreInfo: true };
-            } catch(e) { return { html: `<div class="ai-section"><b>⚠️ خطأ في التحليل:</b> يرجى إعادة صياغة الأعراض بشكل أوضح</div>`, confidence: 'low', error: true }; }
+                return { html: `<div class="ai-section"><b>📋 يحتاج لمزيد من الدقة:</b> يرجى تحديد الآتي للحصول على تشخيص دقيق:</div><div class="ai-section" style="border-color:#3b82f6; background:#eff6ff;"><b>💡 حدد بدقة:</b><br>• <b>الموقع:</b> أي سن أو منطقة؟<br>• <b>النوع:</b> نابض / حاد / خفيف / عند المضغ فقط؟<br>• <b>المحفز:</b> بارد / ساخن / حلو / ليل / مستمر؟<br>• <b>المظهر:</b> تورم / نزف / بقعة بيضاء أو حمراء?</div>`, confidence: 'low', needsMoreInfo: true };            } catch(e) { return { html: `<div class="ai-section"><b>⚠️ خطأ في التحليل:</b> يرجى إعادة صياغة الأعراض بشكل أوضح</div>`, confidence: 'low', error: true }; }
         }
-        
         function runAdvancedAI_Live() {
             try {
                 const input = document.getElementById('aiInput')?.value.trim();
@@ -537,7 +518,8 @@
             if(!diag) return showToast("اكتب الشكوى أولاً","error");
             b.classList.remove('d-none'); b.innerHTML='<div class="text-center"><i class="fas fa-spinner fa-spin text-indigo-600"></i> جاري التحليل...</div>';
             setTimeout(()=>{ const analysis = analyzeDentalSymptoms(diag); b.innerHTML = `<b>💡 توصية:</b> السن #${currentTooth||'؟'} يحتاج فحصاً.<br><div class="mt-2">${analysis.html}</div><small class="text-gray-500">⚠️ لا يغني عن التشخيص</small>`; },300);
-        }        function savePatient() {
+        }
+        function savePatient() {
             const name = document.getElementById('pName')?.value?.trim(), phone = document.getElementById('pPhone')?.value?.trim(), diag = document.getElementById('pDiag')?.value?.trim();
             if(!name || !diag) return showToast("أكمل الاسم والشكوى", "error");
             const pid = 'local_' + Date.now();
@@ -555,8 +537,7 @@
             const pid = 'local_' + Date.now();
             const data = { id: pid, name, phone, birth: document.getElementById('regBirth').value, gender: document.getElementById('regGender').value, date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), createdAt: new Date().toISOString(), diag: 'تم التسجيل', totalCost: 0, paidAmount: 0, payments: [], nextAppointment: '', addedBy: currentUser?.id || 'system' };
             addToLocalDB(data);
-            if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync:", err));
-            showToast("✅ تم التسجيل", "success");
+            if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync:", err));            showToast("✅ تم التسجيل", "success");
             ['regName','regPhone','regBirth','regGender'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
             updateStats(); if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
         }
@@ -586,10 +567,11 @@
                 document.getElementById('pendingCount').innerText = n || 'لا توجد طلبات';
                 if(isMonitoring && n > lastPendingIds.length) showToast("🔔 وارد طلب اشتراك جديد!", "info");
                 lastPendingIds = Array.from({length: n}, (_, i) => i);
-            }).catch(err => console.warn("Polling error:", err));        }
+            }).catch(err => console.warn("Polling error:", err));
+        }
         function activateDoc(id) { if(!db) return showToast("❌ لا يوجد اتصال", "error"); db.ref('doctor_subscriptions/'+id).update({status:'active', activatedAt: new Date().toISOString()}).then(()=>{ showToast("✅ تم التفعيل بنجاح", "success"); fetchPendingRequests(); loadActiveDoctors(); }).catch(err => showToast("❌ فشل التفعيل", "error")); }
-        function archiveDoc(id, name) { if(!confirm(`هل تريد أرشفة طلب "${name}"؟ سيتم حفظ البيانات ولكن لن يظهر في المعلقة.`)) return; if(!db) return; db.ref('doctor_subscriptions/'+id).update({status:'archived', archivedAt: new Date().toISOString()}).then(()=>{ showToast("📦 تم الأرشفة", "info"); fetchPendingRequests(); loadActiveDoctors(); }).catch(err => showToast("❌ فشل الأرشفة", "error")); }
-        function deleteDoc(id, name) { if(!confirm(`⚠️ هل أنت متأكد من حذف طلب "${name}" نهائياً؟ لا يمكن التراجع.`)) return; if(!db) return; db.ref('doctor_subscriptions/'+id).remove().then(()=>{ showToast("🗑️ تم الحذف نهائياً", "info"); fetchPendingRequests(); loadActiveDoctors(); }).catch(err => showToast("❌ فشل الحذف", "error")); }
+        function archiveDoc(id, name) { if(!confirm(`هل تريد أرشفة طلب "${name}"؟`)) return; if(!db) return; db.ref('doctor_subscriptions/'+id).update({status:'archived', archivedAt: new Date().toISOString()}).then(()=>{ showToast("📦 تم الأرشفة", "info"); fetchPendingRequests(); loadActiveDoctors(); }).catch(err => showToast("❌ فشل الأرشفة", "error")); }
+        function deleteDoc(id, name) { if(!confirm(`⚠️ حذف "${name}" نهائياً؟`)) return; if(!db) return; db.ref('doctor_subscriptions/'+id).remove().then(()=>{ showToast("🗑️ تم الحذف", "info"); fetchPendingRequests(); loadActiveDoctors(); }).catch(err => showToast("❌ فشل الحذف", "error")); }
         function loadActiveDoctors() { if(!firebaseReady || !db) return; const c = document.getElementById('activeDoctors'); if(!c) return; c.innerHTML = '<div class="text-center text-xs text-gray-400">جاري التحميل...</div>'; db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap => { c.innerHTML = ''; if(!snap.exists()){ c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء نشطين</p>'; return; } snap.forEach(ch => { const v = ch.val(); c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`; }); }); }
         function suspendDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>{ showToast("⛔ تم الإيقاف","info"); fetchPendingRequests(); loadActiveDoctors(); }); }        
         function checkAppointmentAlerts() { const pts = getLocalDB(), now=new Date(), el=document.getElementById('alertList'), sec=document.getElementById('alertSection'), cnt=document.getElementById('alertCount'); if(!el||!sec||!cnt) return; el.innerHTML=''; let ac=0, uc=0; pts.forEach(p=>{if(!p.nextAppointment) return; const ad=new Date(p.nextAppointment), dh=(ad-now)/(36e5); if(dh>0&&dh<=24){ac++; const u=dh<=2; if(u) uc++; const ts=ad.toLocaleString('ar-EG',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'}); el.innerHTML+=`<div class="p-2 rounded-lg border flex justify-between items-center ${u?'bg-red-50 border-red-200':'bg-amber-50 border-amber-200'}"><div><span class="font-bold text-sm">${p.name}</span><div class="text-[10px] text-gray-600">🕒 ${ts}</div></div><button onclick="event.stopPropagation();openWhatsApp('${p.phone}','${p.name}','موعدك ${ts}')" class="wa-btn-patient"><i class="fab fa-whatsapp"></i></button></div>`; }}); cnt.innerText=ac; if(ac>0){sec.classList.remove('d-none');cnt.className=uc>0?'status-badge status-urgent ml-auto':'status-badge status-pending ml-auto';} else sec.classList.add('d-none'); }
@@ -604,8 +586,7 @@
         function saveNextAppointment() { const id=document.getElementById('editPatientId').value, appt=document.getElementById('editNextAppt').value; if(!id) return; const data={nextAppointment:appt,updatedAt:new Date().toISOString()}; updateLocalDB(id,data); showToast("✅ تم الحفظ","success"); checkAppointmentAlerts(); }
         function updateTotalCost() { const id=document.getElementById('editPatientId').value, cost=parseFloat(document.getElementById('editTotalCost').value)||0; if(!id) return; document.getElementById('payTotal').innerText=cost; document.getElementById('payRemain').innerText=cost-(parseFloat(document.getElementById('payPaid').innerText)||0); const data={totalCost:cost,updatedAt:new Date().toISOString()}; updateLocalDB(id,data); showToast("✅ تم التحديث","success"); }
         function renderPayments(payments) { const c=document.getElementById('paymentHistory'); c.innerHTML=''; if(!payments.length) { c.innerHTML='<p class="text-xs text-gray-400 text-center">لا توجد مدفوعات</p>'; return; } payments.slice().reverse().forEach(p=>{c.innerHTML+=`<div class="p-2 bg-white rounded border flex justify-between items-center text-xs"><span class="font-bold text-green-600">💵 ${p.amount} ل.س</span><span class="text-gray-600">${p.note||'-'}</span><span class="text-gray-400">${p.date}</span></div>`;}); }
-        function addPayment() { const id=document.getElementById('editPatientId').value, amount=parseFloat(document.getElementById('newPayAmount').value), note=document.getElementById('newPayNote').value.trim(); if(!id||isNaN(amount)||amount<=0) return showToast("أدخل مبلغاً صحيحاً","error"); const newPay={amount,note,date:new Date().toLocaleDateString('ar-EG'),timestamp:Date.now()}; const l=getLocalDB(), idx=l.findIndex(p=>p.id===id||p.firebaseId===id); if(idx!==-1){ const pays=l[idx].payments||[]; pays.push(newPay); const total=pays.reduce((s,x)=>s+x.amount,0); l[idx].payments=pays; l[idx].paidAmount=total; l[idx].updatedAt=new Date().toISOString(); saveLocalDB(l); document.getElementById('payPaid').innerText=total; document.getElementById('payRemain').innerText=(l[idx].totalCost||0)-total; renderPayments(pays); document.getElementById('newPayAmount').value=''; document.getElementById('newPayNote').value=''; showToast("✅ تم التسجيل","success"); } }
-        function loadTodayAppointments() { const d = new Date(); const today = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); const pts=getLocalDB(); renderTodayAppts(pts,today); }
+        function addPayment() { const id=document.getElementById('editPatientId').value, amount=parseFloat(document.getElementById('newPayAmount').value), note=document.getElementById('newPayNote').value.trim(); if(!id||isNaN(amount)||amount<=0) return showToast("أدخل مبلغاً صحيحاً","error"); const newPay={amount,note,date:new Date().toLocaleDateString('ar-EG'),timestamp:Date.now()}; const l=getLocalDB(), idx=l.findIndex(p=>p.id===id||p.firebaseId===id); if(idx!==-1){ const pays=l[idx].payments||[]; pays.push(newPay); const total=pays.reduce((s,x)=>s+x.amount,0); l[idx].payments=pays; l[idx].paidAmount=total; l[idx].updatedAt=new Date().toISOString(); saveLocalDB(l); document.getElementById('payPaid').innerText=total; document.getElementById('payRemain').innerText=(l[idx].totalCost||0)-total; renderPayments(pays); document.getElementById('newPayAmount').value=''; document.getElementById('newPayNote').value=''; showToast("✅ تم التسجيل","success"); } }        function loadTodayAppointments() { const d = new Date(); const today = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); const pts=getLocalDB(); renderTodayAppts(pts,today); }
         function renderTodayAppts(pts,today) { const con=document.getElementById('todayAppointmentsList'), sec=document.getElementById('todayAppointmentsSection'); con.innerHTML=''; const tm=pts.filter(p=>p.nextAppointment && p.nextAppointment.startsWith(today)).sort((a,b)=>(a.nextAppointment||'').localeCompare(b.nextAppointment||'')); document.getElementById('todayCountBadge').innerText=tm.length; if(tm.length===0){sec.classList.add('d-none');return;} sec.classList.remove('d-none'); tm.forEach(p=>{const t=p.nextAppointment.includes('T')?p.nextAppointment.split('T')[1].substring(0,5):'-'; con.innerHTML+=`<div class="p-2 bg-white rounded-lg border flex justify-between items-center hover:bg-blue-50 cursor-pointer" onclick="openPatientEdit('${p.firebaseId||p.id}','local')"><div><span class="font-bold text-sm">👤 ${p.name}</span><div class="text-[10px] text-gray-500">🕒 ${t}</div></div><button onclick="event.stopPropagation();openWhatsApp('${p.phone}','${p.name}','موعدك اليوم ${t}')" class="wa-btn-patient"><i class="fab fa-whatsapp"></i></button></div>`;}); }
         function updateStats() { const today=new Date().toLocaleDateString('ar-EG'); const l=getLocalDB(); document.getElementById('statPatients').innerText=l.length; document.getElementById('statToday').innerText=l.filter(d=>d.date===today).length; document.getElementById('statDoctors').innerText='0'; }
         
@@ -622,32 +603,22 @@
                 header.onclick = (e) => { e.preventDefault(); const isExpanded = header.getAttribute('aria-expanded') === 'true'; header.setAttribute('aria-expanded', !isExpanded); card.classList.toggle('collapsed'); localStorage.setItem(panelId, !isExpanded ? 'collapsed' : 'expanded'); };
             });
         }
-        
-        // ✅ ✅ ✅ دوال استيراد JSON ✅ ✅ ✅
-        function toggleJsonImport() { 
-            const panel = document.getElementById('jsonImportPanel'); 
-            if(!panel) return; 
-            panel.classList.toggle('d-none'); 
-            if(!panel.classList.contains('d-none')) document.getElementById('jsonImportInput').focus(); 
-        }
+        function toggleJsonImport() { const p = document.getElementById('jsonImportPanel'); p.classList.toggle('d-none'); if(!p.classList.contains('d-none')) document.getElementById('jsonImportInput').focus(); }
         function validateJSONImport() {
             const input = document.getElementById('jsonImportInput').value.trim();
             const statusEl = document.getElementById('jsonImportStatus');
-            const previewEl = document.getElementById('jsonImportPreview');
-            const previewList = document.getElementById('jsonPreviewList');
-            try {                const cases = JSON.parse(input);
-                if(!Array.isArray(cases)) throw new Error('يجب أن تكون البيانات مصفوفة [] تحتوي على حالات متعددة');
+            try {
+                const cases = JSON.parse(input);
+                if(!Array.isArray(cases)) throw new Error('يجب أن تكون البيانات مصفوفة []');
                 if(cases.length === 0) throw new Error('المصفوفة فارغة');
                 cases.forEach((c, i) => {
                     if(!c.name?.trim()) throw new Error(`الحالة #${i+1}: الاسم مطلوب`);
                     if(!c.phone?.trim()) throw new Error(`الحالة #${i+1}: الهاتف مطلوب`);
                     if(!c.diag?.trim()) throw new Error(`الحالة #${i+1}: التشخيص مطلوب`);
-                    if(c.phone && !/^09\d{8}$/.test(c.phone.replace(/\s/g,''))) throw new Error(`الحالة #${i+1}: رقم هاتف غير صالح`);
                 });
-                previewList.innerHTML = cases.slice(0,10).map((c,i) => `<div class="p-1.5 bg-white rounded border text-[10px] flex justify-between"><span><b>${i+1}.</b> ${c.name}</span><span class="text-gray-500">🦷 ${c.tooth||'-'}</span></div>`).join('') + (cases.length > 10 ? `<div class="text-[10px] text-gray-400 text-center">... و ${cases.length-10} حالات أخرى</div>` : '');
                 statusEl.textContent = `✅ صيغة سليمة | جاهز لاستيراد ${cases.length} حالة`;
-                statusEl.className = 'json-status success show'; previewEl.classList.remove('d-none');
-            } catch(e) { statusEl.textContent = `❌ خطأ: ${e.message}`; statusEl.className = 'json-status error show'; previewEl.classList.add('d-none'); }
+                statusEl.className = 'json-status success show';
+            } catch(e) { statusEl.textContent = `❌ خطأ: ${e.message}`; statusEl.className = 'json-status error show'; }
         }
         function importCasesFromJSON() {
             const input = document.getElementById('jsonImportInput').value.trim();
@@ -655,17 +626,16 @@
             if(!input) { statusEl.textContent = '⚠️ الرجاء لصق بيانات JSON أولاً'; statusEl.className = 'json-status error show'; return; }
             try {
                 const cases = JSON.parse(input); if(!Array.isArray(cases)) throw new Error('يجب أن تكون البيانات مصفوفة []');
-                let imported = 0, skipped = 0;
+                let imported = 0;
                 cases.forEach(c => {
-                    if(!c.name || !c.phone || !c.diag) { skipped++; return; }
+                    if(!c.name || !c.phone || !c.diag) return;
                     const pid = 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2,5);
                     const data = { id: pid, name: c.name.trim(), phone: c.phone.trim(), diag: c.diag.trim(), tooth: c.tooth || null, birth: c.birth || '', gender: c.gender || '', totalCost: c.totalCost || 0, paidAmount: 0, payments: [], nextAppointment: c.nextAppointment || '', date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), createdAt: new Date().toISOString(), addedBy: currentUser?.id || 'admin', updatedAt: new Date().toISOString() };
-                    addToLocalDB(data); if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync:", err)); imported++;
+                    addToLocalDB(data); if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(()=>{}); imported++;
                 });
                 if(imported > 0) {
-                    statusEl.textContent = `🎉 تم استيراد ${imported} حالة${skipped>0?` | تخطي ${skipped} غير مكتملة`:''}`;
-                    statusEl.className = 'json-status success show'; document.getElementById('jsonImportInput').value = ''; document.getElementById('jsonImportPreview').classList.add('d-none');
-                    updateStats(); if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
+                    statusEl.textContent = `🎉 تم استيراد ${imported} حالة`; statusEl.className = 'json-status success show';
+                    document.getElementById('jsonImportInput').value = ''; updateStats();                    if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
                     showToast(`✅ تم استيراد ${imported} حالة`, "success");
                 } else { throw new Error('لا توجد حالات صالحة للاستيراد'); }
             } catch(e) { statusEl.textContent = `❌ فشل الاستيراد: ${e.message}`; statusEl.className = 'json-status error show'; showToast("❌ فشل استيراد الحالات", "error"); }
