@@ -47,7 +47,8 @@
         .status-active { background: #dcfce7; color: #166534; }
         .status-urgent { background: #fee2e2; color: #991b1b; animation: pulse-urgent 2s infinite; }
         @keyframes pulse-urgent { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-        .app-header { background: white; padding: 10px 16px; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: center; gap: 8px; }        .app-logo { width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6, #60a5fa); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; }        .wa-float { position: fixed; bottom: 80px; left: 16px; z-index: 9998; background: #25D366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(37,211,102,0.4); transition: 0.3s; text-decoration: none; }
+        .app-header { background: white; padding: 10px 16px; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: center; gap: 8px; }        .app-logo { width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6, #60a5fa); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; }
+        .wa-float { position: fixed; bottom: 80px; left: 16px; z-index: 9998; background: #25D366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(37,211,102,0.4); transition: 0.3s; text-decoration: none; }
         .wa-float:hover { background: #128C7E; transform: scale(1.1); }
         .wa-pulse { animation: pulse-wa 2s infinite; } .wa-pulse:hover { animation: none; }
         @keyframes pulse-wa { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
@@ -68,20 +69,16 @@
         #installGuide i { color: #3b82f6; margin-left: 4px; }
         #installGuide .close { position: absolute; top: 4px; left: 8px; font-size: 16px; color: #64748b; cursor: pointer; }
         
-        /* 🔹 تحسينات جديدة: خاصية الطي للنوافذ */
+        /* 🔹 تحسينات: خاصية الطي + أزرار الإدارة + JSON */
         .collapsible-panel { overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease; }
         .collapsible-panel.collapsed { max-height: 50px !important; padding-top: 0 !important; padding-bottom: 0 !important; }
         .collapsible-header { cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; }
         .collapsible-header .chevron { transition: transform 0.3s ease; font-size: 12px; }
         .collapsible-header[aria-expanded="true"] .chevron { transform: rotate(180deg); }
-        
-        /* 🔹 نافذة استيراد JSON المبسطة */
         .json-editor { font-family: monospace; font-size: 11px; line-height: 1.4; }
         .json-status { font-size: 11px; padding: 6px 10px; border-radius: 6px; margin-top: 8px; }
         .json-status.success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
         .json-status.error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-        
-        /* 🔹 تحليل الذكاء الاصطناعي المحسن */
         .ai-professional-box { background: linear-gradient(135deg, #6d28d9, #4c1d95); color: white; border-radius: 12px; padding: 12px; margin-top: 8px; }
         .ai-confidence { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
         .ai-confidence.high { background: rgba(16,185,129,0.2); color: #10b981; }
@@ -96,10 +93,10 @@
         <b>📱 لتثبيت التطبيق:</b><br>
         <span id="androidHint" class="d-none">اضغط ⋮ → "إضافة إلى الشاشة الرئيسية"</span>
         <span id="iosHint" class="d-none">اضغط 📤 → "إضافة إلى الشاشة الرئيسية"</span>
-        <span id="desktopHint" class="d-none">اضغط على أيقونة 🔖 في شريط العنوان</span>    </div>
+        <span id="desktopHint" class="d-none">اضغط على أيقونة 🔖 في شريط العنوان</span>
+    </div>
     <div id="loginPage" class="fixed inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 z-[10000] flex items-center justify-center p-6">
-        <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm text-center">
-            <div class="app-logo mx-auto mb-3"><i class="fas fa-tooth"></i></div>
+        <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-sm text-center">            <div class="app-logo mx-auto mb-3"><i class="fas fa-tooth"></i></div>
             <h1 class="text-xl font-bold text-gray-800 mb-1">بَسْمَة AI</h1>
             <p class="text-gray-500 text-xs mb-4">نظام إدارة العيادة السنية</p>
             <div class="flex gap-2 mb-4">
@@ -114,7 +111,8 @@
                 <input type="email" id="doctorEmail" placeholder="البريد الإلكتروني" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-3 text-center outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') handleDoctorLogin()">
                 <input type="password" id="doctorPassword" placeholder="كلمة المرور" class="w-full p-3 border-2 border-gray-200 rounded-xl mb-4 text-center outline-none focus:border-amber-500" onkeypress="if(event.key==='Enter') handleDoctorLogin()">
                 <button type="button" onclick="handleDoctorLogin()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">دخول</button>
-                <p class="text-xs text-gray-400 mt-3">ليس لديك حساب؟ <span class="text-amber-600 cursor-pointer font-medium hover:underline" onclick="openSubscribe()">اشترك الآن</span></p>            </div>
+                <p class="text-xs text-gray-400 mt-3">ليس لديك حساب؟ <span class="text-amber-600 cursor-pointer font-medium hover:underline" onclick="openSubscribe()">اشترك الآن</span></p>
+            </div>
         </div>
     </div>
     <div id="mainContent" class="d-none">
@@ -145,9 +143,9 @@
                     <button type="button" onclick="navTo('ai')" class="quick-action"><i class="fas fa-robot"></i> مساعد ذكي</button>
                     <button type="button" onclick="navTo('add')" class="quick-action"><i class="fas fa-stethoscope"></i> فحص جديد</button>
                     <button type="button" onclick="navTo('list')" class="quick-action"><i class="fas fa-clipboard-list"></i> السجلات</button>
-                    <button type="button" onclick="navTo('list')" class="quick-action" style="background: linear-gradient(135deg, #06b6d4, #22d3ee); grid-column: span 2;">                        <i class="fas fa-users"></i> 👥 قائمة المرضى (اضغط للتعديل)
-                    </button>
-                </div>
+                    <button type="button" onclick="navTo('list')" class="quick-action" style="background: linear-gradient(135deg, #06b6d4, #22d3ee); grid-column: span 2;">
+                        <i class="fas fa-users"></i> 👥 قائمة المرضى (اضغط للتعديل)
+                    </button>                </div>
                 <div id="adminSection" class="d-none">
                     <div class="section-card border-2 border-indigo-200">
                         <div class="flex justify-between items-center mb-2">
@@ -161,12 +159,10 @@
                         </div>
                         <div id="activeDoctors" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                         
-                        <!-- 🔹 زر فتح نافذة استيراد الحالات (مبسط) -->
+                        <!-- 🔹 نافذة استيراد الحالات (مبسط ومضمن) -->
                         <button type="button" onclick="toggleJsonImport()" class="quick-action" style="background: linear-gradient(135deg, #7c3aed, #a78bfa); margin-top: 10px;">
                             <i class="fas fa-file-import"></i> 📦 استيراد حالات (JSON)
                         </button>
-                        
-                        <!-- 🔹 نافذة استيراد الحالات الموحدة والمبسطة (مضمنة في نفس البطاقة) -->
                         <div id="jsonImportPanel" class="d-none mt-3 pt-3 border-t border-indigo-200">
                             <p class="text-[10px] text-gray-500 mb-2">📋 الصيغة: مصفوفة حالات <code>[{...}, {...}]</code></p>
                             <textarea id="jsonImportInput" class="json-editor w-full p-2 bg-gray-900 text-gray-100 border border-gray-700 rounded-lg outline-none focus:border-purple-400 resize-none text-[10px]" rows="5" placeholder='[
@@ -183,10 +179,10 @@
                                 <div id="jsonPreviewList" class="space-y-1 max-h-24 overflow-y-auto text-[10px]"></div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
-                <div class="section-card">                    <h3 class="font-bold text-sm mb-2"><i class="fas fa-chart-pie text-blue-500 ml-1"></i> إحصائيات</h3>
+                <div class="section-card">                    
+                    <h3 class="font-bold text-sm mb-2"><i class="fas fa-chart-pie text-blue-500 ml-1"></i> إحصائيات</h3>
                     <div class="grid grid-cols-3 gap-2 text-center">                        
                         <div class="bg-blue-50 p-2 rounded-lg"><div class="font-bold text-blue-600" id="statPatients">0</div><div class="text-[10px] text-gray-500">مرضى</div></div>
                         <div class="bg-green-50 p-2 rounded-lg"><div class="font-bold text-green-600" id="statToday">0</div><div class="text-[10px] text-gray-500">اليوم</div></div>
@@ -194,11 +190,11 @@
                     </div>
                 </div>
                 <div id="alertSection" class="d-none">
-                    <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">                        <div class="flex items-center gap-2 mb-2">
+                    <div class="section-card border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50">
+                        <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-bell text-amber-600"></i>
                             <h3 class="font-bold text-sm">تنبيهات المواعيد</h3>
-                            <span class="status-badge status-urgent ml-auto" id="alertCount">0</span>
-                        </div>
+                            <span class="status-badge status-urgent ml-auto" id="alertCount">0</span>                        </div>
                         <div id="alertList" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
                     </div>
                 </div>
@@ -234,7 +230,8 @@
                     <input type="text" id="subName" placeholder="الاسم الكامل" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
                     <input type="email" id="subEmail" placeholder="البريد الإلكتروني" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
                     <input type="password" id="subPassword" placeholder="كلمة مرور" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-2 outline-none focus:border-amber-400 text-sm">
-                    <input type="text" id="subSpecialty" placeholder="التخصص (اختياري)" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">                    <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
+                    <input type="text" id="subSpecialty" placeholder="التخصص (اختياري)" class="w-full p-2 bg-white border-2 border-gray-200 rounded-lg mb-3 outline-none focus:border-amber-400 text-sm">                    
+                    <button type="button" onclick="submitDoctorSubscription()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold py-3 rounded-xl">إرسال الطلب</button>
                     <button type="button" onclick="backToLogin()" class="w-full bg-gray-200 text-gray-700 font-bold py-2 rounded-lg mt-3 hover:bg-gray-300 transition">← العودة لتسجيل الدخول</button>                
                 </div>
             </div>            
@@ -243,13 +240,12 @@
                     <div class="flex items-center gap-2 mb-3"><div class="bg-purple-100 p-2 rounded-lg"><i class="fas fa-robot text-purple-600"></i></div><h2 class="font-bold text-sm">🧠 المساعد الذكي السريري</h2></div>
                     <div class="bg-white p-3 rounded-xl border border-purple-200 mb-3 shadow-sm">
                         <label class="text-xs text-gray-600 font-medium block mb-1">📝 الأعراض والعلامات السريرية</label>
-                        <textarea id="aiInput" placeholder="مثال: ألم نابض في السن 36 يزداد ليلاً، حساسية للبارد..." class="w-full p-2 bg-gray-50 border rounded-lg outline-none focus:border-purple-400 resize-none text-sm" rows="4"></textarea>                        <button onclick="runAdvancedAI_Live()" class="mt-2 w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-2 rounded-lg text-sm hover:opacity-90 transition"><i class="fas fa-magic ml-1"></i> تحليل ذكي (بدون إنترنت)</button>
+                        <textarea id="aiInput" placeholder="مثال: ألم نابض في السن 36 يزداد ليلاً، حساسية للبارد..." class="w-full p-2 bg-gray-50 border rounded-lg outline-none focus:border-purple-400 resize-none text-sm" rows="4"></textarea>
+                        <button onclick="runAdvancedAI_Live()" class="mt-2 w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-2 rounded-lg text-sm hover:opacity-90 transition"><i class="fas fa-magic ml-1"></i> تحليل ذكي (بدون إنترنت)</button>
                     </div>
-                    <div id="aiOutputBox" class="d-none bg-white p-3 rounded-xl border-2 border-purple-300 shadow-inner">
-                        <div class="flex justify-between items-center mb-2 border-b border-gray-100 pb-2"><span class="text-xs font-bold text-purple-700">🤖 نتيجة التحليل</span><button onclick="clearAI()" class="text-[10px] text-gray-500 hover:text-red-500 flex items-center gap-1">مسح <i class="fas fa-times"></i></button></div>
+                    <div id="aiOutputBox" class="d-none bg-white p-3 rounded-xl border-2 border-purple-300 shadow-inner">                        <div class="flex justify-between items-center mb-2 border-b border-gray-100 pb-2"><span class="text-xs font-bold text-purple-700">🤖 نتيجة التحليل</span><button onclick="clearAI()" class="text-[10px] text-gray-500 hover:text-red-500 flex items-center gap-1">مسح <i class="fas fa-times"></i></button></div>
                         <div id="aiResult" class="text-sm text-gray-700 leading-relaxed"></div>
                     </div>
-                    <!-- 🔹 ميزة جديدة: التحليل الاحترافي للذكاء الاصطناعي -->
                     <div class="ai-professional-box d-none" id="aiProfessionalBox">
                         <div class="flex justify-between items-start mb-2">
                             <span class="font-bold text-sm">🔬 تحليل احترافي متقدم</span>
@@ -292,10 +288,11 @@
                     <div class="flex gap-2 mb-2"><input type="number" id="editTotalCost" placeholder="التكلفة الإجمالية" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm"><button onclick="updateTotalCost()" class="bg-amber-500 text-white px-3 rounded-lg font-bold text-sm hover:bg-amber-600">تحديث</button></div>
                     <div class="grid grid-cols-3 gap-2 mb-3 text-center text-xs"><div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">الإجمالي</div><div class="font-bold" id="payTotal">0</div></div><div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">المدفوع</div><div class="font-bold text-green-600" id="payPaid">0</div></div><div class="bg-white p-2 rounded-lg border"><div class="text-gray-500">المتبقي</div><div class="font-bold text-red-600" id="payRemain">0</div></div></div>
                     <div class="flex gap-2 mb-3"><input type="number" id="newPayAmount" placeholder="المبلغ" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm"><input type="text" id="newPayNote" placeholder="ملاحظة (اختياري)" class="flex-1 p-2 bg-white border rounded-lg outline-none text-sm"><button onclick="addPayment()" class="bg-green-500 text-white px-3 rounded-lg font-bold text-sm hover:bg-green-600">إضافة</button></div>
-                    <div id="paymentHistory" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>                </div>                <div class="section-card"><h3 class="font-bold text-xs mb-2"><i class="fas fa-history text-gray-500 ml-1"></i> آخر تحديث</h3><div id="patientVisits" class="space-y-2 text-sm"><div class="p-2 bg-gray-50 rounded-lg border text-xs"><span class="text-gray-500">سيظهر هنا تاريخ آخر تعديل للبيانات</span></div></div></div>
+                    <div id="paymentHistory" class="space-y-2 max-h-32 overflow-y-auto text-sm"></div>
+                </div>                
+                <div class="section-card"><h3 class="font-bold text-xs mb-2"><i class="fas fa-history text-gray-500 ml-1"></i> آخر تحديث</h3><div id="patientVisits" class="space-y-2 text-sm"><div class="p-2 bg-gray-50 rounded-lg border text-xs"><span class="text-gray-500">سيظهر هنا تاريخ آخر تعديل للبيانات</span></div></div></div>
             </div>        
-        </main>
-        <div class="copyright-footer">            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
+        </main>        <div class="copyright-footer">            حقوق التصميم محفوظة للدكتور <strong>زكريا محمد عطوني</strong> - سوريا
         </div>
         <footer class="main-footer">
             <button type="button" onclick="navTo('home')" id="btn-home" class="nav-btn active"><i class="fas fa-home"></i><span>الرئيسية</span></button>
@@ -313,8 +310,6 @@
             if (ua.includes('android')) { document.getElementById('androidHint').classList.remove('d-none'); setTimeout(() => guide.classList.add('show'), 3000); } 
             else if (ua.includes('iphone') || ua.includes('ipad')) { document.getElementById('iosHint').classList.remove('d-none'); setTimeout(() => guide.classList.add('show'), 3000); } 
             else if (!ua.includes('mobile')) { document.getElementById('desktopHint').classList.remove('d-none'); }
-            
-            // 🔹 تهيئة خاصية الطي للنوافذ بعد تحميل الصفحة
             initCollapsiblePanels();
         });
         let db = null, firebaseReady = false;
@@ -341,39 +336,61 @@
         function updateLocalDB(id, newData) { const l = getLocalDB(); const idx = l.findIndex(p => p.id === id || p.firebaseId === id); if(idx !== -1) { l[idx] = { ...l[idx], ...newData, id: l[idx].id, firebaseId: l[idx].firebaseId || id }; return saveLocalDB(l); } return false; }
         function deleteFromLocalDB(id) { saveLocalDB(getLocalDB().filter(p => p.id !== id && p.firebaseId !== id)); }
         
-        function switchLogin(type) {            const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');
-            const formA = document.getElementById('adminLoginForm'), formD = document.getElementById('doctorLoginForm');            if(type === 'admin'){ tabA.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabD.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formA.classList.remove('d-none'); formD.classList.add('d-none'); }
+        function switchLogin(type) {
+            const tabA = document.getElementById('tabAdmin'), tabD = document.getElementById('tabDoctor');
+            const formA = document.getElementById('adminLoginForm'), formD = document.getElementById('doctorLoginForm');            
+            if(type === 'admin'){ tabA.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabD.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formA.classList.remove('d-none'); formD.classList.add('d-none'); }
             else { tabD.className = 'flex-1 py-2 rounded-xl bg-blue-600 text-white text-sm font-medium'; tabA.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium'; formD.classList.remove('d-none'); formA.classList.add('d-none'); }
-        }
-        function openSubscribe() { document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); navTo('subscribe'); }
+        }        function openSubscribe() { document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); navTo('subscribe'); }
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
         function handleAdminLogin() {            
             const pwd = document.getElementById('adminPassword')?.value?.trim();
             if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 300); }            
             else showToast("❌ كلمة المرور غير صحيحة", "error");
         }
+        
+        // 🔹 ✅ دالة دخول الطبيب المحسنة والجذرية
         function handleDoctorLogin() {
-            try {
-                const email = document.getElementById('doctorEmail')?.value?.trim(), pwd = document.getElementById('doctorPassword')?.value?.trim();
-                if(!email || !pwd) return showToast("أدخل البريد وكلمة المرور", "error");
-                if(!firebaseReady) return showToast("⚠️ دخول الأطباء يتطلب اتصالاً بـ Firebase", "info");
-                showToast("🔄 جاري التحقق...", "info");
-                db.ref('doctor_subscriptions').orderByChild('email').equalTo(email).once('value').then(snap => {
-                    if(!snap.exists()) return showToast("❌ حساب غير موجود", "error");
-                    let found = null; snap.forEach(c => { if(c.val().password === pwd) found = {id: c.key, ...c.val()}; });
-                    if(!found) return showToast("❌ كلمة المرور خاطئة", "error");
-                    if(found.status !== 'active') return showToast("⏳ حسابك قيد المراجعة", "warning");
-                    currentUser = { role: 'doctor', ...found }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 300);
-                }).catch(() => showToast("فشل الاتصال", "error"));
-            } catch(e) { showToast("❌ خطأ في الدخول", "error"); }
+            const emailEl = document.getElementById('doctorEmail');
+            const passEl = document.getElementById('doctorPassword');
+            if(!emailEl || !passEl) return;
+            
+            const cleanEmail = emailEl.value.trim().toLowerCase();
+            const cleanPass = passEl.value.trim();
+            if(!cleanEmail || !cleanPass) return showToast("أدخل البريد وكلمة المرور", "error");
+            if(!firebaseReady || !db) return showToast("⚠️ دخول الأطباء يتطلب اتصالاً بـ Firebase", "info");
+            
+            showToast("🔄 جاري التحقق...", "info");
+            db.ref('doctor_subscriptions').once('value').then(snap => {
+                if(!snap.exists()) return showToast("❌ لا توجد حسابات مسجلة", "error");
+                let found = null;
+                snap.forEach(c => {
+                    const v = c.val();
+                    if((v.email||"").toLowerCase().trim() === cleanEmail && v.password === cleanPass) {
+                        found = {id: c.key, ...v};
+                    }
+                });
+                if(!found) return showToast("❌ البريد أو كلمة المرور غير صحيحة", "error");
+                
+                const status = (found.status || "").toLowerCase().trim();
+                if(status === 'pending') return showToast("⏳ الحساب قيد المراجعة", "warning");
+                if(status === 'archived') return showToast("📦 الحساب مؤرشف", "info");
+                if(status === 'rejected') return showToast("🚫 تم رفض الطلب", "error");
+                if(status === 'suspended') return showToast("⛔ الحساب موقوف", "warning");
+                if(status !== 'active') return showToast(`⚠️ حالة الحساب غير صالحة (${found.status})`, "error");
+                
+                currentUser = { role: 'doctor', id: found.id, name: found.name, email: found.email };
+                showToast(`✅ مرحباً د. ${found.name}`, "success");
+                localStorage.setItem('basma_doctor_session', JSON.stringify({id: found.id, email: found.email}));
+                setTimeout(afterLogin, 300);
+            }).catch(() => showToast("🔌 فشل الاتصال بالخادم", "error"));
         }
         function afterLogin() {
             document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); document.getElementById('userBar').classList.remove('d-none');
             if(currentUser.role === 'admin') { 
                 document.getElementById('userTypeDisplay').innerText = 'مدير النظام'; 
                 document.getElementById('adminSection').classList.remove('d-none'); 
-                try { startSubscriptionPolling(); loadActiveDoctors(); } catch(e){}
-            }
+                try { startSubscriptionPolling(); loadActiveDoctors(); } catch(e){}            }
             else { document.getElementById('userTypeDisplay').innerText = `د. ${currentUser.name}`; document.getElementById('adminSection').classList.add('d-none'); }
             initTeeth(); loadData(); updateStats(); checkAppointmentAlerts(); navTo('home');
             if('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
@@ -390,7 +407,8 @@
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             const btnMap = {home:'home', add:'add', ai:'ai', list:'list', register:'home', subscribe:'home'}, btn = document.getElementById(`btn-${btnMap[page]||'home'}`);
             if(btn) btn.classList.add('active');
-            if(page === 'list') { loadData(); updateStats(); }            if(page === 'home') { loadTodayAppointments(); checkAppointmentAlerts(); }
+            if(page === 'list') { loadData(); updateStats(); }
+            if(page === 'home') { loadTodayAppointments(); checkAppointmentAlerts(); }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         function initTeeth() {
@@ -402,21 +420,13 @@
             });
         }
         
-        // ✅ ✅ ✅ محرك الذكاء المحلي المُوسّع لأقصى حد (جميع تخصصات الأسنان + الأنسجة الرخوة) ✅ ✅ ✅
+        // ✅ ✅ ✅ محرك الذكاء المحلي المُوسّع ✅ ✅ ✅
         function analyzeDentalSymptoms(text) {
             try {
                 if (!text || !text.trim()) return `<div class="ai-section"><b>📋 التقييم المبدئي:</b> يُرجى كتابة الأعراض بوضوح</div>`;
-                
-                // معالجة ذكية للنص العربي
-                let clean = text
-                    .replace(/[ًٌٍَُِّْٰ]/g, '')
-                    .replace(/[أإآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي')
-                    .replace(/ؤ/g, 'و').replace(/ئ/g, 'ي').replace(/\s+/g, ' ')
-                    .trim();
+                let clean = text.replace(/[ًٌٍَُِّْٰ]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي').replace(/\s+/g, ' ').trim();
                 let bestMatch = null, maxScore = 0, matchedTerms = [];
-                // بنك الأمراض الشامل (70+ حالة) - منظم حسب التخصص
                 const rules = [
-                    // 🔹 طب اللب والجذور (الاندو) - 12 حالة
                     { k: ['الم','وجع','نابض','خافق','مستمر','دايم','ليل','يزيد','لايروح','حساس','بارد','ساخن'], d: 'التهاب لب السن غير القابل للعكس (Irreversible Pulpitis)', p: 'فحص حيوية العصب كهربائياً وحرارياً + أشعة بيريابيكال + تقييم مدى تأثر العصب', a: 'مسكنات مضادة للالتهاب، تجنب المؤثرات الحرارية، ومراجعة عاجلة للعلاج اللبي أو الاستئصال' },
                     { k: ['حساس','بارد','حلو','حامض','سريع','ثواني','يروح','بختفي'], d: 'التهاب لب السن القابل للعكس (Reversible Pulpitis)', p: 'كشف تسوس سطحي + اختبار حيوية + تقييم انحسار اللثة أو تآكل المينا', a: 'معجون فلورايد/حساسية عاجية، تجنب المشروبات الحمضية، حشو وقائي أو تطبيق مادة عازلة' },
                     { k: ['الم','عض','مضغ','مرتفع','ضغط','قمة','بيوجع لما بضغط'], d: 'التهاب دواعم السن الذروي الحاد (Acute Apical Periodontitis)', p: 'فحص إطباق + أشعة بيريابيكال + اختبار حيوية سلبي عادةً + تقييم الحاجة لفتح لب أو علاج جذري', a: 'مسكنات NSAIDs، تجنب المضغ على السن، ومراجعة عاجلة لتخفيف الضغط الذروي' },
@@ -429,17 +439,16 @@
                     { k: ['الم','حاد','مفاجئ','بعد حشو','بعد عصب','انتفاخ','حمى'], d: 'تفاقم حاد بعد العلاج اللبي (Acute Exacerbation)', p: 'إعادة فتح السن للتصريف + تنظيف القنوات + مضاد حيوي إن لزم + مسكنات قوية', a: 'مراجعة عاجلة خلال 24 ساعة، عدم المضغ على السن، والالتزام بالمسكنات والمضاد إن وُصف' },
                     { k: ['الم','عند الضغط','حشوه','عالية','مرتفع','ما بتمضغ'], d: 'ارتفاع في الإطباق بعد الترميم (High Occlusion)', p: 'فحص الإطباق بورق كربوني + ضبط ارتفاع الحشوة أو التاج', a: 'مراجعة سريعة لضبط الارتفاع، تجنب المضغ على الجهة حتى التعديل' },
                     { k: ['الم','مباشر','كهرباء','حرارة','لايستجيب','ميت'], d: 'نخر لب كامل مع عدم استجابة للحيوية (Total Pulp Necrosis)', p: 'أشعة بيريابيكال + تأكيد عدم الاستجابة للحيوية + بدء علاج جذري أو قلع', a: 'السن غير حي، يتطلب علاجاً جذرياً لإنقاذه أو قلعه إذا كان غير قابل للترميم' },
-                    // 🔹 اللثة ودواعم السن - 10 حالات
-                    { k: ['لثه','نزف','فرشاه','رائحه','ترسبات','جيوب','تخلخل','بتدمي'], d: 'التهاب دواعم السن المزمن (Chronic Periodontitis)', p: 'تقييم عمق الجيوب (Probing) + أشعة بانوراما/بيريابيكال + خطة تنظيف عميق (SRP)', a: 'تحسين العناية المنزلية، غسول مطهر مؤقت، جلسات تنظيف دورية، وإقلاع عن التدخين إن وجد' },
-                    { k: ['لثه','حمراء','منتفخه','نزف','سهل','بدون تخلخل'], d: 'التهاب اللثة البسيط (Gingivitis)', p: 'تنظيف مهني + تعليمات نظافة فموية + غسول مطهر مؤقت', a: 'تحسين تقنية التنظيف، استخدام فرشاة ناعمة، ومراجعة دورية كل 6 أشهر' },
+                    { k: ['لثه','نزف','فرشاه','رائحه','ترسبات','جيوب','تخلخل','بتدمي'], d: 'التهاب دواعم السن المزمن (Chronic Periodontitis)', p: 'تقييم عمق الجيوب (Probing) + أشعة بانوراما/بيريابيكال + خطة تنظيف عميق (SRP)', a: 'تحسين العناية المنزلية، غسول مطهر مؤقت، جلسات تنظيف دورية، وإقلاع عن التدخين إن وجد' },                    { k: ['لثه','حمراء','منتفخه','نزف','سهل','بدون تخلخل'], d: 'التهاب اللثة البسيط (Gingivitis)', p: 'تنظيف مهني + تعليمات نظافة فموية + غسول مطهر مؤقت', a: 'تحسين تقنية التنظيف، استخدام فرشاة ناعمة، ومراجعة دورية كل 6 أشهر' },
                     { k: ['لثه','نازله','جذر','ظاهر','فرشاه','قويه','تنظيف','جذر ظاهر'], d: 'انحسار اللثة (Gingival Recession)', p: 'تقييم سبب الانحسار (تقنية تنظيف/إطباق/لثة رقيقة) + حشو زجاجي أو غطاء لثوي إن لزم', a: 'استخدام فرشاة ناعمة وتقنية دائرية لطيفة، معجون منخفض الاحتكاك، وفحص إطباق الأسنان' },
                     { k: ['لثه','ورم','أحمر','مؤلم','صديد','بين الاسنان'], d: 'خراج لثوي حاد (Periodontal Abscess)', p: 'تصريف الخراج + تنظيف الجيب اللثوي + مضاد حيوي موضعي أو جهازي + مسكنات', a: 'مراجعة عاجلة لتصريف الخراج، تنظيف المنطقة بلطف، والالتزام بالمضاد إن وُصف' },
                     { k: ['لثه','تورم','عام','نزف','سهل','حامل','بلوغ','دواء'], d: 'التهاب لثة مرتبط بعامل جهازي (Systemic-Associated Gingivitis)', p: 'تنظيف مهني لطيف + تحسين النظافة + مراجعة الطبيب المعالج للعامل الجهازي', a: 'العلاج يعتمد على السبب الجهازي (حمل، بلوغ، أدوية)، والتنظيف اللطيف أساسي' },
                     { k: ['لثه','تقرحات','بيضاء','حمراء','مؤلمه','حاد','حمى'], d: 'التهاب لثة ناخر حاد (ANUG - Trench Mouth)', p: 'تنظيف لطيف + بيروكسيد الهيدروجين مخفف + مضاد حيوي (ميترونيدازول) + مسكنات', a: '⚠️ حالة مؤلمة تتطلب مراجعة عاجلة، تحسين النظافة بلطف، والامتناع عن التدخين' },
                     { k: ['لثه','ورم','صلب','لون اللحم','مزمن','احتكاك'], d: 'فرط تنسج لثوي (Gingival Hyperplasia)', p: 'تقييم السبب (أدوية، التهاب، هرمونات) + تنظيف + استئصال جراحي إن لزم', a: 'العلاج يعتمد على السبب، قد يتطلب تعديل الدواء أو جراحة لثوية بسيطة' },
-                    { k: ['لثه','بقع','بيضاء','لايمسح','صلبه','تدخين'], d: 'اللوكوبلاكيا اللثوية (Leukoplakia)', p: 'فحص سريري + إزالة المهيجات (تدخين) + خزعة إن لزم + متابعة دورية', a: 'آفة محتملة التسرطن، تتطلب كشفاً نسيجياً، وإقلاع فوري عن التدخين' },                    { k: ['لثه','بقع','حمراء','مخملية','نازفه'], d: 'الأريثروبلاكيا (Erythroplakia)', p: 'خزعة إلزامية + إحالة لجراحة الفم + متابعة مكثفة', a: '⚠️ آفة عالية الخطورة للتسرطن، تتطلب تدخلاً عاجلاً وخزعة فورية' },
+                    { k: ['لثه','بقع','بيضاء','لايمسح','صلبه','تدخين'], d: 'اللوكوبلاكيا اللثوية (Leukoplakia)', p: 'فحص سريري + إزالة المهيجات (تدخين) + خزعة إن لزم + متابعة دورية', a: 'آفة محتملة التسرطن، تتطلب كشفاً نسيجياً، وإقلاع فوري عن التدخين' },
+                    { k: ['لثه','بقع','حمراء','مخملية','نازفه'], d: 'الأريثروبلاكيا (Erythroplakia)', p: 'خزعة إلزامية + إحالة لجراحة الفم + متابعة مكثفة', a: '⚠️ آفة عالية الخطورة للتسرطن، تتطلب تدخلاً عاجلاً وخزعة فورية' },
                     { k: ['لثه','تورم','أزرق','لين','نزف','سهل','حمل'], d: 'ورم الحمل اللثوي (Pregnancy Epulis)', p: 'تنظيف لطيف + تحسين النظافة + استئصال جراحي بعد الولادة إن استمر', a: 'مرتبط بالتغيرات الهرمونية، غالباً يتحسن بعد الولادة، التنظيف اللطيف أساسي' },
-                    // 🔹 جراحة الفم - 8 حالات                    { k: ['خلع','سنخ','رائحه','فراغ','يومين','ثلاثه','يتمدد','ما انقفل'], d: 'السنخ الجاف بعد القلع (Dry Socket)', p: 'غسل السنخ بمحلول ملحي دافئ + وضع ضمادة مسكنة (Alveogyl/Eugenol) + مسكنات فموية', a: 'تجنب المضمضة القوية أو الشفط، الامتناع عن التدخين 72 ساعة، والالتزام بالمسكنات الموصوفة' },
+                    { k: ['خلع','سنخ','رائحه','فراغ','يومين','ثلاثه','يتمدد','ما انقفل'], d: 'السنخ الجاف بعد القلع (Dry Socket)', p: 'غسل السنخ بمحلول ملحي دافئ + وضع ضمادة مسكنة (Alveogyl/Eugenol) + مسكنات فموية', a: 'تجنب المضمضة القوية أو الشفط، الامتناع عن التدخين 72 ساعة، والالتزام بالمسكنات الموصوفة' },
                     { k: ['تورم','وجه','فك','صعب','فتح','فم','حمى','بعد خلع'], d: 'عدوى ما بعد القلع (Post-Extraction Infection)', p: 'مضاد حيوي جهازي + مسكنات + كمادات دافئة + مراجعة لفتح الخراج إن وجد', a: '⚠️ مراجعة عاجلة، عدم الضغط على المنطقة، والالتزام الكامل بالمضاد والمراجعة' },
                     { k: ['نزف','ما بوقف','بعد خلع','دم','كثير','ضغط'], d: 'نزف ما بعد القلع (Post-Extraction Bleeding)', p: 'ضغط بقطعة شاش معقمة 30 دقيقة + حمض الترانيكساميك موضعي + مراجعة إن استمر', a: 'الضغط المستمر هو الحل الأول، تجنب البصق أو الشفط، ومراجعة إذا استمر النزف >1 ساعة' },
                     { k: ['تنميل','شفه','ذقن','لسان','بعد خلع','بعد حشو'], d: 'إصابة عصبية مؤقتة (Transient Nerve Injury)', p: 'تقييم مدى الإصابة + فيتامينات ب + متابعة دورية + إحالة إن استمر >3 أشهر', a: 'غالباً يتحسن خلال أسابيع، تجنب المهيجات، ومتابعة الوظيفة الحسية دورياً' },
@@ -447,7 +456,6 @@
                     { k: ['ورم','صلب','عظمي','ما بيوجع','بطئ','نمو'], d: 'ورم عظمي حميد (Benign Bone Tumor)', p: 'أشعة بانوراما/CT + خزعة + إحالة لجراحة الفم', a: 'يتطلب تقييماً شعاعياً ونسيجياً، العلاج جراحي غالباً، والمتابعة ضرورية' },
                     { k: ['تقرح','ما بيلتئم','3 اسابيع','صلب','حافه','مرفوعه'], d: 'قرحة مشبوهة للتسرطن (Suspicious Ulcer)', p: 'خزعة إلزامية + إحالة فورية لجراحة الفم + تصوير مقطعي إن لزم', a: '⚠️ أي قرحة لا تلتئم خلال 3 أسابيع تتطلب خزعة فورية، لا تؤجل المراجعة' },
                     { k: ['الم','مفصل','فك','صوت','طقطقه','صعوبه','فتح'], d: 'اضطراب المفصل الفكي الصدغي (TMD)', p: 'فحص إطباق وعضلات المضغ + أشعة مفصلية إن لزم + واق ليلي أو علاج طبيعي', a: 'أطعمة لينة، كمادات دافئة، تجنب فتح الفم واسعاً، وتقليل التوتر العضلي والصرير الليلي' },
-                    // 🔹 طب الفم والأنسجة الرخوة - 15 حالة
                     { k: ['ليش','شبكه','خطوط','بيضاء','حزاز','منبسط'], d: 'الحزاز المنبسط الفموي (Oral Lichen Planus)', p: 'فحص سريري دقيق + استبعاد الأسباب الرضية أو الدوائية + خزعة إن لزم + كورتيكوستيرويد موضعي', a: 'تجنب الأطعمة الحارة/الحامضة، الحفاظ على نظافة الفم بلطف، ومتابعة دورية لاستبعاد التحول الخبيث النادر' },
                     { k: ['لسان','جغرافي','بقع','حمراء','بيضاء','حواف','متغيره','مهاجره'], d: 'اللسان الجغرافي (Geographic Tongue)', p: 'فحص سريري تأكيد + استبعاد الصدفية أو نقص الفيتامينات + طمأنة المريض + غسول ملحي إن لزم', a: 'حالة حميدة غير معدية، تتغير أشكالها يومياً، وتهدأ ذاتياً. تجنب المهيجات الموضعية' },
                     { k: ['قرحه','مؤلمه','دائريه','بيضاء','حمراء','تتكرر','حافه'], d: 'القلاع الفموي المتكرر (Recurrent Aphthous Stomatitis)', p: 'تصنيف حسب الحجم + فحص نقص الحديد/فيتامينات + كورتيكوستيرويد موضعي أو غسول مطهر', a: 'تجنب الصدمات الميكانيكية والأطعمة المحفزة، استخدام معجون خالي من SLS، ومراجعة إذا تجاوزت 3 أسابيع' },
@@ -463,66 +471,48 @@
                     { k: ['تقرح','أبيض','يمسح','حرقه','بعد','مضاد','حيوي'], d: 'التهاب الفم بالمضادات الحيوية (Antibiotic-Associated Stomatitis)', p: 'إيقاف المضاد إن أمكن + مضاد فطري موضعي + غسول ملحي + بروبيوتيك', a: 'تحسين النظافة الفموية، تجنب السكريات، واستشارة الطبيب حول تغيير المضاد' },
                     { k: ['تورم','شفاه','وجه','مفاجئ','حساسيه','دواء','طعام'], d: 'وذمة وعائية (Angioedema)', p: 'مضاد هستامين + كورتيكوستيرويد جهازي + مراقبة مجرى الهواء + إحالة طوارئ إن اشتد', a: '⚠️ حالة طارئة إذا أثرت على التنفس، تجنب المسبب، ومراجعة فورية إذا زاد التورم' },
                     { k: ['بقع','بنيه','لثه','لسان','ثابته','ما بتغير'], d: 'تصبغات فموية حميدة (Oral Melanotic Macules)', p: 'فحص سريري + استبعاد الأدوية أو المتلازمات + خزعة إن كانت غير نمطية + متابعة', a: 'غالباً حميدة، لكن أي تغير في الحجم أو اللون يتطلب خزعة فورية' },
-                    // 🔹 طب أسنان الأطفال - 6 حالات
                     { k: ['بزوغ','طفل','سن','يخرج','لثه','منتفخه','حمراء','سيلان','بكاء','بيطلع سن'], d: 'ألم بزوغ الأسنان (Teething Discomfort)', p: 'فحص موضع السن البازغ + استبعاد أسباب أخرى (التهاب أذن/حمى) + توجيه استخدام جل ملطف أو حلقة تبريد', a: 'مسح اللثة بقطعة قماش نظيفة وباردة، تجنب المسكنات القوية دون وصفة، والصبر على المرحلة' },
                     { k: ['سن','لبنى','كسر','سقط','رض','طفل','دم','لثه'], d: 'إصابة أسنان الأطفال الرضية (Traumatic Dental Injury in Children)', p: 'فحص ثبات السن + أشعة + تقييم الحاجة لتثبيت أو علاج لبي أو قلع', a: 'حفظ الجزء المكسور في حليب إن وجد، تجنب المضغ على الجهة، ومراجعة عاجلة خلال ساعة' },
                     { k: ['تسوس','أبيض','بقع','طفل','حلو','رضاعه','ليل'], d: 'تسوس الرضاعة المبكر (Early Childhood Caries)', p: 'كشف التسوس + تنظيف + فلورايد موضعي + توعية الأهل بالعناية والتغذية', a: 'تجنب الرضاعة الليلية بالسكريات، تنظيف الأسنان من أول ظهور، وفحص دوري كل 6 أشهر' },
                     { k: ['سن','دائم','لم','يطلع','لثه','صلبه','أزرق','كيس'], d: 'كيس بزوغ السن الدائم (Eruption Cyst)', p: 'فحص سريري + أشعة لتأكيد وجود السن + مراقبة أو فتح بسيط إن تأخر البزوغ', a: 'غالباً ينفجر ذاتياً، تجنب العبث به، ومراجعة إذا استمر >3 أشهر دون بزوغ' },
                     { k: ['أسنان','ملتصقه','توأم','ثنائي','شكل','غريب'], d: 'التحام الأسنان (Tooth Fusion/Gemination)', p: 'فحص سريري + أشعة لتقييم اللب + تقييم الحاجة لعلاج تجميلي أو وقائي', a: 'حالة تطورية، غالباً لا تحتاج علاجاً إلا إذا أثرت على النظافة أو الجماليات' },
                     { k: ['أسنان','زائده','عدد','أكبر','طبيعي','فك','ضيق'], d: 'أسنان زائدة (Supernumerary Teeth)', p: 'أشعة بانوراما/أوكليوزال + تقييم تأثيرها على البزوغ + إزالة جراحية إن سببت إعاقة', a: 'تتطلب كشفاً شعاعياً، والإزالة المبكرة تمنع مشاكل الإطباق والبزوغ' },
-                    // 🔹 التقويم والمفصل الفكي - 5 حالات
                     { k: ['طقطقه','صدغ','صداع','تحتك','وجع','اذن','فك','قفل','صوت بفك'], d: 'اضطراب المفصل الفكي الصدغي (TMD)', p: 'فحص إطباق وعضلات المضغ + أشعة مفصلية إن لزم + تقييم الحاجة لواق ليلي أو علاج طبيعي', a: 'أطعمة لينة، كمادات دافئة، تجنب فتح الفم واسعاً، وتقليل التوتر العضلي والصرير الليلي' },
                     { k: ['صرير','طحن','اجهاد','صباح','متهالكه','تاكل','باحك اسناني'], d: 'صرير الأسنان (Bruxism)', p: 'تقييم تآكل المينا + فحص إطباق + تصميم واقي ليلي مخصص (Night Guard) + ترميم استعاضي', a: 'تقليل الكافيين، إدارة التوتر، تمارين استرخاء الفك، ومراجعة دورية لفحص الواقي' },
                     { k: ['أسنان','ملتويه','متراكبه','فك','بارز','عَضه','عكسي'], d: 'سوء إطباق يحتاج تقويماً (Malocclusion Requiring Orthodontics)', p: 'فحص إكلينيكي + أشعة بانوراما وسيفالومتري + خطة تقويمية مخصصة', a: 'التقييم المبكر (7-9 سنوات) يحسن النتائج، والعلاج يعتمد على نوع سوء الإطباق' },
                     { k: ['فك','علوي','صغير','سفلي','كبير','عَضه','عكسيه'], d: 'علاقة عكسية بين الفكين (Class III Malocclusion)', p: 'تقييم نمو الفكين + أشعة سيفالومترية + خطة علاجية (تقويم/جراحة/مراقبة)', a: 'العلاج يعتمد على العمر وشدة الحالة، التدخل المبكر قد يمنع الحاجة لجراحة لاحقاً' },
                     { k: ['تنفس','فم','شخير','نوم','لوز','لحميه','فك','ضيق'], d: 'اضطراب تنفسي يؤثر على نمو الفكين (Sleep-Disordered Breathing)', p: 'إحالة لطبيب أنف وأذن وحنجرة + تقييم نمو الفكين + خطة علاجية مشتركة', a: 'علاج السبب التنفسي (لوز/لحمية) قد يحسن نمو الفكين، والتنفس الأنفي أساسي للنمو الطبيعي' },
-                    // 🔹 التعويضات والثبات - 6 حالات
                     { k: ['حشوه','واقعه','تاج','يتحرك','طعم','سيء','تسرب','ريحه سيئه'], d: 'فشل ترميمي أو تسرب (Restorative Failure/Microleakage)', p: 'إزالة الحشوة/التاج + كشف النخر الثانوي + تعقيم التجويف + ترميم جديد أو تاج مخصص', a: 'تنظيف المنطقة بلطف بعد الأكل، تجنب المضغ القاسي عليها، ومراجعة سريعة لمنع وصول التسوس لللب' },
                     { k: ['تاج','سقط','حشوه','كبيره','سن','ضعيف','كسر'], d: 'فقدان تعويض سني (Lost Crown/Filling)', p: 'حفظ التاج إن وجد + فحص السن + ترميم مؤقت + صنع تعويض جديد', a: 'تجنب المضغ على السن، حفظ التاج في علبة، ومراجعة خلال 48 ساعة لمنع حساسية اللب' },
                     { k: ['طقم','مريح','يتحرك','يوجع','لثه','جروح','ضغط'], d: 'طقم غير ملائم (Ill-Fitting Denture)', p: 'فحص ملائمة الطقم + تعديل مناطق الضغط + تعليمات استخدام + إعادة تبطين أو صنع جديد', a: 'إزالة الطقم ليلاً، تنظيفه يومياً، ومراجعة للتعديل إذا سبب جروحاً أو ألماً' },
-                    { k: ['زرعه','الم','تورم','لثه','حولها','نزف','ريحه'], d: 'التهاب حول الزرعة (Peri-Implantitis)', p: 'تنظيف مهني حول الزرعة + مضاد حيوي موضعي + تقييم ثبات الزرعة + جراحة إن لزم', a: 'تحسين العناية حول الزرعة بفرشاة خاصة، ومراجعة دورية كل 3-6 أشهر للكشف المبكر' },                    { k: ['جسر','يتحرك','سن','داعم','ألم','لثه','تحت','الجسر'], d: 'فشل جسر سني (Failed Dental Bridge)', p: 'فحص الأسنان الداعمة + أشعة + تقييم إمكانية الإصلاح أو الاستبدال', a: 'تنظيف تحت الجسر بخيط خاص، تجنب الأطعمة القاسية، ومراجعة سريعة إذا تحرك الجسر' },
+                    { k: ['زرعه','الم','تورم','لثه','حولها','نزف','ريحه'], d: 'التهاب حول الزرعة (Peri-Implantitis)', p: 'تنظيف مهني حول الزرعة + مضاد حيوي موضعي + تقييم ثبات الزرعة + جراحة إن لزم', a: 'تحسين العناية حول الزرعة بفرشاة خاصة، ومراجعة دورية كل 3-6 أشهر للكشف المبكر' },
+                    { k: ['جسر','يتحرك','سن','داعم','ألم','لثه','تحت','الجسر'], d: 'فشل جسر سني (Failed Dental Bridge)', p: 'فحص الأسنان الداعمة + أشعة + تقييم إمكانية الإصلاح أو الاستبدال', a: 'تنظيف تحت الجسر بخيط خاص، تجنب الأطعمة القاسية، ومراجعة سريعة إذا تحرك الجسر' },
                     { k: ['تاج','لون','تغير','غامق','حافه','سوداء','لثه'], d: 'تغير لون تاج أو ظهور حافة معدنية (Crown Discoloration/Metal Margin)', p: 'فحص التاج + تقييم الحاجة لاستبداله بتاج كامل الخزف أو الزيركون', a: 'حالة جمالية غالباً، لا تؤثر على الوظيفة، لكن الاستبدال يحسن المظهر إذا كان مزعجاً' },
-                    // 🔹 حالات عامة وأعراض مشتركة - 8 حالات توجيهية
-                    { k: ['الم','عام','غامض','غير محدد','فحص','ما بعرف','وين'], d: 'ألم سني غير نوعي (Non-Specific Dental Pain)', p: 'فحص إكلينيكي دقيق + أشعة سينية أساسية + اختبارات حيوية متسلسلة لعزل السن المسبب', a: 'مراقبة الأعراض، تسجيل المحفزات، ومراجعة عاجلة إذا اشتد الألم أو ظهر تورم' },
-                    { k: ['حساس','عام','كل','الاسنان','بارد','ساخن','حلو'], d: 'حساسية سنية عامة (Generalized Dentin Hypersensitivity)', p: 'تقييم سبب الحساسية (انحسار، تآكل، تبييض) + معجون حساسية + فلورايد موضعي', a: 'استخدام فرشاة ناعمة، تجنب المشروبات الحمضية، ومعجون حساسية لمدة 4 أسابيع' },
+                    { k: ['الم','عام','غامض','غير محدد','فحص','ما بعرف','وين'], d: 'ألم سني غير نوعي (Non-Specific Dental Pain)', p: 'فحص إكلينيكي دقيق + أشعة سينية أساسية + اختبارات حيوية متسلسلة لعزل السن المسبب', a: 'مراقبة الأعراض، تسجيل المحفزات، ومراجعة عاجلة إذا اشتد الألم أو ظهر تورم' },                    { k: ['حساس','عام','كل','الاسنان','بارد','ساخن','حلو'], d: 'حساسية سنية عامة (Generalized Dentin Hypersensitivity)', p: 'تقييم سبب الحساسية (انحسار، تآكل، تبييض) + معجون حساسية + فلورايد موضعي', a: 'استخدام فرشاة ناعمة، تجنب المشروبات الحمضية، ومعجون حساسية لمدة 4 أسابيع' },
                     { k: ['لون','اسنان','تغير','اصفر','بني','بقع','تدخين','قهوه'], d: 'تصبغات سنية خارجية (Extrinsic Stains)', p: 'تنظيف مهني + تبييض إن لزم + توعية بتجنب المسببات (تدخين، قهوة، شاي)', a: 'تنظيف دوري كل 6 أشهر، تقليل المشروبات المصبغة، واستخدام قشة للشرب' },
                     { k: ['لون','اسنان','تغير','من','داخل','دواء','تتراسايكلين','فلوروز'], d: 'تصبغات سنية داخلية (Intrinsic Stains)', p: 'تقييم نوع التصبغ + خيارات تجميلية (تبييض داخلي، فينير، تاج)', a: 'العلاج تجميلي، يعتمد على شدة التصبغ وتوقعات المريض، والاستشارة المسبقة ضرورية' },
                     { k: ['رائحه','فم','مستمره','ما بتروح','فرشاه','غسول'], d: 'رائحة فم كريهة مستعصية (Persistent Halitosis)', p: 'فحص شامل للفم + تقييم جهازي (جهاز هضمي، جيوب، كبد) + إحالة إن لزم', a: 'تحسين النظافة الفموية الشاملة، ترطيب الفم، ومراجعة طبية إذا استمرت رغم العناية' },
-                    { k: ['جفاف','فم','مستمر','صعوبه','بلع','كلام','دواء'], d: 'جفاف فم مزمن (Chronic Xerostomia)', p: 'تقييم الأدوية والأمراض الجهازية + بدائل لعاب + تحفيز إفراز + حماية من التسوس', a: 'ترطيب مستمر، تجنب الكافيين والكحول، مضغ علكة خالية سكر، وفحص دوري لمنع التسوس' },                    { k: ['الم','وجه','غير سني','صداع','عين','اذن','جيب'], d: 'ألم وجهي غير سني المنشأ (Non-Odontogenic Facial Pain)', p: 'استبعاد الأسباب السنية + إحالة لطبيب أعصاب/أنف وأذن/عيون حسب الأعراض', a: 'الألم الوجهي قد يكون من مصادر متعددة، التشخيص الدقيق أساسي للعلاج الصحيح' },
+                    { k: ['جفاف','فم','مستمر','صعوبه','بلع','كلام','دواء'], d: 'جفاف فم مزمن (Chronic Xerostomia)', p: 'تقييم الأدوية والأمراض الجهازية + بدائل لعاب + تحفيز إفراز + حماية من التسوس', a: 'ترطيب مستمر، تجنب الكافيين والكحول، مضغ علكة خالية سكر، وفحص دوري لمنع التسوس' },
+                    { k: ['الم','وجه','غير سني','صداع','عين','اذن','جيب'], d: 'ألم وجهي غير سني المنشأ (Non-Odontogenic Facial Pain)', p: 'استبعاد الأسباب السنية + إحالة لطبيب أعصاب/أنف وأذن/عيون حسب الأعراض', a: 'الألم الوجهي قد يكون من مصادر متعددة، التشخيص الدقيق أساسي للعلاج الصحيح' },
                     { k: ['ورم','لين','متحرك','ما بيوجع','لثه','خده','لسان'], d: 'كتلة رخوة حميدة (Benign Soft Tissue Mass)', p: 'فحص سريري + أشعة إن لزم + خزعة تأكيدية + استئصال إن كبر أو أثر وظيفياً', a: 'معظم الكتل الرخوة حميدة، لكن أي نمو سريع أو تغير يتطلب خزعة فورية' }
                 ];
                 for (const rule of rules) {
                     let score = 0, currentMatches = [];
                     for (const kw of rule.k) {
-                        if (clean.includes(kw)) {
-                            score += kw.includes(' ') ? 2 : 1; // العبارات = نقطتين، الكلمات المفردة = نقطة
-                            currentMatches.push(kw);
-                        }
+                        if (clean.includes(kw)) { score += kw.includes(' ') ? 2 : 1; currentMatches.push(kw); }
                     }
-                    // ✅ عتبة ذكية: 4 نقاط كافية للتشخيص (كلمتين دقيقين أو عبارة + كلمة)
-                    if (score >= 2 && score > maxScore) {
-                        maxScore = score;
-                        bestMatch = rule;
-                        matchedTerms = currentMatches;
-                    }
+                    if (score >= 2 && score > maxScore) { maxScore = score; bestMatch = rule; matchedTerms = currentMatches; }
                 }
                 if (bestMatch) {
                     const confidence = maxScore >= 4 ? 'high' : 'medium';
-                    const confidenceText = maxScore >= 4 ? '🟢 دقة عالية' : '🟡 مبدئي';
                     return {
                         html: `<div class="ai-section"><b>📋 التشخيص المرجح:</b> ${bestMatch.d}</div>
                                 <div class="ai-section" style="border-color:#10b981; background:#f0fdf4;"><b>💡 الخطة العلاجية:</b> ${bestMatch.p}</div>
                                 <div class="ai-section" style="border-color:#f59e0b; background:#fffbeb;"><b>⚠️ التوصية السريرية:</b> ${bestMatch.a}</div>
-                                <div class="text-[10px] text-gray-500 mt-1 text-left">${confidenceText} | المفردات المطابقة: ${matchedTerms.join('، ')}</div>`,
-                        confidence: confidence,
-                        diagnosis: bestMatch.d,
-                        plan: bestMatch.p,
-                        advice: bestMatch.a,
-                        matchedTerms: matchedTerms
+                                <div class="text-[10px] text-gray-500 mt-1 text-left">${confidence==='high'?'🟢 دقة عالية':'🟡 مبدئي'} | المفردات المطابقة: ${matchedTerms.join('، ')}</div>`,
+                        confidence: confidence, diagnosis: bestMatch.d, plan: bestMatch.p, advice: bestMatch.a, matchedTerms: matchedTerms
                     };
                 }
-                
-                // ✅ رد ذكي موجه بدلاً من الجملة المبهمة
                 return {
                     html: `<div class="ai-section"><b>📋 يحتاج لمزيد من الدقة:</b> يرجى تحديد الآتي للحصول على تشخيص دقيق:</div>
                             <div class="ai-section" style="border-color:#3b82f6; background:#eff6ff;">
@@ -532,15 +522,11 @@
                             • <b>المحفز:</b> بارد / ساخن / حلو / ليل / مستمر؟<br>
                             • <b>المظهر:</b> تورم / نزف / بقعة بيضاء أو حمراء؟
                             </div>`,
-                    confidence: 'low',
-                    needsMoreInfo: true
+                    confidence: 'low', needsMoreInfo: true
                 };
             } catch(e) {
                 console.error("AI Analysis Error:", e);
-                return {                    html: `<div class="ai-section"><b>⚠️ خطأ في التحليل:</b> يرجى إعادة صياغة الأعراض بشكل أوضح</div>`,
-                    confidence: 'low',
-                    error: true
-                };
+                return { html: `<div class="ai-section"><b>⚠️ خطأ في التحليل:</b> يرجى إعادة صياغة الأعراض بشكل أوضح</div>`, confidence: 'low', error: true };
             }
         }
         
@@ -551,31 +537,17 @@
                 const resultDiv = document.getElementById('aiResult');
                 const profBox = document.getElementById('aiProfessionalBox');
                 const profResult = document.getElementById('aiProfessionalResult');
-                const confBadge = document.getElementById('aiConfidenceBadge');
-                
-                if(!input) return showToast("❌ اكتب الأعراض أولاً", "error");            
+                const confBadge = document.getElementById('aiConfidenceBadge');                if(!input) return showToast("❌ اكتب الأعراض أولاً", "error");            
                 if(!outputBox || !resultDiv) return showToast("⚠️ خطأ في تحميل الواجهة", "error");
-                
-                outputBox.classList.remove('d-none');
-                profBox.classList.add('d-none'); // إخفاء النسخة الاحترافية افتراضياً
+                outputBox.classList.remove('d-none'); profBox.classList.add('d-none');
                 resultDiv.innerHTML = '<div class="text-center py-3"><i class="fas fa-brain fa-pulse text-purple-600 mb-2 block"></i><span class="text-xs text-gray-500">جاري التحليل...</span></div>';
-                
                 const analysis = analyzeDentalSymptoms(input);
                 resultDiv.innerHTML = `<div class="bg-purple-50 p-3 rounded-lg border border-purple-200 text-sm leading-relaxed space-y-2">${analysis.html}</div><div class="text-[10px] text-gray-400 mt-2 text-center">🟢 تحليل محلي آمن (يعمل بدون إنترنت)</div>`;
-                
-                // 🔹 عرض النسخة الاحترافية إذا كانت الدقة عالية
                 if(analysis.confidence === 'high' && !analysis.needsMoreInfo) {
-                    profBox.classList.remove('d-none');
-                    confBadge.className = `ai-confidence ${analysis.confidence}`;
+                    profBox.classList.remove('d-none'); confBadge.className = `ai-confidence ${analysis.confidence}`;
                     confBadge.innerText = analysis.confidence === 'high' ? '🟢 دقة عالية' : '🟡 مبدئي';
-                    profResult.innerHTML = `
-                        <div><b>🔬 التشخيص:</b> ${analysis.diagnosis}</div>
-                        <div><b>💊 الخطة:</b> ${analysis.plan}</div>
-                        <div><b>⚠️ توصية:</b> ${analysis.advice}</div>
-                        ${analysis.matchedTerms?.length ? `<div class="opacity-80"><b>🔍 كلمات مفتاحية:</b> ${analysis.matchedTerms.slice(0,5).join('، ')}${analysis.matchedTerms.length>5?'...':''}</div>` : ''}
-                    `;
+                    profResult.innerHTML = `<div><b>🔬 التشخيص:</b> ${analysis.diagnosis}</div><div><b>💊 الخطة:</b> ${analysis.plan}</div><div><b>⚠️ توصية:</b> ${analysis.advice}</div>${analysis.matchedTerms?.length ? `<div class="opacity-80"><b>🔍 كلمات مفتاحية:</b> ${analysis.matchedTerms.slice(0,5).join('، ')}${analysis.matchedTerms.length>5?'...':''}</div>` : ''}`;
                 }
-                
                 showToast("✅ تم التحليل بنجاح", "success");
             } catch(err) { console.error("AI Error:", err); showToast("⚠️ حدث خطأ أثناء التحليل", "error"); }
         }
@@ -584,9 +556,7 @@
             const diag = document.getElementById('pDiag')?.value?.trim(), b=document.getElementById('aiBox');
             if(!diag) return showToast("اكتب الشكوى أولاً","error");
             b.classList.remove('d-none'); b.innerHTML='<div class="text-center"><i class="fas fa-spinner fa-spin text-indigo-600"></i> جاري التحليل...</div>';
-            setTimeout(()=>{ 
-                const analysis = analyzeDentalSymptoms(diag); 
-                b.innerHTML = `<b>💡 توصية:</b> السن #${currentTooth||'؟'} يحتاج فحصاً.<br><div class="mt-2">${analysis.html}</div><small class="text-gray-500">⚠️ لا يغني عن التشخيص</small>`;             },300);
+            setTimeout(()=>{ const analysis = analyzeDentalSymptoms(diag); b.innerHTML = `<b>💡 توصية:</b> السن #${currentTooth||'؟'} يحتاج فحصاً.<br><div class="mt-2">${analysis.html}</div><small class="text-gray-500">⚠️ لا يغني عن التشخيص</small>`; },300);
         }
         function savePatient() {
             const name = document.getElementById('pName')?.value?.trim(), phone = document.getElementById('pPhone')?.value?.trim(), diag = document.getElementById('pDiag')?.value?.trim();
@@ -613,15 +583,69 @@
         }
         function submitDoctorSubscription() {            
             const name=document.getElementById('subName')?.value?.trim(), email=document.getElementById('subEmail')?.value?.trim(), pwd=document.getElementById('subPassword')?.value?.trim();
-            if(!name||!email||!pwd) return showToast("أكمل الحقول","error");            if(firebaseReady && db) db.ref('doctor_subscriptions').push({name,email,password:pwd,specialty:document.getElementById('subSpecialty').value.trim(),status:'pending',requestedAt:new Date().toISOString()});
+            if(!name||!email||!pwd) return showToast("أكمل الحقول","error");
+            if(firebaseReady && db) db.ref('doctor_subscriptions').push({name,email:email.toLowerCase(),password:pwd,specialty:document.getElementById('subSpecialty').value.trim(),status:'pending',requestedAt:new Date().toISOString()});
             showToast("✅ تم الإرسال! انتظر التفعيل","success"); ['subName','subEmail','subPassword','subSpecialty'].forEach(id=>document.getElementById(id).value=''); setTimeout(backToLogin,1500);
+        }        function startSubscriptionPolling() { if (pollingInterval) clearInterval(pollingInterval); if (!firebaseReady || !db) return; fetchPendingRequests(); pollingInterval = setInterval(() => fetchPendingRequests(true), 10000); }
+        
+        // 🔹 ✅ دالة عرض الطلبات المعلقة مع أزرار التفعيل/الأرشفة/الحذف
+        function fetchPendingRequests(isMonitoring = false) {
+            if (!firebaseReady || !db) return;
+            db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').once('value').then(snap => {
+                const c = document.getElementById('doctorRequests');
+                if(!c) return; c.innerHTML = ''; let n = 0;
+                snap.forEach(ch => {
+                    n++; const v = ch.val();
+                    c.innerHTML += `
+                    <div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between items-center">
+                        <div><b>${v.name}</b><br><span class="text-gray-500">${v.email}</span></div>
+                        <div class="flex gap-1">
+                            <button onclick="activateDoc('${ch.key}')" class="px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200">تفعيل</button>
+                            <button onclick="archiveDoc('${ch.key}', '${v.name?.replace(/'/g, "\\'")||''}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded hover:bg-amber-200">أرشفة</button>
+                            <button onclick="deleteDoc('${ch.key}', '${v.name?.replace(/'/g, "\\'")||''}')" class="px-2 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200">حذف</button>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('pendingCount').innerText = n || 'لا توجد طلبات';
+                if(isMonitoring && n > lastPendingIds.length) { showToast("🔔 وارد طلب اشتراك جديد!", "info"); }
+                lastPendingIds = Array.from({length: n}, (_, i) => i);
+            }).catch(err => console.warn("Polling error:", err));
         }
-        function startSubscriptionPolling() { if (pollingInterval) clearInterval(pollingInterval); if (!firebaseReady || !db) return; fetchPendingRequests(); pollingInterval = setInterval(() => fetchPendingRequests(true), 10000); }
-        function fetchPendingRequests(isMonitoring = false) { db.ref('doctor_subscriptions').orderByChild('status').equalTo('pending').once('value').then(snap => { const c = document.getElementById('doctorRequests'); if(!c) return; c.innerHTML = ''; let n = 0; snap.forEach(ch => { n++; const v = ch.val(); c.innerHTML += `<div class="p-2 bg-gray-50 rounded-lg border text-xs flex justify-between items-center"><div><b>${v.name}</b><br><span class="text-gray-500">${v.email}</span></div><div class="flex gap-1"><button onclick="activateDoc('${ch.key}')" class="px-2 py-1 bg-green-100 text-green-700 rounded">تفعيل</button><button onclick="rejectDoc('${ch.key}')" class="px-2 py-1 bg-red-100 text-red-700 rounded">رفض</button></div></div>`; }); document.getElementById('pendingCount').innerText = n || 'لا توجد طلبات'; if(isMonitoring && n > lastPendingIds.length) { showToast("🔔 وارد طلب اشتراك جديد!", "info"); } lastPendingIds = Array.from({length: n}, (_, i) => i); }).catch(err => console.warn("Polling error:", err)); }
-        function activateDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'active'}).then(()=>{ showToast("✅ تم التفعيل","success"); fetchPendingRequests(); loadActiveDoctors(); }); }
-        function rejectDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'rejected'}).then(()=>{ showToast("تم الرفض","info"); fetchPendingRequests(); }); }
-        function loadActiveDoctors() { if(!firebaseReady || !db) return; db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap => { const c = document.getElementById('activeDoctors'); if(!c) return; c.innerHTML = ''; if(!snap.exists()){ c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء</p>'; return; } snap.forEach(ch => { const v = ch.val(); c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`; }); }); }
-        function suspendDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>{ showToast("⛔ تم الإيقاف","info"); loadActiveDoctors(); }); }        
+        
+        // 🔹 ✅ دوال الإدارة الجديدة
+        function activateDoc(id) {
+            if(!db) return showToast("❌ لا يوجد اتصال", "error");
+            db.ref('doctor_subscriptions/'+id).update({status:'active', activatedAt: new Date().toISOString()})
+            .then(()=>{ showToast("✅ تم التفعيل بنجاح", "success"); fetchPendingRequests(); loadActiveDoctors(); })
+            .catch(err => showToast("❌ فشل التفعيل", "error"));
+        }
+        function archiveDoc(id, name) {
+            if(!confirm(`هل تريد أرشفة طلب "${name}"؟ سيتم حفظ البيانات ولكن لن يظهر في المعلقة.`)) return;
+            if(!db) return;
+            db.ref('doctor_subscriptions/'+id).update({status:'archived', archivedAt: new Date().toISOString()})
+            .then(()=>{ showToast("📦 تم الأرشفة", "info"); fetchPendingRequests(); loadActiveDoctors(); })
+            .catch(err => showToast("❌ فشل الأرشفة", "error"));
+        }
+        function deleteDoc(id, name) {
+            if(!confirm(`⚠️ هل أنت متأكد من حذف طلب "${name}" نهائياً؟ لا يمكن التراجع.`)) return;
+            if(!db) return;
+            db.ref('doctor_subscriptions/'+id).remove()
+            .then(()=>{ showToast("🗑️ تم الحذف نهائياً", "info"); fetchPendingRequests(); loadActiveDoctors(); })
+            .catch(err => showToast("❌ فشل الحذف", "error"));
+        }
+        function loadActiveDoctors() {
+            if(!firebaseReady || !db) return;
+            const c = document.getElementById('activeDoctors');            if(!c) return; c.innerHTML = '<div class="text-center text-xs text-gray-400">جاري التحميل...</div>';
+            db.ref('doctor_subscriptions').orderByChild('status').equalTo('active').once('value').then(snap => {
+                c.innerHTML = '';
+                if(!snap.exists()){ c.innerHTML = '<p class="text-xs text-gray-400 text-center">لا يوجد أطباء نشطين</p>'; return; }
+                snap.forEach(ch => {
+                    const v = ch.val();
+                    c.innerHTML += `<div class="p-2 bg-green-50 rounded-lg border text-xs flex justify-between"><span>👨‍⚕️ <b>${v.name}</b></span><button onclick="suspendDoc('${ch.key}')" class="px-2 py-1 bg-amber-100 text-amber-700 rounded">إيقاف</button></div>`;
+                });
+            });
+        }
+        function suspendDoc(id){ if(db) db.ref('doctor_subscriptions/'+id).update({status:'suspended'}).then(()=>{ showToast("⛔ تم الإيقاف","info"); fetchPendingRequests(); loadActiveDoctors(); }); }        
         function checkAppointmentAlerts() { const pts = getLocalDB(), now=new Date(), el=document.getElementById('alertList'), sec=document.getElementById('alertSection'), cnt=document.getElementById('alertCount'); if(!el||!sec||!cnt) return; el.innerHTML=''; let ac=0, uc=0; pts.forEach(p=>{if(!p.nextAppointment) return; const ad=new Date(p.nextAppointment), dh=(ad-now)/(36e5); if(dh>0&&dh<=24){ac++; const u=dh<=2; if(u) uc++; const ts=ad.toLocaleString('ar-EG',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'}); el.innerHTML+=`<div class="p-2 rounded-lg border flex justify-between items-center ${u?'bg-red-50 border-red-200':'bg-amber-50 border-amber-200'}"><div><span class="font-bold text-sm">${p.name}</span><div class="text-[10px] text-gray-600">🕒 ${ts}</div></div><button onclick="event.stopPropagation();openWhatsApp('${p.phone}','${p.name}','موعدك ${ts}')" class="wa-btn-patient"><i class="fab fa-whatsapp"></i></button></div>`; }}); cnt.innerText=ac; if(ac>0){sec.classList.remove('d-none');cnt.className=uc>0?'status-badge status-urgent ml-auto':'status-badge status-pending ml-auto';} else sec.classList.add('d-none'); }
         function openWhatsApp(phone,name,custom='') { if(!phone) return showToast("❌ لا يوجد رقم هاتف","error"); let c=phone.replace(/[\s\-\(\)]/g,''); if(c.startsWith('09')) c='963'+c.substring(1); else if(!c.startsWith('+963')) c='963'+c; const m=custom||`مرحباً ${name}،\nمن عيادة بَسْمَة السنية.\nتذكير بموعدك القادم. 🦷✨`; window.open(`https://wa.me/${c}?text=${encodeURIComponent(m)}`,'_blank'); }
         function filterPatients(q) { const ql=q.toLowerCase().trim(); let v=0; document.querySelectorAll('#patientContainer > div').forEach(card=>{ const t=card.innerText.toLowerCase(); if(ql===''||t.includes(ql)){card.classList.remove('d-none');v++;} else card.classList.add('d-none'); }); document.getElementById('noRecords').classList.toggle('d-none',v>0); }
@@ -635,164 +659,64 @@
         function updateTotalCost() { const id=document.getElementById('editPatientId').value, cost=parseFloat(document.getElementById('editTotalCost').value)||0; if(!id) return; document.getElementById('payTotal').innerText=cost; document.getElementById('payRemain').innerText=cost-(parseFloat(document.getElementById('payPaid').innerText)||0); const data={totalCost:cost,updatedAt:new Date().toISOString()}; updateLocalDB(id,data); showToast("✅ تم التحديث","success"); }
         function renderPayments(payments) { const c=document.getElementById('paymentHistory'); c.innerHTML=''; if(!payments.length) { c.innerHTML='<p class="text-xs text-gray-400 text-center">لا توجد مدفوعات</p>'; return; } payments.slice().reverse().forEach(p=>{c.innerHTML+=`<div class="p-2 bg-white rounded border flex justify-between items-center text-xs"><span class="font-bold text-green-600">💵 ${p.amount} ل.س</span><span class="text-gray-600">${p.note||'-'}</span><span class="text-gray-400">${p.date}</span></div>`;}); }
         function addPayment() { const id=document.getElementById('editPatientId').value, amount=parseFloat(document.getElementById('newPayAmount').value), note=document.getElementById('newPayNote').value.trim(); if(!id||isNaN(amount)||amount<=0) return showToast("أدخل مبلغاً صحيحاً","error"); const newPay={amount,note,date:new Date().toLocaleDateString('ar-EG'),timestamp:Date.now()}; const l=getLocalDB(), idx=l.findIndex(p=>p.id===id||p.firebaseId===id); if(idx!==-1){ const pays=l[idx].payments||[]; pays.push(newPay); const total=pays.reduce((s,x)=>s+x.amount,0); l[idx].payments=pays; l[idx].paidAmount=total; l[idx].updatedAt=new Date().toISOString(); saveLocalDB(l); document.getElementById('payPaid').innerText=total; document.getElementById('payRemain').innerText=(l[idx].totalCost||0)-total; renderPayments(pays); document.getElementById('newPayAmount').value=''; document.getElementById('newPayNote').value=''; showToast("✅ تم التسجيل","success"); } }
-        function loadTodayAppointments() { const d = new Date(); const today = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); const pts=getLocalDB(); renderTodayAppts(pts,today); }        function renderTodayAppts(pts,today) { const con=document.getElementById('todayAppointmentsList'), sec=document.getElementById('todayAppointmentsSection'); con.innerHTML=''; const tm=pts.filter(p=>p.nextAppointment && p.nextAppointment.startsWith(today)).sort((a,b)=>(a.nextAppointment||'').localeCompare(b.nextAppointment||'')); document.getElementById('todayCountBadge').innerText=tm.length; if(tm.length===0){sec.classList.add('d-none');return;} sec.classList.remove('d-none'); tm.forEach(p=>{const t=p.nextAppointment.includes('T')?p.nextAppointment.split('T')[1].substring(0,5):'-'; con.innerHTML+=`<div class="p-2 bg-white rounded-lg border flex justify-between items-center hover:bg-blue-50 cursor-pointer" onclick="openPatientEdit('${p.firebaseId||p.id}','local')"><div><span class="font-bold text-sm">👤 ${p.name}</span><div class="text-[10px] text-gray-500">🕒 ${t}</div></div><button onclick="event.stopPropagation();openWhatsApp('${p.phone}','${p.name}','موعدك اليوم ${t}')" class="wa-btn-patient"><i class="fab fa-whatsapp"></i></button></div>`;}); }
+        function loadTodayAppointments() { const d = new Date(); const today = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); const pts=getLocalDB(); renderTodayAppts(pts,today); }
+        function renderTodayAppts(pts,today) { const con=document.getElementById('todayAppointmentsList'), sec=document.getElementById('todayAppointmentsSection'); con.innerHTML=''; const tm=pts.filter(p=>p.nextAppointment && p.nextAppointment.startsWith(today)).sort((a,b)=>(a.nextAppointment||'').localeCompare(b.nextAppointment||'')); document.getElementById('todayCountBadge').innerText=tm.length; if(tm.length===0){sec.classList.add('d-none');return;} sec.classList.remove('d-none'); tm.forEach(p=>{const t=p.nextAppointment.includes('T')?p.nextAppointment.split('T')[1].substring(0,5):'-'; con.innerHTML+=`<div class="p-2 bg-white rounded-lg border flex justify-between items-center hover:bg-blue-50 cursor-pointer" onclick="openPatientEdit('${p.firebaseId||p.id}','local')"><div><span class="font-bold text-sm">👤 ${p.name}</span><div class="text-[10px] text-gray-500">🕒 ${t}</div></div><button onclick="event.stopPropagation();openWhatsApp('${p.phone}','${p.name}','موعدك اليوم ${t}')" class="wa-btn-patient"><i class="fab fa-whatsapp"></i></button></div>`;}); }
         function updateStats() { const today=new Date().toLocaleDateString('ar-EG'); const l=getLocalDB(); document.getElementById('statPatients').innerText=l.length; document.getElementById('statToday').innerText=l.filter(d=>d.date===today).length; document.getElementById('statDoctors').innerText='0'; }
         
-        // 🔹 🔹 🔹 ميزات جديدة مُضافة (بدون تعديل الكود الأصلي) 🔹 🔹 🔹
-        
-        // 1️⃣ خاصية الطي للنوافذ مع حفظ الحالة
+        // 🔹 🔹 🔹 ميزات جديدة مُضافة 🔹 🔹 🔹
         function initCollapsiblePanels() {
-            // جعل كل section-card قابلة للطي تلقائياً
             document.querySelectorAll('.section-card').forEach(card => {
-                // إضافة هيكل الطي
                 const header = card.querySelector('h2, h3, .flex.justify-between');
                 if(!header || card.dataset.collapsible === 'false') return;
-                
-                card.classList.add('collapsible-panel');
-                header.classList.add('collapsible-header');
-                header.setAttribute('aria-expanded', 'true');
-                
-                // إضافة أيقونة السهم
-                if(!header.querySelector('.chevron')) {
-                    const chevron = document.createElement('span');
-                    chevron.className = 'chevron';
-                    chevron.innerHTML = '▼';
-                    header.appendChild(chevron);
-                }
-                
-                // استعادة الحالة من التخزين المحلي
+                card.classList.add('collapsible-panel'); header.classList.add('collapsible-header'); header.setAttribute('aria-expanded', 'true');
+                if(!header.querySelector('.chevron')) { const chevron = document.createElement('span'); chevron.className = 'chevron'; chevron.innerHTML = '▼'; header.appendChild(chevron); }
                 const panelId = `panel_${Array.from(card.parentNode.children).indexOf(card)}`;
                 const saved = localStorage.getItem(panelId);
-                if(saved === 'collapsed') {
-                    card.classList.add('collapsed');
-                    header.setAttribute('aria-expanded', 'false');
-                }
-                
-                // حدث النقر للطي/الفك
-                header.onclick = (e) => {
-                    e.preventDefault();
-                    const isExpanded = header.getAttribute('aria-expanded') === 'true';
-                    header.setAttribute('aria-expanded', !isExpanded);
-                    card.classList.toggle('collapsed');
-                    localStorage.setItem(panelId, !isExpanded ? 'collapsed' : 'expanded');
-                };
+                if(saved === 'collapsed') { card.classList.add('collapsed'); header.setAttribute('aria-expanded', 'false'); }
+                header.onclick = (e) => { e.preventDefault(); const isExpanded = header.getAttribute('aria-expanded') === 'true'; header.setAttribute('aria-expanded', !isExpanded); card.classList.toggle('collapsed'); localStorage.setItem(panelId, !isExpanded ? 'collapsed' : 'expanded'); };
             });
         }
-        
-        // 2️⃣ تبديل ظهور/إخفاء نافذة استيراد الحالات (مضمنة في لوحة المدير)
-        function toggleJsonImport() {
-            const panel = document.getElementById('jsonImportPanel');
-            panel.classList.toggle('d-none');
-            if(!panel.classList.contains('d-none')) {
-                document.getElementById('jsonImportInput').focus();            }
-        }
-        
-        // 3️⃣ التحقق من صيغة JSON المبسطة (مصفوفة حالات متعددة)
+        function toggleJsonImport() { const panel = document.getElementById('jsonImportPanel'); panel.classList.toggle('d-none'); if(!panel.classList.contains('d-none')) { document.getElementById('jsonImportInput').focus(); } }
         function validateJSONImport() {
             const input = document.getElementById('jsonImportInput').value.trim();
             const statusEl = document.getElementById('jsonImportStatus');
             const previewEl = document.getElementById('jsonImportPreview');
             const previewList = document.getElementById('jsonPreviewList');
-            
             try {
                 const cases = JSON.parse(input);
-                if(!Array.isArray(cases)) throw new Error('يجب أن تكون البيانات مصفوفة [] تحتوي على حالات متعددة');
-                if(cases.length === 0) throw new Error('المصفوفة فارغة');
-                
-                // التحقق من الحقول المطلوبة لكل حالة
+                if(!Array.isArray(cases)) throw new Error('يجب أن تكون البيانات مصفوفة [] تحتوي على حالات متعددة');                if(cases.length === 0) throw new Error('المصفوفة فارغة');
                 cases.forEach((c, i) => {
                     if(!c.name?.trim()) throw new Error(`الحالة #${i+1}: الاسم مطلوب`);
                     if(!c.phone?.trim()) throw new Error(`الحالة #${i+1}: الهاتف مطلوب`);
                     if(!c.diag?.trim()) throw new Error(`الحالة #${i+1}: التشخيص مطلوب`);
-                    if(c.phone && !/^09\d{8}$/.test(c.phone.replace(/\s/g,''))) {
-                        throw new Error(`الحالة #${i+1}: رقم هاتف غير صالح (يجب أن يبدأ بـ 09 ويتكون من 10 أرقام)`);
-                    }
+                    if(c.phone && !/^09\d{8}$/.test(c.phone.replace(/\s/g,''))) throw new Error(`الحالة #${i+1}: رقم هاتف غير صالح`);
                 });
-                
-                // عرض المعاينة المبسطة
-                previewList.innerHTML = cases.slice(0,10).map((c,i) => 
-                    `<div class="p-1.5 bg-white rounded border text-[10px] flex justify-between">
-                        <span><b>${i+1}.</b> ${c.name}</span>
-                        <span class="text-gray-500">🦷 ${c.tooth||'-'}</span>
-                    </div>`
-                ).join('') + (cases.length > 10 ? `<div class="text-[10px] text-gray-400 text-center">... و ${cases.length-10} حالات أخرى</div>` : '');
-                
+                previewList.innerHTML = cases.slice(0,10).map((c,i) => `<div class="p-1.5 bg-white rounded border text-[10px] flex justify-between"><span><b>${i+1}.</b> ${c.name}</span><span class="text-gray-500">🦷 ${c.tooth||'-'}</span></div>`).join('') + (cases.length > 10 ? `<div class="text-[10px] text-gray-400 text-center">... و ${cases.length-10} حالات أخرى</div>` : '');
                 statusEl.textContent = `✅ صيغة سليمة | جاهز لاستيراد ${cases.length} حالة`;
-                statusEl.className = 'json-status success show';
-                previewEl.classList.remove('d-none');
-                
-            } catch(e) {
-                statusEl.textContent = `❌ خطأ: ${e.message}`;
-                statusEl.className = 'json-status error show';
-                previewEl.classList.add('d-none');
-            }
+                statusEl.className = 'json-status success show'; previewEl.classList.remove('d-none');
+            } catch(e) { statusEl.textContent = `❌ خطأ: ${e.message}`; statusEl.className = 'json-status error show'; previewEl.classList.add('d-none'); }
         }
-        
-        // 4️⃣ استيراد الحالات من JSON المبسط
         function importCasesFromJSON() {
             const input = document.getElementById('jsonImportInput').value.trim();
             const statusEl = document.getElementById('jsonImportStatus');
-            
-            if(!input) {                statusEl.textContent = '⚠️ الرجاء لصق بيانات JSON أولاً';
-                statusEl.className = 'json-status error show';
-                return;
-            }
-            
+            if(!input) { statusEl.textContent = '⚠️ الرجاء لصق بيانات JSON أولاً'; statusEl.className = 'json-status error show'; return; }
             try {
-                const cases = JSON.parse(input);
-                if(!Array.isArray(cases)) throw new Error('يجب أن تكون البيانات مصفوفة []');
-                
+                const cases = JSON.parse(input); if(!Array.isArray(cases)) throw new Error('يجب أن تكون البيانات مصفوفة []');
                 let imported = 0, skipped = 0;
-                
                 cases.forEach(c => {
-                    // تخطي الحالات غير المكتملة بصمت
                     if(!c.name || !c.phone || !c.diag) { skipped++; return; }
-                    
                     const pid = 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2,5);
-                    const data = {
-                        id: pid,
-                        name: c.name.trim(),
-                        phone: c.phone.trim(),
-                        diag: c.diag.trim(),
-                        tooth: c.tooth || null,
-                        birth: c.birth || '',
-                        gender: c.gender || '',
-                        totalCost: c.totalCost || 0,
-                        paidAmount: 0,
-                        payments: [],
-                        nextAppointment: c.nextAppointment || '',
-                        date: new Date().toLocaleDateString('ar-EG'),
-                        timestamp: Date.now(),
-                        createdAt: new Date().toISOString(),
-                        addedBy: currentUser?.id || 'admin',
-                        updatedAt: new Date().toISOString()
-                    };
-                    addToLocalDB(data);
-                    if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync:", err));
-                    imported++;
+                    const data = { id: pid, name: c.name.trim(), phone: c.phone.trim(), diag: c.diag.trim(), tooth: c.tooth || null, birth: c.birth || '', gender: c.gender || '', totalCost: c.totalCost || 0, paidAmount: 0, payments: [], nextAppointment: c.nextAppointment || '', date: new Date().toLocaleDateString('ar-EG'), timestamp: Date.now(), createdAt: new Date().toISOString(), addedBy: currentUser?.id || 'admin', updatedAt: new Date().toISOString() };
+                    addToLocalDB(data); if(firebaseReady && db) db.ref('patients/' + pid).set(data).catch(err => console.warn("Firebase sync:", err)); imported++;
                 });
-                
                 if(imported > 0) {
                     statusEl.textContent = `🎉 تم استيراد ${imported} حالة${skipped>0?` | تخطي ${skipped} غير مكتملة`:''}`;
-                    statusEl.className = 'json-status success show';
-                    document.getElementById('jsonImportInput').value = '';
-                    document.getElementById('jsonImportPreview').classList.add('d-none');
-                    
-                    // تحديث الإحصائيات والقوائم
-                    updateStats();
-                    if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
-                    
-                    showToast(`✅ تم استيراد ${imported} حالة`, "success");                } else {
-                    throw new Error('لا توجد حالات صالحة للاستيراد');
-                }
-                
-            } catch(e) {
-                statusEl.textContent = `❌ فشل الاستيراد: ${e.message}`;
-                statusEl.className = 'json-status error show';
-                showToast("❌ فشل استيراد الحالات", "error");
-            }
+                    statusEl.className = 'json-status success show'; document.getElementById('jsonImportInput').value = ''; document.getElementById('jsonImportPreview').classList.add('d-none');
+                    updateStats(); if(!document.getElementById('page-list').classList.contains('d-none')) loadData();
+                    showToast(`✅ تم استيراد ${imported} حالة`, "success");
+                } else { throw new Error('لا توجد حالات صالحة للاستيراد'); }
+            } catch(e) { statusEl.textContent = `❌ فشل الاستيراد: ${e.message}`; statusEl.className = 'json-status error show'; showToast("❌ فشل استيراد الحالات", "error"); }
         }
-        
         document.addEventListener('DOMContentLoaded', () => { console.log("🦷 بَسْمَة AI جاهز ومستقر!"); });
     </script>
 </body>
