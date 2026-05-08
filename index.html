@@ -307,7 +307,7 @@
         function backToLogin() { document.getElementById('mainContent').classList.add('d-none'); document.getElementById('loginPage').classList.remove('d-none'); }
         function handleAdminLogin() {            
             const pwd = document.getElementById('adminPassword')?.value?.trim();
-            if(pwd === "zak1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 300); }            
+            if(pwd === "salem1959") { currentUser = { role: 'admin', id: 'admin_001' }; showToast("✅ تم الدخول!", "success"); setTimeout(afterLogin, 300); }            
             else showToast("❌ كلمة المرور غير صحيحة", "error");
         }
         function handleDoctorLogin() {
