@@ -273,6 +273,7 @@
             const ua = navigator.userAgent.toLowerCase();
             if (ua.includes('mobile')) { /* موبايل */ }
             initCollapsiblePanels();
+            restoreSession(); // استعادة الجلسة عند تحميل الصفحة
         });
         let db = null, firebaseReady = false;
         try {
@@ -291,6 +292,7 @@
         let lastPendingIds = [];
         let pollingInterval = null;
         const LOCAL_KEY = 'basma_patients';
+        const STORAGE_KEY = 'basma_auth'; // مفتاح تخزين الجلسة
         
         function getLocalDB() { try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); } catch { return []; } }        function saveLocalDB(data) { try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); return true; } catch { showToast("❌ فشل الحفظ", "error"); return false; } }
         function addToLocalDB(record) { const l = getLocalDB(); if(!l.some(p => p.id === record.id)) { l.push(record); saveLocalDB(l); } }
@@ -339,6 +341,10 @@
             }).catch(() => showToast("🔌 فشل الاتصال بالخادم", "error"));
         }
         function afterLogin() {
+            // حفظ الجلسة في localStorage
+            if (currentUser) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
+            }
             document.getElementById('loginPage').classList.add('d-none'); document.getElementById('mainContent').classList.remove('d-none'); document.getElementById('userBar').classList.remove('d-none');
             if(currentUser.role === 'admin') { 
                 document.getElementById('userTypeDisplay').innerText = 'مدير النظام';                 document.getElementById('adminSection').classList.remove('d-none'); 
@@ -348,7 +354,31 @@
             initTeeth(); loadData(); updateStats(); checkAppointmentAlerts(); navTo('home');
             if('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
         }
-        function logout() { currentUser = null; if(pollingInterval) clearInterval(pollingInterval); backToLogin(); ['adminPassword','doctorEmail','doctorPassword'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; }); }
+        function restoreSession() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    const user = JSON.parse(saved);
+                    if (user && (user.role === 'admin' || user.role === 'doctor')) {
+                        currentUser = user;
+                        afterLogin();
+                        return;
+                    } else {
+                        localStorage.removeItem(STORAGE_KEY);
+                    }
+                } catch(e) { localStorage.removeItem(STORAGE_KEY); }
+            }
+            // إذا لم توجد جلسة، نضمن ظهور صفحة الدخول
+            document.getElementById('loginPage').classList.remove('d-none');
+            document.getElementById('mainContent').classList.add('d-none');
+        }
+        function logout() { 
+            localStorage.removeItem(STORAGE_KEY); // مسح الجلسة المخزنة
+            currentUser = null; 
+            if(pollingInterval) clearInterval(pollingInterval); 
+            backToLogin(); 
+            ['adminPassword','doctorEmail','doctorPassword'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; }); 
+        }
         function showToast(msg, type='info') {
             const c = document.getElementById('toastContainer');
             const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':type==='warning'?'triangle-exclamation':'info-circle'}"></i><span class="text-sm">${msg}</span>`;
